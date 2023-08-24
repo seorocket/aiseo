@@ -84,7 +84,7 @@ WSGI_APPLICATION = '_project_.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangoproject',
+        'NAME': 'aiseo',
         'USER': 'pweb',
         'PASSWORD': 'pweb',
         'HOST': '127.0.0.1',
