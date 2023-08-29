@@ -19,4 +19,4 @@ class DomainAdmin(admin.ModelAdmin):
 
 @admin.register(SearchQuery)
 class SearchQueryAdmin(admin.ModelAdmin):
-    list_display = ('query', 'project')
+    list_display = ('query', 'project','impressions','ctr','clicks','position','demand')

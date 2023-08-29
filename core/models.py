@@ -30,7 +30,11 @@ class Domain(models.Model):
 class SearchQuery(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
-
+    impressions = models.FloatField()
+    ctr = models.FloatField()
+    clicks = models.FloatField()
+    position = models.FloatField()
+    demand = models.FloatField()
     def __str__(self):
         return self.query
 
