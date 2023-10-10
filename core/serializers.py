@@ -23,6 +23,18 @@ class SearchQuerySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = '__all__'
+
+
+class ShotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shot
+        fields = '__all__'
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

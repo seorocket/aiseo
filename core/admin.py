@@ -19,4 +19,14 @@ class DomainAdmin(admin.ModelAdmin):
 
 @admin.register(SearchQuery)
 class SearchQueryAdmin(admin.ModelAdmin):
-    list_display = ('query', 'project','impressions','ctr','clicks','position','demand')
+    list_display = ('query', 'project')
+
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ('url', 'mimetype', 'timestamp', 'endtimestamp', 'groupcount', 'uniqcount', 'domain', 'status', 'file')
+
+
+@admin.register(Shot)
+class ShotAdmin(admin.ModelAdmin):
+    list_display = ('name', 'file', 'date', 'status')

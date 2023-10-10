@@ -13,11 +13,7 @@ app_name = 'core'
 
 
 urlpatterns = [
-    re_path(r'^$', index, name='index'),
-    re_path(r'^about/$', about, name='about'),
-    re_path(r'^contacts/$', contacts, name='contacts'),
-    re_path(r'^news/$', news, name='news'),
-    re_path(r'^news/(?P<alias>[0-9A-Za-z\-_]+)/$', news_item, name='news-item'),
-    re_path(r'^reviews/$', reviews, name='reviews'),
-    re_path(r'^ajax/$', ajax, name='ajax'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

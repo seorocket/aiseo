@@ -18,24 +18,77 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-
-class Domain(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
 class SearchQuery(models.Model):
+    CHOICE_KEY_SEARCH_STATUS = (
+        (0, 'added'),
+        (1, 'done'),
+        (2, 'inprogress')
+    )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
-    impressions = models.FloatField()
-    ctr = models.FloatField()
-    clicks = models.FloatField()
-    position = models.FloatField()
-    demand = models.FloatField()
+    status = models.IntegerField(default=0, choices=CHOICE_KEY_SEARCH_STATUS)
     def __str__(self):
         return self.query
 
 
+class Domain(models.Model):
+    CHOICE_DOMAIN_STATUS = (
+        (0, 'added'),
+        (1, 'check files'),
+        (2, 'inprogress')
+    )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, unique=True)
+    status = models.IntegerField(default=0, choices=CHOICE_DOMAIN_STATUS)
+    def __str__(self):
+        return self.name
+
+
+from django.db import models
+
+
+class File(models.Model):
+    CHOICE_FILE_STATUS = (
+        (3, 'Done'),
+        (2, 'Inprogress'),
+        (1, 'ToDo'),
+        (0, 'Error'),
+    )
+    url = models.CharField(max_length=1255, unique=True)
+    mimetype = models.CharField(max_length=255)
+    timestamp = models.CharField(max_length=20)
+    endtimestamp = models.CharField(max_length=20)
+    groupcount = models.IntegerField()
+    uniqcount = models.IntegerField()
+    domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=CHOICE_FILE_STATUS, default=1)
+    content = models.TextField(max_length=314572800, null=True, blank=True)
+
+    # Добавляем поле для загрузки файла
+    file = models.FileField(upload_to='')  # '/' - это путь для сохранения файлов на сервере
+
+    def __str__(self):
+        return self.url
+
+    class Meta:
+        verbose_name = "файл"
+        verbose_name_plural = "файлы"
+
+class Shot(models.Model):
+    CHOICE_SHOT_STATUS = (
+        (3, 'Done'),
+        (2, 'Inprogress'),
+        (1, 'ToDo'),
+        (0, 'Error'),
+    )
+    name = models.CharField(max_length=99999, verbose_name=u"ID")
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    date = models.DateField(default='1000-01-01')
+    status = models.IntegerField(default=1,choices=CHOICE_SHOT_STATUS)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u"Snapshot"
+        verbose_name_plural = u"Snapshot's"
