@@ -1,0 +1,12 @@
+@media screen and (max-width: 800px) {
+  .main-container {
+    flex-direction: column;
+  }
+  .main-container .right-col {
+    margin-left: 0;
+  }
+  .main-container .left-col {
+    position: inherit;
+    width: 100%;
+  }
+}/*# sourceMappingURL=mobile.css.map */

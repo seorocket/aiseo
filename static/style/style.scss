@@ -1,0 +1,444 @@
+$blue: #128DC2;
+$blue2: #066BF9;
+$purple: #9837C6;
+$red: #FF5A6E;
+$black: #000000;
+$white: #FFFFFF;
+$lgrey: #F9F9F9;
+$dgrey: #828B8D;
+$grey: #e5e5e5;
+$border: rgba(0, 0, 0, .2);
+$gr: linear-gradient(90deg, #1C1C1C 0%, #111 100%);
+
+
+@mixin bg_s {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+:root {
+    --container: calc(100% - 40px);
+    --fz120: 120px;
+    --fz60: 60px;
+    --fz50: 50px;
+    --fz38: 38px;
+    --fz30: 30px;
+    --fz28: 28px;
+    --fz24: 24px;
+    --fz22: 22px;
+    --fz20: 20px;
+    --fz18: 18px;
+    --fz17: 17px;
+    --fz16: 16px;
+    --fz14: 14px;
+    --fz12: 12px;
+}
+body {
+    background-color: $white;
+    margin: 0;
+    padding: 0;
+    color: $black;
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
+    font-size: var(--fz16);
+    font-weight: 400;
+    color: $black;
+}
+a,
+a i {
+    display: inline-block;
+    text-decoration: none;
+    color: $black;
+    transition: all .3s;
+    cursor: pointer;
+}
+a:hover,
+a:hover i {
+    color: rgba(0, 0, 0, 0.6)
+}
+section {
+    padding: 75px 0;
+}
+.pt0 {
+    padding-top: 0!important;
+}
+.pb0 {
+    padding-bottom: 0!important;
+}
+.mt0 {
+    margin-top: 0!important;
+}
+.mb0 {
+    margin-bottom: 0!important;
+}
+img,
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+input,
+textarea,
+select,
+.input {
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    background-color: $white;
+    padding: 7px 10px;
+    color: $black;
+    border: 1px solid $border;
+    transition: all .3s;
+    &.error,
+    &.error-2 {
+        border-color: red!important;
+    }
+}
+input[type=checkbox], input[type=radio] {
+    width: auto;
+}
+select {
+    appearance: none;
+    cursor: pointer;
+}
+label.select {
+    position: relative;
+    cursor: pointer;
+    &.non-style {
+        &.left {
+            &::before {
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26' fill='none'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M3.25 7.58333C3.25 6.98503 3.73503 6.5 4.33333 6.5H21.6667C22.265 6.5 22.75 6.98503 22.75 7.58333C22.75 8.18164 22.265 8.66667 21.6667 8.66667H4.33333C3.73503 8.66667 3.25 8.18164 3.25 7.58333ZM6.5 13C6.5 12.4017 6.98503 11.9167 7.58333 11.9167H18.4167C19.015 11.9167 19.5 12.4017 19.5 13C19.5 13.5983 19.015 14.0833 18.4167 14.0833H7.58333C6.98503 14.0833 6.5 13.5983 6.5 13ZM9.75 18.4167C9.75 17.8183 10.235 17.3333 10.8333 17.3333H15.1667C15.765 17.3333 16.25 17.8183 16.25 18.4167C16.25 19.015 15.765 19.5 15.1667 19.5H10.8333C10.235 19.5 9.75 19.015 9.75 18.4167Z' fill='white'/%3e%3c/svg%3e");
+                right: auto;
+                left: 0;
+                width: 26px;
+                height: 26px;
+            }
+            select {
+                padding: 0 0 0 30px;
+            }
+        }
+        select {
+            border: 0;
+            padding: 0 20px 0 0;
+            background-color: transparent;
+        }
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        width: 10px;
+        height: 10px;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'%3e%3c!--! Font Awesome Free 6.4.2 by %40fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --%3e%3cstyle%3esvg%7bfill:%23000000%7d%3c/style%3e%3cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3e%3c/svg%3e");
+        @include bg_s;
+        background-size: contain;
+        transform: translateY(-50%);
+    }
+    select {
+        padding-right: 30px;
+    }
+}
+.pt0 {
+    padding-top: 0!important;
+}
+.mt0 {
+    margin-top: 0!important;
+}
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    padding: 10px 25px;
+    background-color: $blue;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: all .3s;
+    cursor: pointer;
+    color: $white;
+    &:hover {
+        background-color: $blue2;
+        opacity: 1;
+    }
+    &.blue {
+        background-color: $blue;
+        color: $black;
+        &:hover {
+            background-color: $white;
+            color: $black;
+            opacity: 1;
+        }
+    }
+}
+h1, h2, h3, h4, h5, h6 {
+  color: $black;
+}
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: var(--container);
+}
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background: $gr;
+    backdrop-filter: blur(10px);
+    z-index: 50;
+    a {
+        color: $white;
+        &:hover {
+            opacity: .6;
+            color: $white;
+        }
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        gap: 20px;
+        .logo {
+            height: 50px;
+        }
+        nav {
+            ul {
+                display: flex;
+                align-items: center;
+                gap: 10px 26px;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                li {
+                    a {
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                        color: $white;
+                        i {
+                            color: $white;
+                        }
+                        &:hover {
+                            opacity: .6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+    position: relative;
+    .left-col,
+    .right-col {
+        background-color: $lgrey;
+        padding: 20px;
+    }
+    .left-col {
+        position: fixed;
+        width: 300px;
+        height: calc(100% - 80px);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .func {
+            display: flex;
+            gap: 5px;
+            .item {
+                background-color: $blue;
+                width: 30px;
+                height: 30px;
+                color: $white;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all .3s;
+                &:hover {
+                    background-color: $blue2;
+                }
+            }
+        }
+        .list {
+            font-size: var(--fz12);
+            overflow: auto;
+            ul {
+                list-style: none;
+                padding-left: 15px;
+                li {
+                    ul {
+                        display: none;
+                    }
+                    &.open {
+                        > a {
+                            color: $blue;
+                            &.openSub::before {
+                                transform: translateY(-50%) rotate(90deg);
+                            }
+                        }
+                        > ul {
+                            display: block;
+                        }
+                    }
+                    > a {
+                        display: inline-block;
+                        position: relative;
+                        &.openSub::before {
+                            content: '';
+                            position: absolute;
+                            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 320 512'%3e%3c!--! Font Awesome Free 6.4.2 by %40fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --%3e%3cstyle%3esvg%7bfill:%23000000%7d%3c/style%3e%3cpath d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'/%3e%3c/svg%3e");
+                            width: 8px;
+                            height: 8px;
+                            top: 50%;
+                            left: -15px;
+                            transform: translateY(-50%);
+                            @include bg_s;
+                            background-size: contain;
+                            transition: all .3s;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .right-col {
+        width: 100%;
+        margin-left: calc(300px + 20px);
+        .info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            .item {
+                border: 1px solid rgba(0, 0, 0, .2);
+                padding: 20px;
+                border-radius: 10px;
+                background-color: $lgrey;
+                &.functions {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+                .btn-block {
+                    width: fit-content;
+                }
+            }
+        }
+    }
+}
+form.form-parameters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        > span {
+            font-size: var(--fz14);
+        }
+    }
+}
+.checkbox-type {
+    justify-content: space-between;
+}
+.checkbox-block {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.checkbox {
+    position: relative;
+    input#check {
+        cursor: pointer;
+        position: absolute;
+        opacity: 0;
+        display: none;
+        &:checked + div svg path {
+            stroke-dashoffset: 0;
+        }
+        &:focus + div {
+            transform: scale(1.03);
+        }
+    }
+    #check + div {
+        display: block;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        width: 15px;
+        height: 15px;
+        border-radius: 3px;
+        position: relative;
+        cursor: pointer;
+        transition: all .2s ease;
+        &:active {
+            border-radius: 3px;
+        }
+        svg {
+            pointer-events: none;
+            position: absolute;
+            top: -3px;
+            left: 0px;
+            transform: translateX(2px);
+            path {
+                fill: none;
+                stroke: $blue2;
+                stroke-width: 10px;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-dasharray: 100;
+                stroke-dashoffset: 101;
+                transition: all 350ms cubic-bezier(1,0,.37,.91);
+            }
+        }
+    }
+}
+.indexSection {
+    .info-block-main {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        .item {
+            &.group {
+                display: flex;
+                gap: 5px;
+                label {
+                    flex: 1;
+                    height: 100%;
+                }
+                .add-group {
+                    height: auto;
+                    > span {
+                        display: flex;
+                        height: 100%;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 10px;
+                        border-radius: 5px;
+                        border: 1px solid $border;
+                        background-color: $white;
+                        cursor: pointer;
+                        transition: all .3s;
+                        &:hover {
+                            background-color: $grey;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+form.application-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

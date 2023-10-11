@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 
 class Proxy(models.Model):
@@ -92,3 +93,25 @@ class Shot(models.Model):
     class Meta:
         verbose_name = u"Snapshot"
         verbose_name_plural = u"Snapshot's"
+
+
+class Page(models.Model):
+    class Meta:
+        abstract = True
+
+    alias = models.SlugField(max_length=200, verbose_name=u"Url", null=True)
+    seo_h1 = models.CharField(max_length=200, verbose_name="H1", null=True, blank=True)
+    seo_title = models.CharField(max_length=200, verbose_name="Title", null=True, blank=True)
+    seo_description = models.CharField(max_length=500, verbose_name="Description", null=True, blank=True)
+    content = RichTextField(null=True, blank=True)
+
+
+class TextPage(Page):
+    class Meta:
+        verbose_name = "page"
+        verbose_name_plural = "Pages"
+
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name

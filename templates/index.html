@@ -1,0 +1,63 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="indexSection">
+        <div class="info-block-main">
+            {% if textp.seo_h1 %}
+            <div class="item">
+                <h1> {{textp.seo_h1}}</h1>
+            </div>
+            {% endif %}
+            <div class="item group">
+                <label class="select">
+                    <select  class="group_select" name="group">
+                        <option disabled selected>Выберите группу</option>
+                        {% for k in group %}
+                            <option value="{{k.id}}">{{k.name}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <div class="add-group">
+                    <span class="open-modal" data-type-modal="add-group"><i class="fa-solid fa-plus open-modal" data-type-modal="add-group"></i></span>
+                </div>
+            </div>
+            <div class="item phrase d-none">
+                <div class="field">
+                    <textarea placeholder="Фразы для поиска" class="phrase_text"></textarea>
+                    <div class="info-btn">
+                        <button class="btn save_phrase">Сохранить фразы</button>
+                        <span class="podsk">Все фразы вводяться с новой строки</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{#    <div class="item-col right-column">#}
+{#        <div class="add-phrase">#}
+{#            <div class="block">#}
+{#                <div class="field df">#}
+{#                    <label class="select">#}
+{#                        <select  class="group_select" name="group">#}
+{#                            <option disabled selected>Выберите группу</option>#}
+{#                            {% for k in group %}#}
+{#                                <option value="{{k.id}}">{{k.name}}</option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </label>#}
+{#                    <div class="add-group">#}
+{#                        <span class="open-modal" data-type-modal="add-group"><i class="fa-solid fa-plus open-modal" data-type-modal="add-group"></i></span>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="phrase d-none">#}
+{#                <div class="field">#}
+{#                    <textarea placeholder="Фразы для поиска" class="phrase_text"></textarea>#}
+{#                    <div class="info-btn">#}
+{#                        <button class="btn save_phrase">Сохранить фразы</button>#}
+{#                        <span class="podsk">Все фразы вводяться с новой строки</span>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}

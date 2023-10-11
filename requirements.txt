@@ -21,7 +21,7 @@ matplotlib-inline==0.1.6
 parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==8.3.2
+Pillow
 prompt-toolkit==3.0.31
 psycopg2-binary
 ptyprocess==0.7.0

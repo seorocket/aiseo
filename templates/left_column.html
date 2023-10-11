@@ -1,0 +1,46 @@
+<div class="item-col left-column">
+    {% if link %}
+        <div class="filter links_g">
+            <div class="filter-b  {% if selected %} {% if selected == 1 %} selected {% endif %}{% endif %}">
+               <a href="{% url 'extractor:phrase' %}">Фразы</a>
+            </div>
+            <div class="filter-b {% if selected %} {% if selected == 2 %} selected {% endif %} {% endif %}">
+                <a href="{% url 'extractor:group' %}">Группы</a>
+            </div>
+            <div class="filter-b">
+                <a href="{% url 'extractor:search_domains' %}">Все домены</a>
+            </div>
+            <div class="filter-b">
+                <a href="{% url 'extractor:search_urls' %}">Все URL</a>
+            </div>
+            <div class="filter-b">
+                <a href="{% url 'extractor:search_shot' %}">Все Shot`s</a>
+            </div>
+        </div>
+    {% else %}
+        {% if filter %}
+        <div class="filter">
+            <div class="filter-b">
+                <i class="fa fa-sliders-h" aria-hidden="true"></i> <span>Filters</span>
+            </div>
+        </div>
+        <div class="rows_filter">
+    {#            <form class="nameFilter-block">#}
+    {#                {% if filter.ahrefs_rank %}#}
+    {#                    {% include "ahrefs_rank.html" %}#}
+    {#                {% endif %}#}
+    {#                {% if filter.symbol %}#}
+    {#                    {% include "symbol.html" %}#}
+    {#                {% endif %}#}
+    {#                {% if filter.all_words %}#}
+    {#                    {% include "range_filter.html" %}#}
+    {#                {% endif %}#}
+    {#                {% if filter.categories %}#}
+    {#                    {% include "categories.html" %}#}
+    {#                {% endif %}#}
+    {#                <button type="button" class="searc_filter">APPLY<i class="fa fa-search" aria-hidden="true"></i></button>#}
+    {#            </form>#}
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
