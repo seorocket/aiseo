@@ -14,6 +14,7 @@ app_name = 'core'
 urlpatterns = [
     re_path(r'^$', index, name='index'),
     re_path(r'^robots\.txt$', robots, name='robots'),
+    re_path(r'^ajax/$', ajax, name='ajax'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

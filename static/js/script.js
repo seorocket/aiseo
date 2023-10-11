@@ -173,27 +173,17 @@ function sendAjax(dataForm, el) {
         }
     });
 
+    obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
     $.ajax({
         url: '/ajax/',
         method: "POST",
-        data: obj,
+        data: JSON.stringify(obj),
         headers: {
             'X-CSRFToken': csrftoken,
         },
-        success: function (data, textStatus){
-            if(data.error){
-                $('.message').html('<span style="color:red;">' + data.error + '</span>');
-            }else{
-                $('.group_select').html(data);
-                $('.group_select option:last').prop('selected', true);
-                $('.message').html('<span style="color:green;">Группа успешно добавлена</span>');
-                $('.add-phrase .phrase .field').removeClass('d-none')
-                $('.group_add').val('')
-                setTimeout(function() {
-                    $('.message').html('')
-                }, 1500)
-            }
+        success: function (response){
+            console.log(response)
         }
     });
 
@@ -249,8 +239,8 @@ function infoOpenModal(elem) {
         `)
         bodyText.html(`
             <form class="application-block">
-                <input class="group_add" placeholder="Новая группа" name="name_group">
-                <div class="btn checkField">Создать новую группу</div>
+                <input class="group_add" placeholder="Новая группа" name="name">
+                <div class="btn checkField" data-request="new_group">Создать новую группу</div>
             </form>
         `)
     }
