@@ -38,7 +38,8 @@ class SearchQuery(models.Model):
     CHOICE_SEARCHQUERY_STATUS = (
         (0, 'added'),
         (1, 'done'),
-        (2, 'inprogress')
+        (2, 'inprogress'),
+        (3, 'error')
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
@@ -58,6 +59,20 @@ class Domain(models.Model):
     pages = models.IntegerField(default=0)
     history = models.CharField(max_length=200, null=True, blank=True)
     status = models.IntegerField(default=0, choices=CHOICE_DOMAIN_STATUS)
+
+    snippet = models.CharField(max_length=255, null=True, blank=True)
+    image = models.IntegerField(default=0)
+    first_captured = models.IntegerField(default=0)
+    stripped_snippet = models.CharField(max_length=255, null=True, blank=True)
+    display_name = models.CharField(max_length=255, null=True, blank=True)
+    text = models.CharField(max_length=255, null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    thumb = models.CharField(max_length=255, null=True, blank=True)
+    capture = models.IntegerField(default=0)
+    video = models.IntegerField(default=0)
+    webpage = models.IntegerField(default=0)
+    audio = models.IntegerField(default=0)
+    last_captured = models.IntegerField(default=0)
     def __str__(self):
         return self.name
 

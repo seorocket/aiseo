@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from django.contrib.auth.models import User
-from .models import Proxy, Project, Domain, SearchQuery
+from .models import *
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template import loader
