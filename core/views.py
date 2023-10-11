@@ -1,4 +1,5 @@
 import django_filters
+import random
 from django_filters import rest_framework as filters
 
 from rest_framework import viewsets
@@ -35,6 +36,18 @@ class UserViewSet(viewsets.ModelViewSet):
 class ProxyViewSet(viewsets.ModelViewSet):
     queryset = Proxy.objects.all()
     serializer_class = ProxySerializer
+
+    @action(detail=False, methods=['get'])
+    def get_random_proxy(self, request):
+        valid_proxies = Proxy.objects.filter(status=0)  # Фильтруем только действительные (valid) прокси
+
+        if valid_proxies.exists():
+            random_proxy = random.choice(valid_proxies)  # Выбираем случайный действительный прокси
+            proxy_url = f"{random_proxy.protocol}://{random_proxy.username}:{random_proxy.password}@{random_proxy.ip_address}:{random_proxy.port}"
+
+            return Response({'proxy_url': proxy_url}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Не найдено действительных прокси."}, status=status.HTTP_404_NOT_FOUND)
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()

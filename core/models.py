@@ -2,13 +2,28 @@ from django.db import models
 
 
 class Proxy(models.Model):
+    CHOICE_PROXY_STATUS = (
+        (0, 'valid'),
+        (1, 'error'),
+        (2, 'stop')
+    )
+
+    CHOICE_PROXY_PROTOCOL = (
+        ('http', 'HTTP'),
+        ('https', 'HTTPS'),
+        ('socks4', 'SOCKS4'),
+        ('socks5', 'SOCKS5'),
+    )
+
     ip_address = models.GenericIPAddressField()
     port = models.PositiveIntegerField()
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    protocol = models.CharField(default='http', max_length=10, choices=CHOICE_PROXY_PROTOCOL)
+    status = models.IntegerField(default=0, choices=CHOICE_PROXY_STATUS)
 
     def __str__(self):
-        return f"{self.ip_address}:{self.port}"
+        return f"{self.protocol}://{self.username}:{self.password}@{self.ip_address}:{self.port}"
 
 
 class Project(models.Model):

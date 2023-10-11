@@ -4,7 +4,18 @@ from .models import *
 
 @admin.register(Proxy)
 class ProxyAdmin(admin.ModelAdmin):
-    list_display = ('ip_address', 'port', 'username')
+    list_display = ('ip_address', 'port', 'username', 'password', 'protocol', 'status')
+    list_filter = ('protocol', 'status')
+    search_fields = ('ip_address', 'port', 'username', 'password')
+
+    fieldsets = (
+        (None, {'fields': ('ip_address', 'port', 'username', 'password')}),
+        ('Протокол', {'fields': ('protocol',)}),
+        ('Статус', {'fields': ('status',)}),
+    )
+
+    # Определите порядок протоколов в административном интерфейсе
+    radio_fields = {'protocol': admin.VERTICAL}
 
 
 @admin.register(Project)
@@ -14,7 +25,9 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name', 'project')
+    list_display = ('name', 'project', 'pages', 'history', 'status')
+    list_filter = ('project', 'status')
+    search_fields = ('name', 'project__name')  # поиск по имени и имени проекта
 
 
 @admin.register(SearchQuery)
