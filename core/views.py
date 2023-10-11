@@ -1,5 +1,4 @@
 import django_filters
-import json
 from django_filters import rest_framework as filters
 
 from rest_framework import viewsets
@@ -16,7 +15,6 @@ from django.shortcuts import get_object_or_404
 from django.template import loader
 from django.template.context_processors import csrf
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 
 
 class UserFilter(filters.FilterSet):
@@ -241,24 +239,3 @@ class ShotViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def ajax(request):
-    result = False
-    obj_info = {}
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        if data.get('type') == 'new_group':
-            for name in data:
-                if name != 'type':
-                    obj_info[name] = data.get(name, '')
-
-    return JsonResponse({'created': obj_info})
-    # if request.POST['type'] == 'save_domains':
-    #     domain = Domain.objects.filter(id=request.POST['id'])
-    #     if domain.exists():
-    #         domain = domain.first()
-    #         domain.status = request.POST['status']
-    #         domain.save()
-    #         result = {'status': 'ok'}
-    #     else:
-    #         result = {'status': 'error'}
-    # return JsonResponse(result)
