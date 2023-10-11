@@ -1,6 +1,22 @@
 from django.contrib import admin
 from .models import *
 
+seo_fields = [
+    'alias',
+    'seo_h1',
+    'seo_title',
+    'seo_description',
+    'content'
+]
+
+
+@admin.register(TextPage)
+class TextPageAdmin(admin.ModelAdmin):
+    fieldsets = [('Основные', {"fields": ["name"]}), ('SEO информация', {'fields': seo_fields})]
+
+    def get_prepopulated_fields(self, request, obj=None):
+        return {"alias": ("name",)}
+
 
 @admin.register(Proxy)
 class ProxyAdmin(admin.ModelAdmin):

@@ -1,0 +1,11 @@
+{#{% url 'core:index' as index %}#}
+{#{% url 'core:catalog' as catalog %}#}
+{#{% url 'core:contacts' as contacts %}#}
+{#{% url 'core:about' as about %}#}
+
+<nav>
+    <ul>
+        <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Main</a></li>
+        <li><a href="{% url 'core:catalog' %}" class="{% if request.path == catalog %}active{% endif %}">Catalog</a></li>
+    </ul>
+</nav>

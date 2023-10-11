@@ -11,7 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from django.contrib.auth.models import User
 from .models import Proxy, Project, Domain, SearchQuery
-
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.template import loader
+from django.template.context_processors import csrf
+from django.shortcuts import render
 
 
 class UserFilter(filters.FilterSet):
@@ -20,6 +24,7 @@ class UserFilter(filters.FilterSet):
     class Meta:
         model = User
         fields = ['username']
+
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -31,6 +36,43 @@ class UserViewSet(viewsets.ModelViewSet):
         return User.objects.all()
 
 
+def default_context(request, alias, obj):
+    data = get_object_or_404(obj, alias=alias)
+    # csrf_token = csrf(request)
+    # c = csrf(request)
+    user = request.user
+
+    context = {
+        'data': data,
+        # 'csrf_token': csrf_token,
+        # 'c': c,
+        'request': request,
+        'user': user,
+    }
+    context.update(csrf(request))
+
+    return context
+
+
+def robots(request):
+    template = loader.get_template('robots.txt')
+
+    context = default_context(request, "index", TextPage)
+    context.update({
+        'ssl': request.is_secure()
+    })
+
+    return HttpResponse(template.render(context), content_type="text/plain")
+
+
+def index(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('index.html')
+
+    context.update({
+    })
+
+    return HttpResponse(template.render(context))
 
 
 class ProxyViewSet(viewsets.ModelViewSet):
@@ -52,6 +94,7 @@ class ProxyViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
 
 class DomainViewSet(viewsets.ModelViewSet):
     queryset = Domain.objects.all()
@@ -82,6 +125,7 @@ class DomainViewSet(viewsets.ModelViewSet):
         # Возвращаем объект Domain с обновленным статусом
         serializer = DomainSerializer(first_domain)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class SearchQueryViewSet(viewsets.ModelViewSet):
     queryset = SearchQuery.objects.all()

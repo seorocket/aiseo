@@ -11,8 +11,9 @@ from core.views import *
 app_name = 'core'
 
 
-
 urlpatterns = [
+    re_path(r'^$', index, name='index'),
+    re_path(r'^robots\.txt$', robots, name='robots'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
