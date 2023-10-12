@@ -82,13 +82,15 @@ class Domain(models.Model):
         return self.name
 
 
+CHOICE_FILE_STATUS = (
+    (3, 'Done'),
+    (2, 'Inprogress'),
+    (1, 'ToDo'),
+    (0, 'Error'),
+)
+
+
 class File(models.Model):
-    CHOICE_FILE_STATUS = (
-        (3, 'Done'),
-        (2, 'Inprogress'),
-        (1, 'ToDo'),
-        (0, 'Error'),
-    )
     url = models.CharField(max_length=1255, unique=True)
     mimetype = models.CharField(max_length=255)
     timestamp = models.CharField(max_length=20)
@@ -111,13 +113,15 @@ class File(models.Model):
         verbose_name_plural = "файлы"
 
 
+CHOICE_SHOT_STATUS = (
+    (3, 'Done'),
+    (2, 'Inprogress'),
+    (1, 'ToDo'),
+    (0, 'Error'),
+)
+
+
 class Shot(models.Model):
-    CHOICE_SHOT_STATUS = (
-        (3, 'Done'),
-        (2, 'Inprogress'),
-        (1, 'ToDo'),
-        (0, 'Error'),
-    )
     name = models.CharField(max_length=99999, verbose_name=u"ID")
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     date = models.DateField(default='1000-01-01')

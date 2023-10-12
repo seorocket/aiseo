@@ -28,7 +28,7 @@
                     <th>Pages</th>
                     <th>History</th>
                     <th>Status</th>
-                    <th>S</th>
+                    <th>Sn</th>
                     <th>FC</th>
                     <th>LC</th>
                     <th>SS</th>
@@ -48,7 +48,7 @@
                         <td><input type="checkbox" value="{{ i.id }}"
                                    class="checks group-{{ g.id }}"></td>
                         <td>
-                            <a href="#">{{ i.name }}</a>
+                            <a href="{{ i.id }}">{{ i.name }}</a>
                         </td>
                         <td>{{ i.project.name }}</td>
                         <td>{{ i.pages }}</td>

@@ -478,6 +478,10 @@ form.application-block {
   flex-direction: column;
   gap: 10px;
 }
+.accordion-phrase .accordion-header .accordion-button {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+}
 
 .accordion .accordion-button {
   padding: 10px 15px;
@@ -493,6 +497,9 @@ form.application-block {
   font-size: var(--fz22);
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.left-column .filter .filter-b span {
+  font-weight: 600;
 }
 .left-column .links_g {
   font-size: var(--fz18);
@@ -519,6 +526,9 @@ table tbody tr:hover {
 }
 table tbody tr td {
   padding: 5px 0;
+}
+table tbody tr td a {
+  color: #066BF9;
 }
 
 .phrasesSection .info-block-main {
@@ -623,4 +633,33 @@ table tbody tr td {
 
 .accordion-button {
   font-weight: 600;
+}
+
+.search_phrase {
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+.search_phrase .serch-left-column {
+  width: 100%;
+  background: #E2E8EC;
+  border: 1px solid #BDBDC8;
+  box-sizing: border-box;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.search_phrase .serch-left-column button {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: transparent;
+  cursor: pointer;
+}
+.search_phrase .serch-left-column i {
+  width: 25px;
+  padding-left: 7px;
+  margin-right: 7px;
 }/*# sourceMappingURL=style.css.map */

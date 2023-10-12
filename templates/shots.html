@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="domainsSection">
+        <div class="info-block-main">
+            <div class="status-all-search-block">
+                <label class="select">
+                    <select class="status-all-search" name="filter">
+                        <option value="" selected>Search by status</option>
+                        {% for kst, st in statuses.items %}
+                            <option value="{{ kst }}">{{ st.name }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <div class="btn-block">
+                    <div class="btn f-status">Search</div>
+                </div>
+            </div>
+            <div class="_titleBlock">
+                <span class="name">{{ shots.count }} result{{ shots.count|pluralize }} found</span>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                    <th>ID</th>
+                    <th>Url</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in shots %}
+                    <tr>
+                        <td><input type="checkbox" value="{{ i.id }}"
+                                   class="checks group-{{ g.id }}"></td>
+                        <td>{{ i.name }}</td>
+                        <td>{% if i.url %}{{ i.url }}{% else %}-{% endif %}</td>
+                        <td>{% if i.date %}{{ i.date }}{% else %}-{% endif %}</td>
+                        <td>{{ i.get_status_display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,8 @@
 {% url 'core:phrases' as phrases_url %}
 {% url 'core:projects' as projects_url %}
 {% url 'core:domains' as domains_url %}
+{% url 'core:urls' as urls_url %}
+{% url 'core:shots' as shots_url %}
 <div class="item-col left-column">
     {% if link %}
         <div class="filter">
@@ -20,7 +22,13 @@
                 <a href="{{ projects_url }}"><i class="fa-solid fa-angles-right"></i> <span>Projects</span></a>
             </div>
             <div class="filter-b{% if request.path == domains_url %} active{% endif %}">
-                <a href="{{ domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>Domains</span></a>
+                <a href="{{ domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>All domains</span></a>
+            </div>
+            <div class="filter-b{% if request.path == urls_url %} active{% endif %}">
+                <a href="{{ urls_url }}"><i class="fa-solid fa-angles-right"></i> <span>All urls</span></a>
+            </div>
+            <div class="filter-b{% if request.path == shots_url %} active{% endif %}">
+                <a href="{{ shots_url }}"><i class="fa-solid fa-angles-right"></i> <span>All snapshot's</span></a>
             </div>
         </div>
     {% endif %}
@@ -31,6 +39,7 @@
             </div>
         </div>
         <div class="rows_filter">
+            {% include "include/search_phrase.html" %}
             <form class="nameFilter-block">
                 <div id="accordion-filters" class="accordion accordion-filters">
                 {% if ahrefs_rank %}
@@ -38,6 +47,9 @@
                 {% endif %}
                 {% if projects %}
                     {% include "include/categories.html" %}
+                {% endif %}
+                {% if domains %}
+                    {% include "include/domains.html" %}
                 {% endif %}
                 </div>
 {#                                {% if filter.ahrefs_rank %}#}

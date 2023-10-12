@@ -133,6 +133,93 @@ def domains(request):
     return HttpResponse(template.render(context))
 
 
+def domain_item(request, domain_id):
+    data = get_object_or_404(Domain, id=domain_id)
+    template = loader.get_template('domain-item.html')
+
+    urls = File.objects.filter(domain=domain_id)
+
+    choices = dict()
+
+    for choice in CHOICE_FILE_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    context = {
+        'link': True,
+        'filter': True,
+        'data': data,
+        'urls': urls,
+        'statuses': choices,
+    }
+
+    return HttpResponse(template.render(context))
+
+
+def urls(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('urls.html')
+    urls = File.objects.all()
+    domains = Domain.objects.all()
+
+    choices = dict()
+
+    for choice in CHOICE_FILE_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    context.update({
+        'link': True,
+        'filter': True,
+        'statuses': choices,
+        'urls': urls,
+        'domains': domains,
+    })
+
+    return HttpResponse(template.render(context))
+
+
+def url_item(request, url_id):
+    data = get_object_or_404(File, id=url_id)
+    template = loader.get_template('url-item.html')
+
+    shots = Shot.objects.filter(file=url_id)
+
+    choices = dict()
+
+    for choice in CHOICE_FILE_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    context = {
+        'link': True,
+        'filter': True,
+        'data': data,
+        'shots': shots,
+        'statuses': choices,
+    }
+
+    return HttpResponse(template.render(context))
+
+
+def shots(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('shots.html')
+    shots = Shot.objects.all()
+
+    choices = dict()
+
+    for choice in CHOICE_SHOT_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    context.update({
+        'link': True,
+        'filter': True,
+        'statuses': choices,
+        'shots': shots,
+    })
+
+    return HttpResponse(template.render(context))
+
+
+
 class ProxyViewSet(viewsets.ModelViewSet):
     queryset = Proxy.objects.all()
     serializer_class = ProxySerializer

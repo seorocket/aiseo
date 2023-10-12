@@ -18,6 +18,10 @@ urlpatterns = [
     re_path(r'^phrases/$', phrases, name='phrases'),
     re_path(r'^projects/$', projects, name='projects'),
     re_path(r'^domains/$', domains, name='domains'),
+    re_path(r'^domains/(?P<domain_id>[0-9A-Za-z\-_]+)/$', domain_item, name='domain_item'),
+    re_path(r'^urls/$', urls, name='urls'),
+    re_path(r'^urls/(?P<url_id>[0-9A-Za-z\-_]+)/$', url_item, name='url_item'),
+    re_path(r'^shots/$', shots, name='shots'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
