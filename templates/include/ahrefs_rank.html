@@ -1,0 +1,40 @@
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse_ahrefs" aria-expanded="false"
+                aria-controls="flush-collapse_ahrefs">Ahrefs rank
+        </button>
+    </h2>
+    <div id="flush-collapse_ahrefs" class="accordion-collapse collapse show">
+        <div class="accordion-body categories">
+            <div class="group_block">
+                <span>Pages</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="count__gte" {% if request.GET.count__gte|default:"" != '' %}value="{{ request.GET.count__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="count__lte" {% if request.GET.count__lte|default:"" != '' %}value="{{ request.GET.count__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>History</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="history__gte" {% if request.GET.history__gte|default:"" != '' %}value="{{ request.GET.history__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="history__lte" {% if request.GET.history__lte|default:"" != '' %}value="{{ request.GET.history__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>Domains</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="domains_in__gte" {% if request.GET.domains_in__gte|default:"" != '' %}value="{{ request.GET.domains_in__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="domains_in__lte" {% if request.GET.domains_in__lte|default:"" != '' %}value="{{ request.GET.domains_in__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>Links</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="links_in__gte" {% if request.GET.links_in__gte|default:"" != '' %}value="{{ request.GET.links_in__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="links_in__lte" {% if request.GET.links_in__lte|default:"" != '' %}value="{{ request.GET.links_in__lte }}"{% endif %}></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

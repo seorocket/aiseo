@@ -549,4 +549,78 @@ table tbody tr td {
 .domainsSection .info-block-main .status-all-search-block {
   display: flex;
   gap: 10px;
+}
+.domainsSection .info-block-main .table tbody .more_urls {
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 2px 5px;
+}
+
+.accordion-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.accordion-filters .accordion-body {
+  display: flex;
+  flex-direction: column;
+}
+.accordion-filters .accordion-body.categories {
+  padding: 0;
+}
+.accordion-filters .accordion-body.categories .group_block {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+}
+.accordion-filters .accordion-body.categories .group_block:nth-child(2n+1) {
+  background-color: #F9F9F9;
+}
+.accordion-filters .accordion-body.categories .group_block.select {
+  background-color: #128DC2;
+}
+.accordion-filters .accordion-body.categories .group_block:not(.span) {
+  padding: 5px 10px;
+}
+.accordion-filters .accordion-body.categories .group_block.span > span {
+  width: 100%;
+  display: block;
+  padding: 5px 10px;
+}
+.accordion-filters .accordion-body.categories .group_block.select-block input {
+  display: none;
+}
+.accordion-filters .accordion-body.categories .group_block .filter_block {
+  display: flex;
+  gap: 5px;
+}
+.accordion-filters .accordion-body.categories .group_block .filter_block input {
+  max-width: 70px;
+  padding: 5px;
+}
+
+.select-block.active {
+  background-color: #128DC2 !important;
+  color: #FFFFFF !important;
+}
+
+.nameFilter-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+._titleBlock {
+  text-align: center;
+}
+._titleBlock .name {
+  display: inline-block;
+  text-align: center;
+  font-size: var(--fz30);
+  font-weight: 600;
+}
+
+.accordion-button {
+  font-weight: 600;
 }/*# sourceMappingURL=style.css.map */

@@ -119,11 +119,15 @@ def domains(request):
     for choice in CHOICE_DOMAIN_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    projects = Project.objects.all()
+
     context.update({
         'link': True,
         'filter': True,
         'domains': domains,
-        'statuses': choices
+        'statuses': choices,
+        'projects': projects,
+        'ahrefs_rank': True
     })
 
     return HttpResponse(template.render(context))

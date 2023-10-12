@@ -1,24 +1,25 @@
-$(document).ready(function() {
+$(document).ready(function () {
     maskField()
     checkSize()
 })
-$(window).resize(function() {
+$(window).resize(function () {
     checkSize()
 })
 
 // href
 $("body").on('click', '[href*="#"]', function (e) {
-	var fixed_offset = 0;
-	$('html,body').stop().animate({
-		scrollTop: $(this.hash).offset().top - fixed_offset
-	}, 1000);
-	e.preventDefault();
+    var fixed_offset = 0;
+    $('html,body').stop().animate({
+        scrollTop: $(this.hash).offset().top - fixed_offset
+    }, 1000);
+    e.preventDefault();
 });
 
 $(document).on('click', '.checkField', function (el) {
-  el.preventDefault();
-  checkField(el)
+    el.preventDefault();
+    checkField(el)
 })
+
 function checkField(el) {
     let field = $(el.target).parents('form').find('input, textarea, select'),
         rating = $(el.target).parents('form').find('.rating-mini')
@@ -51,16 +52,16 @@ function checkField(el) {
                         if (!$(field[i]).hasClass('gocity')) {
                             $(field[i]).removeClass('error')
                         } else {
-                            let t=0
-                            for (let j=0; j<$(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
-                                if (t=0) {
+                            let t = 0
+                            for (let j = 0; j < $(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
+                                if (t = 0) {
                                     if ($(field).eq(i).val() != $(field).eq(i).parents('.form-group-auto-row').find('.list.list-directions ul li').eq(j).text()) {
                                         $(field).eq(i).addClass('error')
                                     } else {
                                         $(field).eq(i).removeClass('error')
                                         t++
                                     }
-                                }                                
+                                }
                             }
                         }
                     }
@@ -79,16 +80,16 @@ function checkField(el) {
                         if (!$(field[i]).hasClass('gocity')) {
                             $(field[i]).removeClass('error')
                         } else {
-                            let t=0
-                            for (let j=0; j<$(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
-                                if (t=0) {
+                            let t = 0
+                            for (let j = 0; j < $(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
+                                if (t = 0) {
                                     if ($(field).eq(i).val() != $(field).eq(i).parents('.form-group-auto-row').find('.list.list-directions ul li').eq(j).text()) {
                                         $(field).eq(i).addClass('error')
                                     } else {
                                         $(field).eq(i).removeClass('error')
                                         t++
                                     }
-                                }                                
+                                }
                             }
                         }
                     }
@@ -116,16 +117,16 @@ function checkField(el) {
                 if (!$(field[i]).hasClass('gocity')) {
                     $(field[i]).removeClass('error')
                 } else {
-                    let t=0
-                    for (let j=0; j<$(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
-                        if (t=0) {
+                    let t = 0
+                    for (let j = 0; j < $(field[i]).parents('.form-group-auto-row').find('.list.list-directions ul li').length; j++) {
+                        if (t = 0) {
                             if ($(field).eq(i).val() != $(field).eq(i).parents('.form-group-auto-row').find('.list.list-directions ul li').eq(j).text()) {
                                 $(field).eq(i).addClass('error')
                             } else {
                                 $(field).eq(i).removeClass('error')
                                 t++
                             }
-                        }                                
+                        }
                     }
                 }
             }
@@ -182,7 +183,7 @@ function sendAjax(dataForm, el) {
         headers: {
             'X-CSRFToken': csrftoken,
         },
-        success: function (response){
+        success: function (response) {
             if (response.error) {
                 console.log(response.error)
             } else {
@@ -194,7 +195,7 @@ function sendAjax(dataForm, el) {
                 }
                 if (type === 'save_phrase') {
                     $('.message_phrase').html('<span style="color:green;">Фразы успешно добавлены</span>');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.message_phrase').html('')
                     }, 1500)
                 }
@@ -214,22 +215,23 @@ function sendAjax(dataForm, el) {
 }
 
 function maskField() {
-    $(".mask-phone").click(function(){
-      $(this).setCursorPosition(3);
+    $(".mask-phone").click(function () {
+        $(this).setCursorPosition(3);
     }).mask("+7(999) 999-9999");
     // $(".mask-phone").mask("+7 (999) 999-99-99");
     $('.mask-date').mask('99.99.9999');
 }
-$.fn.setCursorPosition = function(pos) {
-  if ($(this).get(0).setSelectionRange) {
-    $(this).get(0).setSelectionRange(pos, pos);
-  } else if ($(this).get(0).createTextRange) {
-    var range = $(this).get(0).createTextRange();
-    range.collapse(true);
-    range.moveEnd('character', pos);
-    range.moveStart('character', pos);
-    range.select();
-  }
+
+$.fn.setCursorPosition = function (pos) {
+    if ($(this).get(0).setSelectionRange) {
+        $(this).get(0).setSelectionRange(pos, pos);
+    } else if ($(this).get(0).createTextRange) {
+        var range = $(this).get(0).createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
 };
 
 function checkSize() {
@@ -263,11 +265,11 @@ function infoOpenModal(elem) {
     $('#infoModal').modal('show')
 }
 
-$('.left-col .list ul li > a.openSub').on('click', function() {
+$('.left-col .list ul li > a.openSub').on('click', function () {
     $(this).parent('li').toggleClass('open')
 })
 
-$('.main-container .left-col .func .item.open-all').on('click', function() {
+$('.main-container .left-col .func .item.open-all').on('click', function () {
     if ($('.left-col .list ul li > a.openSub').parent('li').length == $('.left-col .list ul li > a.openSub').parent('li.open').length) {
         $('.left-col .list ul li > a.openSub').parent('li').removeClass('open')
     } else {
@@ -275,30 +277,13 @@ $('.main-container .left-col .func .item.open-all').on('click', function() {
     }
 })
 
-//  $('.save_phrase').click(function(){
-//     let phrase = $('.phrase_text').val();
-//     let sel = $('.group_select').val();
-//     $.ajax({
-//         url: '/ajax/',
-//         method: "POST",
-//         data: {
-//             csrfmiddlewaretoken: getCookie('csrftoken'),
-//             type: 'save_search_key',
-//             group: sel,
-//             phrases: phrase
-//         },
-//         success: function (data, textStatus){
-//             if(data.status == 'ok' || data.ok){
-//                 $('.message_phrase').html('<span style="color:green;">Фразы успешно добавлены</span>');
-//                 $('.phrase_text').val('');
-//                 $('.group_select').val('');
-//                 window.location.href = '/phrase/'
-//             }else{
-//                 $('.message_phrase').html('<span style="color:red;">' + data.error + '</span>');
-//             }
-//         }
-//     });
-// });
-//  $('.group_select').on('change', function() {
-//      $('.add-phrase .phrase .field').removeClass('d-none')
-//  })
+$('.select-block').on('click', function () {
+    if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+    } else {
+        $(this).addClass('active');
+    }
+});
+$('.select-block input').on('click', function (el) {
+    el.stopPropagation();
+});

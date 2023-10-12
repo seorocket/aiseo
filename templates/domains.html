@@ -16,28 +16,57 @@
                     <div class="btn f-status">Search</div>
                 </div>
             </div>
+            <div class="_titleBlock">
+                <span class="name">{{ domains.count }} result{{ domains.count|pluralize }} found</span>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
                     <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Action</th>
+                    <th>Domains</th>
+                    <th>Project</th>
+                    <th>Pages</th>
+                    <th>History</th>
+                    <th>Status</th>
+                    <th>S</th>
+                    <th>FC</th>
+                    <th>LC</th>
+                    <th>SS</th>
+                    <th>DN</th>
+                    <th>T</th>
+                    <th>Th</th>
+                    <th>C</th>
+                    <th>V</th>
+                    <th>W</th>
+                    <th>A</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for i in projects %}
+                {% for i in domains %}
                     <tr>
                         <td><input type="checkbox" value="{{ i.id }}"
                                    class="checks group-{{ g.id }}"></td>
                         <td>
-                            {{ i.name }}
+                            <a href="#">{{ i.name }}</a>
                         </td>
+                        <td>{{ i.project.name }}</td>
+                        <td>{{ i.pages }}</td>
+                        <td>{% if i.history %}{{ i.history }}{% else %}-{% endif %}</td>
+                        <td>{{ i.get_status_display }}</td>
+                        <td>{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</td>
+                        <td>{% if i.first_captured %}{{ i.first_captured }}{% else %}-{% endif %}</td>
+                        <td>{% if i.last_captured %}{{ i.last_captured }}{% else %}-{% endif %}</td>
+                        <td>{% if i.stripped_snippet %}{{ i.stripped_snippet }}{% else %}-{% endif %}</td>
+                        <td>{% if i.display_name %}{{ i.display_name }}{% else %}-{% endif %}</td>
+                        <td>{% if i.text %}{{ i.text }}{% else %}-{% endif %}</td>
+                        <td>{% if i.thumb %}{{ i.thumb }}{% else %}-{% endif %}</td>
+                        <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>
+                        <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
+                        <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
+                        <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
                         <td>
-                            {% if i.description %}{{ i.description }}{% else %}-{% endif %}
-                        </td>
-                        <td>
-                            <div type="button" class="btn red delete" data-id="{{ i.id }}">Delete</div>
+                            <div type="button" class="btn more_urls" data-id="{{ i.id }}">More</div>
                         </td>
                     </tr>
                 {% endfor %}

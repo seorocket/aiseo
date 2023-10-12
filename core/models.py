@@ -110,6 +110,7 @@ class File(models.Model):
         verbose_name = "файл"
         verbose_name_plural = "файлы"
 
+
 class Shot(models.Model):
     CHOICE_SHOT_STATUS = (
         (3, 'Done'),
