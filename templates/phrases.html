@@ -1,0 +1,70 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="phrasesSection">
+        <div class="info-block-main">
+            <div class="status-all-search-block">
+                <label class="select">
+                    <select class="status-all-search" name="filter">
+                        <option value="" selected>Search by status</option>
+                        {% for kst, st in statuses.items %}
+                            <option value="{{ kst }}">{{ st.name }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <div class="btn-block">
+                    <div class="btn f-status">Search</div>
+                </div>
+            </div>
+            <div id="accordion-phrase" class="accordion accordion-phrase">
+                {% for g in projects %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapse_{{ forloop.counter }}" aria-expanded="false"
+                                    aria-controls="flush-collapse_{{ forloop.counter }}">{{ g.name }}</button>
+                        </h2>
+                        <div id="flush-collapse_{{ forloop.counter }}" class="accordion-collapse collapse"
+                             data-bs-parent="#accordion-phrase">
+                            <div class="accordion-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                                        <th>Name</th>
+                                        <th>Group</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in keys %}
+                                        {% if i.project.id == g.id %}
+                                            <tr>
+                                                <td><input type="checkbox" value="{{ i.id }}"
+                                                           class="checks group-{{ g.id }}"></td>
+                                                <td>
+                                                    {{ i.query }}
+                                                </td>
+                                                <td>
+                                                    {{ i.project.name }}
+                                                </td>
+                                                <td>
+                                                    {{ i.get_status_display }}
+                                                </td>
+                                                <td>
+                                                    <div type="button" class="btn red delete" data-id="{{ i.id }}">Delete</div>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

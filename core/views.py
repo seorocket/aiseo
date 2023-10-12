@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
+from .templates_resolve import *
 from django.contrib.auth.models import User
 from .models import *
 from django.http import HttpResponse, JsonResponse
@@ -70,8 +71,59 @@ def robots(request):
 def index(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('index.html')
+    projects = Project.objects.all()
 
     context.update({
+        'link': True,
+        'projects': projects
+    })
+
+    return HttpResponse(template.render(context))
+
+
+def phrases(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('phrases.html')
+    projects = Project.objects.all()
+    keys = SearchQuery.objects.all()
+
+    context.update({
+        'link': True,
+        'projects': projects,
+        'keys': keys
+    })
+
+    return HttpResponse(template.render(context))
+
+
+def projects(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('projects.html')
+    projects = Project.objects.all()
+
+    context.update({
+        'link': True,
+        'projects': projects,
+    })
+
+    return HttpResponse(template.render(context))
+
+
+def domains(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('domains.html')
+    domains = Domain.objects.all()
+
+    choices = dict()
+
+    for choice in CHOICE_DOMAIN_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    context.update({
+        'link': True,
+        'filter': True,
+        'domains': domains,
+        'statuses': choices
     })
 
     return HttpResponse(template.render(context))
@@ -254,23 +306,43 @@ class ShotViewSet(viewsets.ModelViewSet):
 
 
 def ajax(request):
-    result = False
-    obj_info = {}
+    result = dict()
     if request.method == 'POST':
+        obj_info = {}
         data = json.loads(request.body)
         if data.get('type') == 'new_group':
-            for name in data:
-                if name != 'type':
-                    obj_info[name] = data.get(name, '')
+            try:
+                for name in data:
+                    if name != 'type':
+                        obj_info[name] = data.get(name, '')
+                Project.objects.create(**obj_info)
+                project = Project.objects.all()
+                result = render_groups(request, project)
+                return HttpResponse(result)
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'save_phrase':
+            try:
+                project = data['project']
+                phrases = data['phrases']
+                if project:
+                    project = Project.objects.get(id=project)
+                    if phrases:
+                        p = phrases.split("\n")
+                        for query in p:
+                            if query:
+                                keys_on_bd = SearchQuery.objects.filter(query=query, project=project)
+                                if keys_on_bd.exists():
+                                    result = {'status': 'ok'}
+                                else:
+                                    ph = SearchQuery(query=query, project=project)
+                                    ph.save()
+                                    result = {"status": True}
+                    else:
+                        result = {"error": 'Список фраз пуст'}
+                else:
+                    result = {"error": 'Не выбрана группа'}
+            except Exception as e:
+                result = {"error": e}
 
-    return JsonResponse({'created': obj_info})
-    # if request.POST['type'] == 'save_domains':
-    #     domain = Domain.objects.filter(id=request.POST['id'])
-    #     if domain.exists():
-    #         domain = domain.first()
-    #         domain.status = request.POST['status']
-    #         domain.save()
-    #         result = {'status': 'ok'}
-    #     else:
-    #         result = {'status': 'error'}
-    # return JsonResponse(result)
+    return JsonResponse(result)

@@ -15,6 +15,9 @@ urlpatterns = [
     re_path(r'^$', index, name='index'),
     re_path(r'^robots\.txt$', robots, name='robots'),
     re_path(r'^ajax/$', ajax, name='ajax'),
+    re_path(r'^phrases/$', phrases, name='phrases'),
+    re_path(r'^projects/$', projects, name='projects'),
+    re_path(r'^domains/$', domains, name='domains'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

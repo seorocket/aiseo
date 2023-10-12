@@ -1,0 +1,38 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="projectsSection">
+        <div class="info-block-main">
+            <div class="btn-block delete-project">
+                <div class="btn delete-selected">Delete selected</div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in projects %}
+                    <tr>
+                        <td><input type="checkbox" value="{{ i.id }}"
+                                   class="checks group-{{ g.id }}"></td>
+                        <td>
+                            {{ i.name }}
+                        </td>
+                        <td>
+                            {% if i.description %}{{ i.description }}{% else %}-{% endif %}
+                        </td>
+                        <td>
+                            <div type="button" class="btn red delete" data-id="{{ i.id }}">Delete</div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

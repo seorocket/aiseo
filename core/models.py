@@ -29,10 +29,11 @@ class Proxy(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
 
 class SearchQuery(models.Model):
     CHOICE_SEARCHQUERY_STATUS = (
@@ -44,16 +45,20 @@ class SearchQuery(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
     status = models.IntegerField(default=0, choices=CHOICE_SEARCHQUERY_STATUS)
+
     def __str__(self):
         return self.query
 
 
+CHOICE_DOMAIN_STATUS = (
+    (0, 'added'),
+    (1, 'check files'),
+    (2, 'inprogress')
+)
+
+
 class Domain(models.Model):
-    CHOICE_DOMAIN_STATUS = (
-        (0, 'added'),
-        (1, 'check files'),
-        (2, 'inprogress')
-    )
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     pages = models.IntegerField(default=0)

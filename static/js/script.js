@@ -143,7 +143,7 @@ function checkField(el) {
 }
 
 function clearFields() {
-    $('input:not([type=checkbox])').val('')
+    $('input:not([type=checkbox]):not([name=csrfmiddlewaretoken])').val('')
     $('textarea').val('')
     $('.__select__title').removeClass('error')
 }
@@ -183,7 +183,22 @@ function sendAjax(dataForm, el) {
             'X-CSRFToken': csrftoken,
         },
         success: function (response){
-            console.log(response)
+            if (response.error) {
+                console.log(response.error)
+            } else {
+                if (type === 'new_group') {
+                    $('#infoModal').modal('hide')
+                    $('.group_select').html(response);
+                    $('.group_select option:last').prop('selected', true);
+                    $('.indexSection .item.phrase').removeClass('d-none')
+                }
+                if (type === 'save_phrase') {
+                    $('.message_phrase').html('<span style="color:green;">Фразы успешно добавлены</span>');
+                    setTimeout(function() {
+                        $('.message_phrase').html('')
+                    }, 1500)
+                }
+            }
         }
     });
 
@@ -260,36 +275,6 @@ $('.main-container .left-col .func .item.open-all').on('click', function() {
     }
 })
 
-// $('.save_group').click(function(){
-//     let name_group = $('.group_add').val();
-//     if (name_group !== '') {
-//         $.ajax({
-//             url: '/ajax/',
-//             method: "POST",
-//             data: {
-//                 csrfmiddlewaretoken: getCookie('csrftoken'),
-//                 type: 'save_group',
-//                 name: name_group,
-//             },
-//             success: function (data, textStatus){
-//                 if(data.error){
-//                     $('.message').html('<span style="color:red;">' + data.error + '</span>');
-//                 }else{
-//                     $('.group_select').html(data);
-//                     $('.group_select option:last').prop('selected', true);
-//                     $('.message').html('<span style="color:green;">Группа успешно добавлена</span>');
-//                     $('.add-phrase .phrase .field').removeClass('d-none')
-//                     $('.group_add').val('')
-//                     setTimeout(function() {
-//                         $('.message').html('')
-//                     }, 1500)
-//                 }
-//             }
-//         });
-//     } else {
-//         $('.message').html('<span style="color:red;">Пустое название группы</span>');
-//     }
-// });
 //  $('.save_phrase').click(function(){
 //     let phrase = $('.phrase_text').val();
 //     let sel = $('.group_select').val();

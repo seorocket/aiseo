@@ -1,0 +1,5 @@
+{% load i18n %}
+<option disabled selected>Select a group</option>
+{% for i in projects %}
+<option value="{{i.id}}">{{i.name}}</option>
+{% endfor %}

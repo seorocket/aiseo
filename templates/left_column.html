@@ -1,21 +1,39 @@
+{% url 'core:index' as index_url %}
+{% url 'core:phrases' as phrases_url %}
+{% url 'core:projects' as projects_url %}
+{% url 'core:domains' as domains_url %}
 <div class="item-col left-column">
     {% if link %}
-        <div class="filter links_g">
-            <div class="filter-b  {% if selected %} {% if selected == 1 %} selected {% endif %}{% endif %}">
-               <a href="{% url 'extractor:phrase' %}">Фразы</a>
-            </div>
-            <div class="filter-b {% if selected %} {% if selected == 2 %} selected {% endif %} {% endif %}">
-                <a href="{% url 'extractor:group' %}">Группы</a>
-            </div>
+        <div class="filter">
             <div class="filter-b">
-                <a href="{% url 'extractor:search_domains' %}">Все домены</a>
+                <i class="fa-solid fa-bars"></i> <span>Menu</span>
             </div>
-            <div class="filter-b">
-                <a href="{% url 'extractor:search_urls' %}">Все URL</a>
+        </div>
+        <div class="links_g">
+            <div class="filter-b{% if request.path == index_url %} active{% endif %}">
+                <a href="{{ index_url }}"><i class="fa-solid fa-angles-right"></i> <span>Home</span></a>
             </div>
-            <div class="filter-b">
-                <a href="{% url 'extractor:search_shot' %}">Все Shot`s</a>
+            <div class="filter-b{% if request.path == phrases_url %} active{% endif %}">
+                <a href="{{ phrases_url }}"><i class="fa-solid fa-angles-right"></i> <span>Phrases</span></a>
             </div>
+            <div class="filter-b{% if request.path == projects_url %} active{% endif %}">
+                <a href="{{ projects_url }}"><i class="fa-solid fa-angles-right"></i> <span>Projects</span></a>
+            </div>
+            <div class="filter-b{% if request.path == domains_url %} active{% endif %}">
+                <a href="{{ domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>Domains</span></a>
+            </div>
+{#            <div class="filter-b {% if selected %} {% if selected == 2 %} selected {% endif %} {% endif %}">#}
+{#                <a href="{% url 'extractor:group' %}">Группы</a>#}
+{#            </div>#}
+{#            <div class="filter-b">#}
+{#                <a href="{% url 'extractor:search_domains' %}">Все домены</a>#}
+{#            </div>#}
+{#            <div class="filter-b">#}
+{#                <a href="{% url 'extractor:search_urls' %}">Все URL</a>#}
+{#            </div>#}
+{#            <div class="filter-b">#}
+{#                <a href="{% url 'extractor:search_shot' %}">Все Shot`s</a>#}
+{#            </div>#}
         </div>
     {% else %}
         {% if filter %}
