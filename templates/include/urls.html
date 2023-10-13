@@ -1,0 +1,18 @@
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapse_domains" aria-expanded="false"
+                aria-controls="flush-collapse_domains">Urls
+        </button>
+    </h2>
+    <div id="flush-collapse_domains" class="accordion-collapse collapse show">
+        <div class="accordion-body categories">
+            {% for fl in urls %}
+                <label class="select-block group_block span">
+                    <span>{{ fl.url|safe }}</span>
+                    <input type="checkbox" name="group" value="{{ fl.id }}">
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+</div>

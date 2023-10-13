@@ -10,7 +10,7 @@
             {% for fl in projects %}
                 <label class="select-block group_block span">
                     <span>{{ fl.name|safe }}</span>
-                    <input type="checkbox" name="group" value="{{ fl.id }}">
+                    <input type="checkbox" name="project" value="{{ fl.id }}">
                 </label>
             {% endfor %}
         </div>

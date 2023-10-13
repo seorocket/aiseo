@@ -481,6 +481,12 @@ form.application-block {
 .accordion-phrase .accordion-header .accordion-button {
   display: grid;
   grid-template-columns: 1fr auto auto;
+  gap: 10px;
+}
+.accordion-phrase .accordion-header .accordion-button .status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .accordion .accordion-button {

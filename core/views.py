@@ -19,6 +19,7 @@ from django.template import loader
 from django.template.context_processors import csrf
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 
 class UserFilter(filters.FilterSet):
@@ -87,6 +88,10 @@ def phrases(request):
     projects = Project.objects.all()
     keys = SearchQuery.objects.all()
 
+    status_entry = request.GET.get('status')
+    if status_entry:
+        keys = keys.filter(status=status_entry)
+
     context.update({
         'link': True,
         'projects': projects,
@@ -121,13 +126,41 @@ def domains(request):
 
     projects = Project.objects.all()
 
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        domains = domains.filter(search_filter)
+
+    # фильтр по левому меню
+    left_filter = request.GET.dict()
+    if left_filter.get('left_filter'):
+        left_filter.pop('filter_p_sort')
+
+    for key in left_filter.keys():
+        value = left_filter.get(key)
+        if ',' in value:
+            values = [int(v) for v in value.split(',')]
+            q_objects = Q()
+            for v in values:
+                q_objects |= Q(**{key: v})
+            domains = domains.filter(q_objects)
+        try:
+            domains = domains.filter(**{key: value})
+        except Exception:
+            pass
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        domains = domains.filter(status=status_entry)
+
     context.update({
         'link': True,
         'filter': True,
         'domains': domains,
         'statuses': choices,
         'projects': projects,
-        'ahrefs_rank': True
+        'ahrefs_rank': True,
+        'domains_filter': True
     })
 
     return HttpResponse(template.render(context))
@@ -143,6 +176,10 @@ def domain_item(request, domain_id):
 
     for choice in CHOICE_FILE_STATUS:
         choices[choice[0]] = {'name': choice[1]}
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        urls = urls.filter(status=status_entry)
 
     context = {
         'link': True,
@@ -166,6 +203,33 @@ def urls(request):
     for choice in CHOICE_FILE_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(url__icontains=search_query)
+        urls = urls.filter(search_filter)
+
+    # фильтр по левому меню
+    left_filter = request.GET.dict()
+    if left_filter.get('left_filter'):
+        left_filter.pop('filter_p_sort')
+
+    for key in left_filter.keys():
+        value = left_filter.get(key)
+        if ',' in value:
+            values = [int(v) for v in value.split(',')]
+            q_objects = Q()
+            for v in values:
+                q_objects |= Q(**{key: v})
+            urls = urls.filter(q_objects)
+        try:
+            urls = urls.filter(**{key: value})
+        except Exception:
+            pass
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        urls = urls.filter(status=status_entry)
+
     context.update({
         'link': True,
         'filter': True,
@@ -188,6 +252,10 @@ def url_item(request, url_id):
     for choice in CHOICE_FILE_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    status_entry = request.GET.get('status')
+    if status_entry:
+        shots = shots.filter(status=status_entry)
+
     context = {
         'link': True,
         'filter': True,
@@ -203,21 +271,49 @@ def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
     shots = Shot.objects.all()
+    urls = File.objects.all()
 
     choices = dict()
 
     for choice in CHOICE_SHOT_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        shots = shots.filter(search_filter)
+
+    # фильтр по левому меню
+    left_filter = request.GET.dict()
+    if left_filter.get('left_filter'):
+        left_filter.pop('filter_p_sort')
+
+    for key in left_filter.keys():
+        value = left_filter.get(key)
+        if ',' in value:
+            values = [int(v) for v in value.split(',')]
+            q_objects = Q()
+            for v in values:
+                q_objects |= Q(**{key: v})
+            shots = shots.filter(q_objects)
+        try:
+            shots = shots.filter(**{key: value})
+        except Exception:
+            pass
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        shots = shots.filter(status=status_entry)
+
     context.update({
         'link': True,
         'filter': True,
         'statuses': choices,
         'shots': shots,
+        'urls': urls
     })
 
     return HttpResponse(template.render(context))
-
 
 
 class ProxyViewSet(viewsets.ModelViewSet):
@@ -235,6 +331,7 @@ class ProxyViewSet(viewsets.ModelViewSet):
             return Response({'proxy_url': proxy_url}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Не найдено действительных прокси."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -433,6 +530,20 @@ def ajax(request):
                         result = {"error": 'Список фраз пуст'}
                 else:
                     result = {"error": 'Не выбрана группа'}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'delete_phrases':
+            try:
+                phrase = SearchQuery.objects.get(id=data.get('id'))
+                phrase.delete()
+                result = {'delete': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'delete_projects':
+            try:
+                project = Project.objects.get(id=data.get('id'))
+                project.delete()
+                result = {'delete': True}
             except Exception as e:
                 result = {"error": e}
 

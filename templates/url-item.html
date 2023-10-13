@@ -5,7 +5,7 @@
         <div class="info-block-main">
             <div class="status-all-search-block">
                 <label class="select">
-                    <select class="status-all-search" name="filter">
+                    <select class="status-all-search" name="status">
                         <option value="" selected>Search by status</option>
                         {% for kst, st in statuses.items %}
                             <option value="{{ kst }}">{{ st.name }}</option>

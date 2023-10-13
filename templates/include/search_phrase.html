@@ -1,6 +1,6 @@
 <div class="filter_header search_phrase" type="button" data-toggle="collapse" data-target="#multiCollapseExample{{filter.search_phrase.key}}" aria-expanded="false" aria-controls="multiCollapseExample2">
     <form class="serch-left-column">
-        <input type="text" id="search_phrase" placeholder="Search" name="search" required>
+        <input type="text" id="search_phrase" placeholder="Search" name="search" value="{{ request.GET.search }}">
         <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
     </form>
 </div>

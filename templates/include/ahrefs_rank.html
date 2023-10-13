@@ -10,31 +10,80 @@
             <div class="group_block">
                 <span>Pages</span>
                 <div class="filter_block">
-                    <div><input type="number" placeholder="0" name="count__gte" {% if request.GET.count__gte|default:"" != '' %}value="{{ request.GET.count__gte }}"{% endif %}></div>
-                    <div><input type="number" placeholder="0" name="count__lte" {% if request.GET.count__lte|default:"" != '' %}value="{{ request.GET.count__lte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="pages__gte" {% if request.GET.pages__gte|default:"" != '' %}value="{{ request.GET.pages__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="pages__lte" {% if request.GET.pages__lte|default:"" != '' %}value="{{ request.GET.pages__lte }}"{% endif %}></div>
                 </div>
             </div>
             <div class="group_block">
-                <span>History</span>
+                <span>First captured</span>
                 <div class="filter_block">
-                    <div><input type="number" placeholder="0" name="history__gte" {% if request.GET.history__gte|default:"" != '' %}value="{{ request.GET.history__gte }}"{% endif %}></div>
-                    <div><input type="number" placeholder="0" name="history__lte" {% if request.GET.history__lte|default:"" != '' %}value="{{ request.GET.history__lte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="first_captured__gte" {% if request.GET.first_captured__gte|default:"" != '' %}value="{{ request.GET.first_captured__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="first_captured__lte" {% if request.GET.first_captured__lte|default:"" != '' %}value="{{ request.GET.first_captured__lte }}"{% endif %}></div>
                 </div>
             </div>
             <div class="group_block">
-                <span>Domains</span>
+                <span>Last_captured</span>
                 <div class="filter_block">
-                    <div><input type="number" placeholder="0" name="domains_in__gte" {% if request.GET.domains_in__gte|default:"" != '' %}value="{{ request.GET.domains_in__gte }}"{% endif %}></div>
-                    <div><input type="number" placeholder="0" name="domains_in__lte" {% if request.GET.domains_in__lte|default:"" != '' %}value="{{ request.GET.domains_in__lte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="last_captured__gte" {% if request.GET.last_captured__gte|default:"" != '' %}value="{{ request.GET.last_captured__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="last_captured__lte" {% if request.GET.last_captured__lte|default:"" != '' %}value="{{ request.GET.last_captured__lte }}"{% endif %}></div>
                 </div>
             </div>
             <div class="group_block">
-                <span>Links</span>
+                <span>Capture</span>
                 <div class="filter_block">
-                    <div><input type="number" placeholder="0" name="links_in__gte" {% if request.GET.links_in__gte|default:"" != '' %}value="{{ request.GET.links_in__gte }}"{% endif %}></div>
-                    <div><input type="number" placeholder="0" name="links_in__lte" {% if request.GET.links_in__lte|default:"" != '' %}value="{{ request.GET.links_in__lte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="capture__gte" {% if request.GET.capture__gte|default:"" != '' %}value="{{ request.GET.capture__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="capture__lte" {% if request.GET.capture__lte|default:"" != '' %}value="{{ request.GET.capture__lte }}"{% endif %}></div>
                 </div>
             </div>
+            <div class="group_block">
+                <span>Image</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="image__gte" {% if request.GET.image__gte|default:"" != '' %}value="{{ request.GET.image__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="image__lte" {% if request.GET.image__lte|default:"" != '' %}value="{{ request.GET.image__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>Video</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="video__gte" {% if request.GET.video__gte|default:"" != '' %}value="{{ request.GET.video__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="video__lte" {% if request.GET.video__lte|default:"" != '' %}value="{{ request.GET.video__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>Webpage</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="webpage__gte" {% if request.GET.webpage__gte|default:"" != '' %}value="{{ request.GET.webpage__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="webpage__lte" {% if request.GET.webpage__lte|default:"" != '' %}value="{{ request.GET.webpage__lte }}"{% endif %}></div>
+                </div>
+            </div>
+            <div class="group_block">
+                <span>Audio</span>
+                <div class="filter_block">
+                    <div><input type="number" placeholder="0" name="audio__gte" {% if request.GET.audio__gte|default:"" != '' %}value="{{ request.GET.audio__gte }}"{% endif %}></div>
+                    <div><input type="number" placeholder="0" name="audio__lte" {% if request.GET.audio__lte|default:"" != '' %}value="{{ request.GET.audio__lte }}"{% endif %}></div>
+                </div>
+            </div>
+{#            <div class="group_block">#}
+{#                <span>History</span>#}
+{#                <div class="filter_block">#}
+{#                    <div><input type="number" placeholder="0" name="history__gte" {% if request.GET.history__gte|default:"" != '' %}value="{{ request.GET.history__gte }}"{% endif %}></div>#}
+{#                    <div><input type="number" placeholder="0" name="history__lte" {% if request.GET.history__lte|default:"" != '' %}value="{{ request.GET.history__lte }}"{% endif %}></div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="group_block">#}
+{#                <span>Domains</span>#}
+{#                <div class="filter_block">#}
+{#                    <div><input type="number" placeholder="0" name="domains_in__gte" {% if request.GET.domains_in__gte|default:"" != '' %}value="{{ request.GET.domains_in__gte }}"{% endif %}></div>#}
+{#                    <div><input type="number" placeholder="0" name="domains_in__lte" {% if request.GET.domains_in__lte|default:"" != '' %}value="{{ request.GET.domains_in__lte }}"{% endif %}></div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="group_block">#}
+{#                <span>Links</span>#}
+{#                <div class="filter_block">#}
+{#                    <div><input type="number" placeholder="0" name="link__gte" {% if request.GET.link__gte|default:"" != '' %}value="{{ request.GET.link__gte }}"{% endif %}></div>#}
+{#                    <div><input type="number" placeholder="0" name="link__lte" {% if request.GET.link__lte|default:"" != '' %}value="{{ request.GET.link__lte }}"{% endif %}></div>#}
+{#                </div>#}
+{#            </div>#}
         </div>
     </div>
 </div>

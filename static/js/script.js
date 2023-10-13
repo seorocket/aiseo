@@ -1,6 +1,7 @@
 $(document).ready(function () {
     maskField()
     checkSize()
+    checkFilter()
 })
 $(window).resize(function () {
     checkSize()
@@ -173,6 +174,9 @@ function sendAjax(dataForm, el) {
             }
         }
     });
+    if (type === 'delete_phrases' || type === 'delete_projects') {
+        obj['id'] = $(el.target).attr('data-id')
+    }
 
     obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
@@ -192,12 +196,15 @@ function sendAjax(dataForm, el) {
                     $('.group_select').html(response);
                     $('.group_select option:last').prop('selected', true);
                     $('.indexSection .item.phrase').removeClass('d-none')
-                }
-                if (type === 'save_phrase') {
+                } else if (type === 'save_phrase') {
                     $('.message_phrase').html('<span style="color:green;">Фразы успешно добавлены</span>');
                     setTimeout(function () {
                         $('.message_phrase').html('')
                     }, 1500)
+                } else if (type === 'delete_phrases' || type === 'delete_projects') {
+                    if (response.delete) {
+                        $(el.target).parents('tr').fadeOut()
+                    }
                 }
             }
         }
@@ -286,4 +293,108 @@ $('.select-block').on('click', function () {
 });
 $('.select-block input').on('click', function (el) {
     el.stopPropagation();
+});
+
+$('table .delete').on('click', function(el) {
+    el.preventDefault()
+    sendAjax('', el)
+})
+
+$('form .search_filter_btn').on('click', function (el) {
+    el.preventDefault();
+    let dataArray = $('form.nameFilter-block').serializeArray();
+    let mergedData = {};
+
+    $.each(dataArray, function (index, item) {
+        const paramName = item.name;
+        if ((item.name.endsWith('__gte') || item.name.endsWith('__lte')) && item.value !== '') {
+            if (mergedData[paramName] !== undefined) {
+                let existingValues = mergedData[paramName].split(',');
+                let newValues = item.value.split(',');
+                let mergedValues = Array.from(new Set(existingValues.concat(newValues)));
+                mergedData[paramName] = mergedValues.join(',');
+            } else {
+                mergedData[paramName] = item.value;
+            }
+        } else if (item.value !== '') {
+            if (mergedData[paramName] !== undefined) {
+                mergedData[paramName] = mergedData[paramName] + ',' + item.value;
+            } else {
+                mergedData[paramName] = item.value;
+            }
+        }
+    });
+
+    let mergedSerializedData = $.param(mergedData),
+        decodedSerializedData = decodeURIComponent(mergedSerializedData),
+        filter = window.location.search,
+        urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("filter_p_sort") !== null) {
+    if (urlParams.get("p") !== null) {
+      window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}&p=${urlParams.get("p")}`;
+    } else {
+      window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}`;
+    }
+    } else {
+    if (urlParams.get("p") !== null) {
+      window.location.search = decodedSerializedData + `&p=${urlParams.get("p")}`;
+    } else {
+      window.location.search = decodedSerializedData;
+    }
+    }
+});
+
+function checkFilter() {
+    let filter = window.location.search;
+    let params = new URLSearchParams(filter);
+
+    // Проход по каждому ключу параметров URL
+    params.forEach(function (value, key) {
+        // Исключение для ключа "stocks и available"
+
+        // Поиск полей ввода с совпадающим именем ключа
+        $('input[name="' + key + '"]').each(function () {
+            let inputValues = $(this).val().split(',');
+
+            let hasMatchingValues = ''
+            if (key !== 'available' && key !== 'stocks') {
+                // Проверка наличия совпадающих значений
+                hasMatchingValues = inputValues.some(function (inputValue) {
+                    return value.split(',').includes(inputValue);
+                });
+            }
+
+            if (hasMatchingValues) {
+                $(this).prop('checked', true);
+                $(this).parents('.group_block').addClass('active')
+            }
+        });
+    });
+}
+
+$('form .reset').on('click', function(el) {
+    el.preventDefault()
+    window.location.search = ''
+})
+
+$('.group_select').on('change', function() {
+    $('.indexSection .item.phrase').removeClass('d-none')
+})
+
+$('.status-all-search-block .f-status').on('click', function() {
+    let selectedValue = $('.status-all-search').val(),
+        filter = window.location.search,
+        type = $('.status-all-search').attr('name'),
+        regex = new RegExp(`[?&]?${type}=[^&]+`, 'gi');
+
+    if (window.location.href.indexOf(type) !== -1) {
+        window.location.search = `${filter.replace(regex, '')}&${type}=${selectedValue}`
+    } else {
+        if (window.location.href.indexOf('?') !== -1) {
+            window.location.search = `${filter}&${type}=${selectedValue}`
+        } else {
+            window.location.search = `?${type}=${selectedValue}`
+        }
+    }
 });

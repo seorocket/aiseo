@@ -477,6 +477,12 @@ form.application-block {
         .accordion-button {
             display: grid;
             grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            .status {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
         }
     }
 }

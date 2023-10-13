@@ -5,7 +5,7 @@
         <div class="info-block-main">
             <div class="status-all-search-block">
                 <label class="select">
-                    <select class="status-all-search" name="filter">
+                    <select class="status-all-search" name="status">
                         <option value="" selected>Search by status</option>
                         {% for kst, st in statuses.items %}
                             <option value="{{ kst }}">{{ st.name }}</option>
@@ -55,7 +55,7 @@
                                                     {{ i.get_status_display }}
                                                 </td>
                                                 <td>
-                                                    <div type="button" class="btn red delete" data-id="{{ i.id }}">Delete</div>
+                                                    <div type="button" class="btn red delete" data-id="{{ i.id }}" data-request="delete_phrases">Delete</div>
                                                 </td>
                                             </tr>
                                         {% endif %}

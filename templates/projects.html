@@ -27,7 +27,7 @@
                             {% if i.description %}{{ i.description }}{% else %}-{% endif %}
                         </td>
                         <td>
-                            <div type="button" class="btn red delete" data-id="{{ i.id }}">Delete</div>
+                            <div type="button" class="btn red delete" data-id="{{ i.id }}" data-request="delete_projects">Delete</div>
                         </td>
                     </tr>
                 {% endfor %}

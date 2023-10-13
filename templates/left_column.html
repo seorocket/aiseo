@@ -48,8 +48,11 @@
                 {% if projects %}
                     {% include "include/categories.html" %}
                 {% endif %}
-                {% if domains %}
+                {% if domains and not domains_filter %}
                     {% include "include/domains.html" %}
+                {% endif %}
+                {% if urls %}
+                    {% include "include/urls.html" %}
                 {% endif %}
                 </div>
 {#                                {% if filter.ahrefs_rank %}#}
@@ -62,7 +65,8 @@
                 {#                    {% include "range_filter.html" %}#}
                 {#                {% endif %}#}
 
-                <button type="button" class="btn searc_filter">APPLY<i class="fa fa-search" aria-hidden="true"></i></button>
+                <button type="button" class="btn search_filter_btn">Apply<i class="fa fa-search" aria-hidden="true"></i></button>
+                <button type="button" class="btn reset">Reset<i class="fa-solid fa-trash-arrow-up"></i></button>
             </form>
         </div>
     {% endif %}

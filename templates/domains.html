@@ -5,10 +5,10 @@
         <div class="info-block-main">
             <div class="status-all-search-block">
                 <label class="select">
-                    <select class="status-all-search" name="filter">
-                        <option value="" selected>Search by status</option>
+                    <select class="status-all-search" name="status">
+                        <option selected>Search by status</option>
                         {% for kst, st in statuses.items %}
-                            <option value="{{ kst }}">{{ st.name }}</option>
+                            <option value="{{ kst }}" class="{{ kst|string }}" {% if request.GET.status == kst %}selected{% endif %}>{{ st.name }}</option>
                         {% endfor %}
                     </select>
                 </label>
@@ -29,6 +29,7 @@
                     <th>History</th>
                     <th>Status</th>
                     <th>Sn</th>
+                    <th>Img</th>
                     <th>FC</th>
                     <th>LC</th>
                     <th>SS</th>
@@ -55,6 +56,7 @@
                         <td>{% if i.history %}{{ i.history }}{% else %}-{% endif %}</td>
                         <td>{{ i.get_status_display }}</td>
                         <td>{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</td>
+                        <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
                         <td>{% if i.first_captured %}{{ i.first_captured }}{% else %}-{% endif %}</td>
                         <td>{% if i.last_captured %}{{ i.last_captured }}{% else %}-{% endif %}</td>
                         <td>{% if i.stripped_snippet %}{{ i.stripped_snippet }}{% else %}-{% endif %}</td>
