@@ -185,6 +185,9 @@ label.select select {
   text-transform: none;
   padding: 5px 10px;
 }
+.btn.red:hover {
+  background-color: #a50013;
+}
 .btn.red-main {
   background-color: #ff1330;
 }
@@ -726,4 +729,14 @@ table tbody tr.active {
 }
 .list-images-block .list-images-main > .list-domain > .list-domain > li ul li .count {
   display: none;
+}
+
+.accordion .accordion-body.with-del {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.accordion .accordion-body.with-del > .btn-block {
+  width: -moz-fit-content;
+  width: fit-content;
 }/*# sourceMappingURL=style.css.map */

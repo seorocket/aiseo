@@ -4,6 +4,7 @@ $(document).ready(function () {
     checkFilter()
     checkStatus()
     checkStatusFilter()
+    count_table_td()
 })
 $(window).resize(function () {
     checkSize()
@@ -179,6 +180,16 @@ function sendAjax(dataForm, el) {
     if (type === 'delete_phrases' || type === 'delete_projects') {
         obj['id'] = $(el.target).attr('data-id')
     }
+    if (type === 'delete_selected') {
+        let id_array = []
+        console.log($(el.target).parents('.accordion-item').find('td input:checked'))
+        $(el.target).parents('.accordion-item').find('td input:checked').map(function(i, item) {
+            id_array.push($(item).val())
+        })
+        obj['id_array'] = id_array
+    }
+
+    console.log(obj)
 
     obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
@@ -206,6 +217,13 @@ function sendAjax(dataForm, el) {
                 } else if (type === 'delete_phrases' || type === 'delete_projects') {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut()
+                    }
+                } else if (type === 'delete_selected') {
+                    if (response.delete) {
+                        $(el.target).parents('tr').fadeOut()
+                        obj['id_array'].map(function(i, item) {
+                            $(`.accordion-item tr td input[value=${i}]`).parents('tr').fadeOut().remove()
+                        })
                     }
                 }
             }
@@ -440,21 +458,21 @@ function checkStatus() {
                         }
                     }
                     if (done === count) {
-                        status = 'Завершено'
+                        status = 'Completed'
                     } else if (done+added === count) {
-                        status = 'Есть не проверенные'
+                        status = 'There are not verified'
                     } else if (done+error === count) {
-                        status = 'Есть ошибки'
+                        status = 'There are errors'
                     } else if (done+error+added === count) {
-                        status = 'Есть проверенные, не проверенные и ошибки'
+                        status = 'There are tested, not tested and errors'
                     } else if (error+added === count) {
-                        status = 'Есть ошибки и не проверенные'
+                        status = 'There are errors and not verified'
                     } else if (error === count) {
-                        status = 'Ошибка'
+                        status = 'Error'
                     } else if (added === count) {
-                        status = 'Добавлено'
+                        status = 'Added'
                     } else {
-                        status = 'В процессе'
+                        status = 'In process'
                     }
                     $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span>${done}/${count} (${((done/count)*100).toFixed(0)}%)</span><span>${status}</span>`)
                 }
@@ -563,3 +581,33 @@ $(document).on('click', '.more_urls', function (el) {
         $('.table tr').removeClass('active')
     }
 });
+
+function count_table_td() {
+  let count_table = 0;
+  for (let i = 0; i < $('.table.tree-count-results td.count-td').length; i++) {
+    let block = $('.table.tree-count-results td.count-td').eq(i);
+    let count = 0;
+    for (let j = 0; j < $(block).find('> span').length; j++) {
+      count += Number($(block).find('> span').eq(j).text());
+    }
+    count_table += count;
+    $(block).append(count);
+  }
+  $('.table.tree-count-results .count-th > span').text(`(${count_table})`);
+}
+
+$('.checks_all').on('click', function(){
+    if($(this).prop('checked')){
+        let checking = $(this).parents('table').find('.checks').map(function(i, el){
+            return $(el).prop('checked', true);
+        }).get();
+    }else{
+        let checking = $(this).parents('table').find('.checks').map(function(i, el){
+            return $(el).prop('checked', false);
+        }).get();
+    }
+});
+
+$('.accordion .delete-selected').on('click', function(el) {
+    sendAjax('', el)
+})

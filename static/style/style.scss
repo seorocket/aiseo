@@ -180,6 +180,9 @@ label.select {
         background-color: $red;
         text-transform: none;
         padding: 5px 10px;
+        &:hover {
+            background-color: $dred;
+        }
     }
     &.red-main {
         background-color: $red;
@@ -748,6 +751,19 @@ table {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+.accordion {
+    .accordion-body {
+        &.with-del {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            > .btn-block {
+                width: fit-content;
             }
         }
     }

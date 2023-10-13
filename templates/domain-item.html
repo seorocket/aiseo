@@ -8,18 +8,50 @@
                     <select class="status-all-search" name="status">
                         <option selected disabled>Search by status</option>
                         {% for kst, st in statuses.items %}
-                            <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
+                            <option value="{{ kst }}"
+                                    {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
                         {% endfor %}
                     </select>
                 </label>
                 <div class="btn-block">
                     <div class="btn f-status">Search</div>
-                    <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
+                    <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status
+                    </div>
                 </div>
             </div>
             <div class="_titleBlock">
                 <span class="name">{{ urls.count }} result{{ urls.count|pluralize }} found</span>
             </div>
+            <table class="table tree-count-results">
+                <thead>
+                <tr>
+                    <th>URL</th>
+                    <th class="count-th">COUNT <span>(0)</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key, value in nested_urls.items %}
+                    <tr>
+                        <td>
+                            {% if value.link %}
+                                {% with value.link as url_without_protocol %}
+                                    <li class="1"><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>
+                                {% endwith %}
+                            {% else %}
+                                <ul class="first-list">
+                                    {% include "include/nested_urls.html" with nested_urls=value %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="count-td">
+                            {% for key, v in value.items %}
+                                <span class="d-none">{{ v.count }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             <table class="table">
                 <thead>
                 <tr>

@@ -187,6 +187,9 @@ def domain_item(request, domain_id):
     if status_entry:
         urls = urls.filter(status=status_entry)
 
+    urls_data = [{"name": url.url, "id": url.id} for url in urls]
+    nested_urls = create_nested_url_list(urls_data)
+
     context = {
         'link': True,
         'filter': True,
@@ -194,6 +197,7 @@ def domain_item(request, domain_id):
         'urls': urls,
         'statuses': choices,
         'request': request,
+        'nested_urls': nested_urls
     }
     context.update(csrf(request))
 
@@ -609,6 +613,16 @@ def ajax(request):
             try:
                 project = Project.objects.get(id=data.get('id'))
                 project.delete()
+                result = {'delete': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'delete_selected':
+            try:
+                id_array = data['id_array']
+                if id_array:
+                    for id_item in id_array:
+                        phrase = SearchQuery.objects.get(id=id_item)
+                        phrase.delete()
                 result = {'delete': True}
             except Exception as e:
                 result = {"error": e}

@@ -1,0 +1,13 @@
+{% for key, value in nested_urls.items %}
+    {% if value.count %}
+    <li {% if not key %}class="main-title"{% endif %}>
+        {% if value.link %}
+          <a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a>
+        {% else %}
+          <ul>
+            {% include "include/nested_urls.html" with nested_urls=value %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endif %}
+{% endfor %}

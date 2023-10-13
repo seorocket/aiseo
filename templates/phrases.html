@@ -29,13 +29,15 @@
                         </h2>
                         <div id="flush-collapse_{{ forloop.counter }}" class="accordion-collapse collapse"
                              data-bs-parent="#accordion-phrase">
-                            <div class="accordion-body">
+                            <div class="accordion-body with-del">
+                                <div class="btn-block">
+                                    <div class="btn red delete-selected" data-request="delete_selected">Delete selected</div>
+                                </div>
                                 <table class="table">
                                     <thead>
                                     <tr>
                                         <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
                                         <th>Name</th>
-                                        <th>Group</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -48,9 +50,6 @@
                                                            class="checks group-{{ g.id }}"></td>
                                                 <td>
                                                     {{ i.query }}
-                                                </td>
-                                                <td>
-                                                    {{ i.project.name }}
                                                 </td>
                                                 <td>
                                                     {{ i.get_status_display }}
