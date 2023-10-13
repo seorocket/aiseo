@@ -2,6 +2,8 @@ $(document).ready(function () {
     maskField()
     checkSize()
     checkFilter()
+    checkStatus()
+    checkStatusFilter()
 })
 $(window).resize(function () {
     checkSize()
@@ -197,7 +199,7 @@ function sendAjax(dataForm, el) {
                     $('.group_select option:last').prop('selected', true);
                     $('.indexSection .item.phrase').removeClass('d-none')
                 } else if (type === 'save_phrase') {
-                    $('.message_phrase').html('<span style="color:green;">Фразы успешно добавлены</span>');
+                    $('.message_phrase').html('<span style="color:green;">Phrases added successfully</span>');
                     setTimeout(function () {
                         $('.message_phrase').html('')
                     }, 1500)
@@ -400,25 +402,164 @@ $('.status-all-search-block .f-status').on('click', function() {
 });
 
 $('.status-all-search-block .reset-status').on('click', function() {
-    // Получаем текущий URL
     let currentUrl = window.location.href;
-
-    // Получаем параметры из URL
     let searchParams = new URLSearchParams(window.location.search);
-
-    // Получаем имя параметра, который нужно удалить
     let paramName = $('.status-all-search').attr('name');
-
-    // Проверяем, есть ли такой параметр в URL
     if (searchParams.has(paramName)) {
-        // Удаляем параметр из URL
         searchParams.delete(paramName);
-
-        // Создаем новый URL без удаленного параметра
         let newUrl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
-
-        // Заменяем текущий URL на новый URL без параметра
         window.history.replaceState({ path: newUrl }, '', newUrl);
         location.reload();
+    }
+});
+
+function checkStatus() {
+    let accordion = $('.accordion-phrase .accordion-item')
+    for (let i=0; i<accordion.length; i++) {
+        let id = $(accordion).eq(i).attr('data-id')
+        $.ajax({
+            url: `/api/searchqueries/?project=${id}`,
+            method: "GET",
+            success: function (response) {
+                if (response.length) {
+                    let count = response.length, // всего
+                        added = 0, // добавлен
+                        done = 0, // сделано
+                        inprogress = 0, // в процессе
+                        error = 0, // ошибка
+                        status
+                    for (let j=0; j<count; j++) {
+                        if (response[j].status === 0) {
+                            added++
+                        } else if (response[j].status === 1) {
+                            done++
+                        } else if (response[j].status === 2) {
+                            inprogress++
+                        } else if (response[j].status === 3) {
+                            error++
+                        }
+                    }
+                    if (done === count) {
+                        status = 'Завершено'
+                    } else if (done+added === count) {
+                        status = 'Есть не проверенные'
+                    } else if (done+error === count) {
+                        status = 'Есть ошибки'
+                    } else if (done+error+added === count) {
+                        status = 'Есть проверенные, не проверенные и ошибки'
+                    } else if (error+added === count) {
+                        status = 'Есть ошибки и не проверенные'
+                    } else if (error === count) {
+                        status = 'Ошибка'
+                    } else if (added === count) {
+                        status = 'Добавлено'
+                    } else {
+                        status = 'В процессе'
+                    }
+                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span>${done}/${count} (${((done/count)*100).toFixed(0)}%)</span><span>${status}</span>`)
+                }
+            }
+        });
+    }
+}
+
+setInterval(function() {
+    checkStatus()
+}, 5000)
+
+$('.status-all-search').on('change', function() {
+    checkStatusFilter()
+})
+
+function checkStatusFilter() {
+    if ($('.status-all-search').val() !== null) {
+        $('.status-all-search-block .f-status').addClass('active')
+    }
+}
+
+function createNestedStructure(data, el) {
+    const ul = $('<ul class="list-domain">');
+    if (typeof data === 'object') {
+        $.each(data, function(key, value) {
+            if (key !== 'count') {
+                if (value.count > 0) {
+                    if (value.link) {
+                        const link = $('<a>')
+                            .attr('href', `/urls/${value.id}/`)
+                            .text(value.link);
+                        const li = $('<li class="main-title">').append(link);
+                        ul.append(li);
+                    } else {
+                        const nestedUl = createNestedStructure(value);
+                        const li = $('<li>').append(nestedUl);
+                        li.append(`<div class="count">${value.count}</div>`);
+                        ul.append(li);
+                    }
+                } else {
+                    const nestedUl = createNestedStructure(value, el);
+                    ul.append(nestedUl);
+                }
+            }
+        });
+    }
+    $(el).append(ul);
+    return ul;
+}
+
+$(document).on('click', '.more_urls', function (el) {
+    const id = Number($(this).attr('data-id'));
+    if (!$(el.target).parents('tr').next('tr.list-images-block').hasClass('list-images-block')) {
+        $('.table .list-images-block').remove()
+        $('.table tr').removeClass('active')
+        $(el.target).parents('tr').after(`<tr class="list-images-block"><td colspan="19" class="list-images"><div class="list-images-main"></div></td></tr>`)
+        const tr = $(el.target).parents('tbody').find('tr.list-images-block td.list-images .list-images-main')
+        $.ajax({
+            url: `/get-urls-domain/${id}/`,
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            success: function(response) {
+                createNestedStructure(response.nested_urls, tr);
+                $('.list-images-block').prev(tr).addClass('active')
+            }
+        });
+
+        // const imageSliderBlock = $(el.target).parents('tbody').find('tr.list-images-block td.list-images .list-images-main')
+        // $.ajax({
+        //     url: `/api/domain_photo/?domain_id=${id}`, // Передаем URL как часть запроса
+        //     type: 'get',
+        //     dataType: 'json',
+        //     headers: {
+        //         'X-CSRFToken': getCookie('csrftoken'),
+        //     },
+        //     success: function(response) {
+        //         $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>`)
+        //         let imageSlider = $(imageSliderBlock).find('.swiper .swiper-wrapper')
+        //         new Swiper(".galleryDomainSlider", {
+        //           navigation: {
+        //             nextEl: ".swiper-button-next",
+        //             prevEl: ".swiper-button-prev",
+        //           },
+        //         });
+        //         if (response) {
+        //             for (let i=0; i<response.length; i++) {
+        //                 $(imageSlider).append(`
+        //                     <div class="swiper-slide"><img src="${response[i].photo}" alt=""></div>
+        //                 `)
+        //             }
+        //         } else {
+        //             console.log('Ошибка при получении скриншота');
+        //         }
+        //     },
+        //     error: function(response) {
+        //         console.log(response);
+        //     }
+        // });
+    } else {
+        $('.table .list-images-block').remove()
+        $('.table tr').removeClass('active')
     }
 });

@@ -22,6 +22,7 @@ urlpatterns = [
     re_path(r'^urls/$', urls, name='urls'),
     re_path(r'^urls/(?P<url_id>[0-9A-Za-z\-_]+)/$', url_item, name='url_item'),
     re_path(r'^shots/$', shots, name='shots'),
+    re_path(r'^get-urls-domain/(?P<domen_id>\d+)/$', get_urls_domain, name='get_urls_domain'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

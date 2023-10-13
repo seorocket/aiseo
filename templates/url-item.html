@@ -25,7 +25,6 @@
                 <tr>
                     <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
                     <th>ID</th>
-                    <th>Url</th>
                     <th>Date</th>
                     <th>Status</th>
                 </tr>
@@ -36,7 +35,6 @@
                         <td><input type="checkbox" value="{{ i.id }}"
                                    class="checks group-{{ g.id }}"></td>
                         <td>{{ i.name }}</td>
-                        <td>{% if i.url %}{{ i.url }}{% else %}-{% endif %}</td>
                         <td>{% if i.date %}{{ i.date }}{% else %}-{% endif %}</td>
                         <td>{{ i.get_status_display }}</td>
                     </tr>

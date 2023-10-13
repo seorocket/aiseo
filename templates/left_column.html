@@ -65,8 +65,10 @@
                 {#                    {% include "range_filter.html" %}#}
                 {#                {% endif %}#}
 
-                <button type="button" class="btn search_filter_btn">Apply<i class="fa fa-search" aria-hidden="true"></i></button>
-                <button type="button" class="btn reset">Reset<i class="fa-solid fa-trash-arrow-up"></i></button>
+                {% if ahrefs_rank or projects or domains or urls %}
+                    <button type="button" class="btn search_filter_btn">Apply<i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button type="button" class="btn reset">Reset<i class="fa-solid fa-trash-arrow-up"></i></button>
+                {% endif %}
             </form>
         </div>
     {% endif %}

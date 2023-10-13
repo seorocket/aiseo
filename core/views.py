@@ -92,10 +92,16 @@ def phrases(request):
     if status_entry:
         keys = keys.filter(status=status_entry)
 
+    choices = dict()
+
+    for choice in CHOICE_DOMAIN_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
     context.update({
         'link': True,
         'projects': projects,
-        'keys': keys
+        'keys': keys,
+        'statuses': choices,
     })
 
     return HttpResponse(template.render(context))
@@ -187,7 +193,9 @@ def domain_item(request, domain_id):
         'data': data,
         'urls': urls,
         'statuses': choices,
+        'request': request,
     }
+    context.update(csrf(request))
 
     return HttpResponse(template.render(context))
 
@@ -262,7 +270,9 @@ def url_item(request, url_id):
         'data': data,
         'shots': shots,
         'statuses': choices,
+        'request': request,
     }
+    context.update(csrf(request))
 
     return HttpResponse(template.render(context))
 
@@ -314,6 +324,51 @@ def shots(request):
     })
 
     return HttpResponse(template.render(context))
+
+
+def get_urls_domain(request, domen_id):
+    urls = File.objects.filter(domain__id=domen_id).select_related('domain')
+    urls_data = [{"name": url.url, "id": url.id} for url in urls]
+    nested_urls = create_nested_url_list(urls_data)
+    return JsonResponse({'nested_urls': nested_urls})
+
+
+def create_nested_url_list(urls_data):
+    # Создаем пустой словарь для хранения вложенных уровней
+    nested_urls = {}
+
+    for idx, url_info in enumerate(urls_data):
+        url = url_info['name']
+        # Добавляем слеш в конец URL, если его там нет
+        if not url.endswith('/'):
+            url_with_slash = url + '/'
+        else:
+            url_with_slash = url
+
+        # Разделяем URL на протокол и оставшуюся часть
+        protocol, remaining_url = url_with_slash.split('://')
+
+        parts = remaining_url.split('/')  # Разбиваем URL на части
+
+        current_level = nested_urls
+        # Если учитываем протокол
+        if protocol not in current_level:
+            current_level[protocol] = {}
+
+        current_level = current_level[protocol]
+
+        for part in parts:
+            if part not in current_level:
+                current_level[part] = {'count': 0}  # Создаем новый уровень и счетчик
+            current_level = current_level[part]  # Переходим на следующий уровень
+            current_level['count'] += 1  # Увеличиваем счетчик на этом уровне
+
+        # Добавляем id и ссылку к текущему уровню, только если есть id в urls_data
+        if 'id' in url_info:
+            current_level['id'] = url_info['id']
+            current_level['link'] = url
+
+    return nested_urls
 
 
 class ProxyViewSet(viewsets.ModelViewSet):
@@ -369,7 +424,18 @@ class DomainViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class SearchQueryFilter(filters.FilterSet):
+    project = django_filters.CharFilter(field_name="project")
+    status = django_filters.CharFilter(field_name="status")
+
+    class Meta:
+        model = SearchQuery
+        fields = ['project', 'status']
+
+
 class SearchQueryViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    filterset_class = SearchQueryFilter
     queryset = SearchQuery.objects.all()
     serializer_class = SearchQuerySerializer
 
@@ -527,9 +593,9 @@ def ajax(request):
                                     ph.save()
                                     result = {"status": True}
                     else:
-                        result = {"error": 'Список фраз пуст'}
+                        result = {"error": 'The list of phrases is empty'}
                 else:
-                    result = {"error": 'Не выбрана группа'}
+                    result = {"error": 'No project selected'}
             except Exception as e:
                 result = {"error": e}
         if data.get('type') == 'delete_phrases':

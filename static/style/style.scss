@@ -532,7 +532,7 @@ table {
     thead {
         tr {
             th {
-                padding: 10px 0;
+                padding: 10px 3px;
             }
         }
     }
@@ -546,10 +546,13 @@ table {
                 background-color: $lgrey;
             }
             td {
-                padding: 5px 0;
+                padding: 5px 3px;
                 a {
                     color: $blue2;
                 }
+            }
+            &.active {
+                background-color: $white;
             }
         }
     }
@@ -565,7 +568,8 @@ table {
             .btn-block {
                 display: flex;
                 gap: 5px;
-                .reset-status {
+                .reset-status,
+                .f-status {
                     &:not(.active) {
                         display: none;
                     }
@@ -595,7 +599,8 @@ table {
             .btn-block {
                 display: flex;
                 gap: 5px;
-                .reset-status {
+                .reset-status,
+                .f-status {
                     &:not(.active) {
                         display: none;
                     }
@@ -706,6 +711,44 @@ table {
             width: 25px;
             padding-left:7px;
             margin-right:7px;
+        }
+    }
+}
+.list-images-block {
+    background-color: $white;
+    &:hover {
+        background-color: $white;
+    }
+    .list-images-main {
+        .list-domain {
+            display: flex;
+            flex-direction: column;
+            .main-title {
+                order: -1;
+            }
+        }
+        > .list-domain {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            > .list-domain {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                > li {
+                    display: flex;
+                    > .count {
+                        order: -1;
+                    }
+                    ul {
+                        li {
+                            .count {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

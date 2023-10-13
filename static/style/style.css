@@ -525,7 +525,7 @@ form.application-block {
 }
 
 table thead tr th {
-  padding: 10px 0;
+  padding: 10px 3px;
 }
 table tbody tr {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
@@ -537,10 +537,13 @@ table tbody tr:hover {
   background-color: #F9F9F9;
 }
 table tbody tr td {
-  padding: 5px 0;
+  padding: 5px 3px;
 }
 table tbody tr td a {
   color: #066BF9;
+}
+table tbody tr.active {
+  background-color: #FFFFFF;
 }
 
 .phrasesSection .info-block-main {
@@ -556,7 +559,8 @@ table tbody tr td a {
   display: flex;
   gap: 5px;
 }
-.phrasesSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active) {
+.phrasesSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active),
+.phrasesSection .info-block-main .status-all-search-block .btn-block .f-status:not(.active) {
   display: none;
 }
 
@@ -583,7 +587,8 @@ table tbody tr td a {
   display: flex;
   gap: 5px;
 }
-.domainsSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active) {
+.domainsSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active),
+.domainsSection .info-block-main .status-all-search-block .btn-block .f-status:not(.active) {
   display: none;
 }
 .domainsSection .info-block-main .table tbody .more_urls {
@@ -688,4 +693,37 @@ table tbody tr td a {
   width: 25px;
   padding-left: 7px;
   margin-right: 7px;
+}
+
+.list-images-block {
+  background-color: #FFFFFF;
+}
+.list-images-block:hover {
+  background-color: #FFFFFF;
+}
+.list-images-block .list-images-main .list-domain {
+  display: flex;
+  flex-direction: column;
+}
+.list-images-block .list-images-main .list-domain .main-title {
+  order: -1;
+}
+.list-images-block .list-images-main > .list-domain {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain > li {
+  display: flex;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain > li > .count {
+  order: -1;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain > li ul li .count {
+  display: none;
 }/*# sourceMappingURL=style.css.map */
