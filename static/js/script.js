@@ -398,3 +398,27 @@ $('.status-all-search-block .f-status').on('click', function() {
         }
     }
 });
+
+$('.status-all-search-block .reset-status').on('click', function() {
+    // Получаем текущий URL
+    let currentUrl = window.location.href;
+
+    // Получаем параметры из URL
+    let searchParams = new URLSearchParams(window.location.search);
+
+    // Получаем имя параметра, который нужно удалить
+    let paramName = $('.status-all-search').attr('name');
+
+    // Проверяем, есть ли такой параметр в URL
+    if (searchParams.has(paramName)) {
+        // Удаляем параметр из URL
+        searchParams.delete(paramName);
+
+        // Создаем новый URL без удаленного параметра
+        let newUrl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
+
+        // Заменяем текущий URL на новый URL без параметра
+        window.history.replaceState({ path: newUrl }, '', newUrl);
+        location.reload();
+    }
+});

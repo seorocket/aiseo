@@ -2,6 +2,7 @@ $blue: #128DC2;
 $blue2: #066BF9;
 $purple: #9837C6;
 $red: #ff1330;
+$dred: #a50013;
 $black: #000000;
 $white: #FFFFFF;
 $lgrey: #F9F9F9;
@@ -179,6 +180,12 @@ label.select {
         background-color: $red;
         text-transform: none;
         padding: 5px 10px;
+    }
+    &.red-main {
+        background-color: $red;
+        &:hover {
+            background-color: $dred;
+        }
     }
 }
 h1, h2, h3, h4, h5, h6 {
@@ -555,6 +562,15 @@ table {
         .status-all-search-block {
             display: flex;
             gap: 10px;
+            .btn-block {
+                display: flex;
+                gap: 5px;
+                .reset-status {
+                    &:not(.active) {
+                        display: none;
+                    }
+                }
+            }
         }
     }
 }
@@ -576,6 +592,15 @@ table {
         .status-all-search-block {
             display: flex;
             gap: 10px;
+            .btn-block {
+                display: flex;
+                gap: 5px;
+                .reset-status {
+                    &:not(.active) {
+                        display: none;
+                    }
+                }
+            }
         }
         .table {
             tbody {

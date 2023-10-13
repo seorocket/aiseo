@@ -6,14 +6,15 @@
             <div class="status-all-search-block">
                 <label class="select">
                     <select class="status-all-search" name="status">
-                        <option selected>Search by status</option>
+                        <option selected disabled>Search by status</option>
                         {% for kst, st in statuses.items %}
-                            <option value="{{ kst }}" class="{{ kst|string }}" {% if request.GET.status == kst %}selected{% endif %}>{{ st.name }}</option>
+                            <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
                         {% endfor %}
                     </select>
                 </label>
                 <div class="btn-block">
                     <div class="btn f-status">Search</div>
+                    <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
                 </div>
             </div>
             <div class="_titleBlock">

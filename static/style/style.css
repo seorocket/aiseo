@@ -185,6 +185,12 @@ label.select select {
   text-transform: none;
   padding: 5px 10px;
 }
+.btn.red-main {
+  background-color: #ff1330;
+}
+.btn.red-main:hover {
+  background-color: #a50013;
+}
 
 h1, h2, h3, h4, h5, h6 {
   color: #000000;
@@ -546,6 +552,13 @@ table tbody tr td a {
   display: flex;
   gap: 10px;
 }
+.phrasesSection .info-block-main .status-all-search-block .btn-block {
+  display: flex;
+  gap: 5px;
+}
+.phrasesSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active) {
+  display: none;
+}
 
 .projectsSection .info-block-main {
   display: flex;
@@ -565,6 +578,13 @@ table tbody tr td a {
 .domainsSection .info-block-main .status-all-search-block {
   display: flex;
   gap: 10px;
+}
+.domainsSection .info-block-main .status-all-search-block .btn-block {
+  display: flex;
+  gap: 5px;
+}
+.domainsSection .info-block-main .status-all-search-block .btn-block .reset-status:not(.active) {
+  display: none;
 }
 .domainsSection .info-block-main .table tbody .more_urls {
   width: -moz-fit-content;
