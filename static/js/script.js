@@ -180,10 +180,16 @@ function sendAjax(dataForm, el) {
     if (type === 'delete_phrases' || type === 'delete_projects') {
         obj['id'] = $(el.target).attr('data-id')
     }
-    if (type === 'delete_selected') {
+    if (type === 'delete_selected_phrases') {
         let id_array = []
-        console.log($(el.target).parents('.accordion-item').find('td input:checked'))
         $(el.target).parents('.accordion-item').find('td input:checked').map(function(i, item) {
+            id_array.push($(item).val())
+        })
+        obj['id_array'] = id_array
+    }
+    if (type === 'delete_selected_projects') {
+        let id_array = []
+        $(el.target).parents('.info-block-main').find('table td input:checked').map(function(i, item) {
             id_array.push($(item).val())
         })
         obj['id_array'] = id_array
@@ -216,11 +222,18 @@ function sendAjax(dataForm, el) {
                     }, 1500)
                 } else if (type === 'delete_phrases' || type === 'delete_projects') {
                     if (response.delete) {
-                        $(el.target).parents('tr').fadeOut()
+                        $(el.target).parents('tr').fadeOut().remove()
                     }
-                } else if (type === 'delete_selected') {
+                } else if (type === 'delete_selected_phrases') {
                     if (response.delete) {
-                        $(el.target).parents('tr').fadeOut()
+                        $(el.target).parents('tr').fadeOut().remove()
+                        obj['id_array'].map(function(i, item) {
+                            $(`.accordion-item tr td input[value=${i}]`).parents('tr').fadeOut().remove()
+                        })
+                    }
+                } else if (type === 'delete_selected_projects') {
+                    if (response.delete) {
+                        $(el.target).parents('tr').fadeOut().remove()
                         obj['id_array'].map(function(i, item) {
                             $(`.accordion-item tr td input[value=${i}]`).parents('tr').fadeOut().remove()
                         })
@@ -608,6 +621,9 @@ $('.checks_all').on('click', function(){
     }
 });
 
+$('.accordion .delete-selected').on('click', function(el) {
+    sendAjax('', el)
+})
 $('.accordion .delete-selected').on('click', function(el) {
     sendAjax('', el)
 })

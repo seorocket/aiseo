@@ -616,7 +616,7 @@ def ajax(request):
                 result = {'delete': True}
             except Exception as e:
                 result = {"error": e}
-        if data.get('type') == 'delete_selected':
+        if data.get('type') == 'delete_selected_phrases':
             try:
                 id_array = data['id_array']
                 if id_array:
