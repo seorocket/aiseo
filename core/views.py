@@ -205,8 +205,8 @@ def domains(request):
 def domain_item(request, domain_id):
     data = get_object_or_404(Domain, id=domain_id)
     template = loader.get_template('domain-item.html')
-
     urls = File.objects.filter(domain=domain_id)
+    urls_count = urls.count()
 
     choices = dict()
 
@@ -239,6 +239,7 @@ def domain_item(request, domain_id):
         'filter': True,
         'data': data,
         'urls': urls,
+        'urls_count': urls_count,
         'statuses': choices,
         'request': request,
         'nested_urls': nested_urls
@@ -252,6 +253,7 @@ def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
     urls = File.objects.all()
+    urls_count = urls.count()
     domains = Domain.objects.all()
 
     choices = dict()
@@ -300,6 +302,7 @@ def urls(request):
         'filter': True,
         'statuses': choices,
         'urls': urls,
+        'urls_count': urls_count,
         'domains': domains,
     })
 
@@ -309,8 +312,8 @@ def urls(request):
 def url_item(request, url_id):
     data = get_object_or_404(File, id=url_id)
     template = loader.get_template('url-item.html')
-
     shots = Shot.objects.filter(file=url_id)
+    shots_count = shots.count()
 
     choices = dict()
 
@@ -340,6 +343,7 @@ def url_item(request, url_id):
         'filter': True,
         'data': data,
         'shots': shots,
+        'shots_count': shots_count,
         'statuses': choices,
         'request': request,
     }
@@ -352,6 +356,7 @@ def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
     shots = Shot.objects.all()
+    shots_count = shots.count()
     urls = File.objects.all()
 
     choices = dict()
@@ -400,6 +405,7 @@ def shots(request):
         'filter': True,
         'statuses': choices,
         'shots': shots,
+        'shots_count': shots_count,
         'urls': urls
     })
 
