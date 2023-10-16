@@ -143,6 +143,7 @@ def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
     domains = Domain.objects.all()
+    domains_count = domains.count()
 
     choices = dict()
 
@@ -191,6 +192,7 @@ def domains(request):
         'link': True,
         'filter': True,
         'domains': domains,
+        'domains_count': domains_count,
         'statuses': choices,
         'projects': projects,
         'ahrefs_rank': True,
