@@ -43,7 +43,13 @@ a:hover i {
 }
 
 section {
-  padding: 75px 0;
+  padding: 20px 0;
+}
+section:first-of-type {
+  padding-top: 0;
+}
+section:last-of-type {
+  padding-bottom: 0;
 }
 
 .pt0 {
@@ -429,7 +435,7 @@ form.form-parameters label > span {
 .indexSection .info-block-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 .indexSection .info-block-main form {
   display: flex;
@@ -552,7 +558,7 @@ table tbody tr.active {
 .phrasesSection .info-block-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 .phrasesSection .info-block-main .status-all-search-block {
   display: flex;
@@ -570,7 +576,7 @@ table tbody tr.active {
 .projectsSection .info-block-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 .projectsSection .info-block-main .delete-project {
   width: -moz-fit-content;
@@ -580,7 +586,7 @@ table tbody tr.active {
 .domainsSection .info-block-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 .domainsSection .info-block-main .status-all-search-block {
   display: flex;
@@ -762,4 +768,56 @@ table tbody tr.active {
 }
 .info-block-main .functions .change .btn-block .btn {
   height: 100%;
+}
+
+.addProxySection form.add-proxy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.addProxySection form.add-proxy .btn-block {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.addProxySection form.add-proxy .field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.addProxySection form.add-proxy .field > span {
+  font-size: var(--fz14);
+}
+.addProxySection form.add-proxy .btn-block .btn {
+  padding: 7px 25px;
+}
+
+.proxyListSection .name {
+  font-size: var(--fz28);
+  margin-bottom: 10px;
+}
+.proxyListSection .info-block-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.proxyListSection .info-block-main .item {
+  display: flex;
+  gap: 5px;
+}
+.proxyListSection .info-block-main .item .field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.proxyListSection .info-block-main .item .field input {
+  height: 100%;
+}
+.proxyListSection .info-block-main .item .field .message_status {
+  font-size: var(--fz14);
+}
+.proxyListSection .info-block-main .item .btn-block {
+  display: flex;
+  gap: 5px;
 }/*# sourceMappingURL=style.css.map */

@@ -74,19 +74,6 @@ def index(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('index.html')
     projects = Project.objects.all()
-
-    context.update({
-        'link': True,
-        'projects': projects
-    })
-
-    return HttpResponse(template.render(context))
-
-
-def phrases(request):
-    context = default_context(request, "index", TextPage)
-    template = loader.get_template('phrases.html')
-    projects = Project.objects.all()
     keys = SearchQuery.objects.all()
 
     status_entry = request.GET.get('status')
@@ -109,34 +96,66 @@ def phrases(request):
 
     context.update({
         'link': True,
-        'projects': projects,
-        'keys': keys,
-        'statuses': choices,
+        'projects': projects
     })
 
     return HttpResponse(template.render(context))
 
 
-def projects(request):
-    context = default_context(request, "index", TextPage)
-    template = loader.get_template('projects.html')
-    projects = Project.objects.all()
+# def phrases(request):
+#     context = default_context(request, "index", TextPage)
+#     template = loader.get_template('phrases.html')
+#     projects = Project.objects.all()
+#     keys = SearchQuery.objects.all()
+#
+#     status_entry = request.GET.get('status')
+#     if status_entry:
+#         keys = keys.filter(status=status_entry)
+#
+#     choices = dict()
+#
+#     for choice in CHOICE_SEARCHQUERY_STATUS:
+#         choices[choice[0]] = {'name': choice[1]}
+#
+#     paginator = Paginator(projects, 250)
+#     page = request.GET.get('page')
+#     try:
+#         projects = paginator.page(page)
+#     except PageNotAnInteger:
+#         projects = paginator.page(1)
+#     except EmptyPage:
+#         projects = paginator.page(paginator.num_pages)
+#
+#     context.update({
+#         'link': True,
+#         'projects': projects,
+#         'keys': keys,
+#         'statuses': choices,
+#     })
+#
+#     return HttpResponse(template.render(context))
 
-    paginator = Paginator(projects, 250)
-    page = request.GET.get('page')
-    try:
-        projects = paginator.page(page)
-    except PageNotAnInteger:
-        projects = paginator.page(1)
-    except EmptyPage:
-        projects = paginator.page(paginator.num_pages)
 
-    context.update({
-        'link': True,
-        'projects': projects,
-    })
-
-    return HttpResponse(template.render(context))
+# def projects(request):
+#     context = default_context(request, "index", TextPage)
+#     template = loader.get_template('projects.html')
+#     projects = Project.objects.all()
+#
+#     paginator = Paginator(projects, 250)
+#     page = request.GET.get('page')
+#     try:
+#         projects = paginator.page(page)
+#     except PageNotAnInteger:
+#         projects = paginator.page(1)
+#     except EmptyPage:
+#         projects = paginator.page(paginator.num_pages)
+#
+#     context.update({
+#         'link': True,
+#         'projects': projects,
+#     })
+#
+#     return HttpResponse(template.render(context))
 
 
 def domains(request):
@@ -407,6 +426,19 @@ def shots(request):
         'shots': shots,
         'shots_count': shots_count,
         'urls': urls
+    })
+
+    return HttpResponse(template.render(context))
+
+
+def proxy(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('proxy.html')
+    proxies = Proxy.objects.all()
+
+    context.update({
+        'link': True,
+        'proxies': proxies
     })
 
     return HttpResponse(template.render(context))
@@ -736,6 +768,44 @@ def ajax(request):
                         item = model.objects.get(id=id_item)
                         item.status = status
                         item.save()
+                result = {'change': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'add_proxy':
+            try:
+                proxies = data['proxy']
+                if proxies:
+                    for proxy in proxies:
+                        obj_info = {}
+                        for name in proxy:
+                            obj_info[name] = proxy.get(name, '')
+                        Proxy.objects.create(**obj_info)
+                    proxy = Proxy.objects.all()
+                    result = render_proxy(request, proxy)
+                    return HttpResponse(result)
+                else:
+                    result = {"error": 'The list of phrases is empty'}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'update_proxy':
+            try:
+                id = data.get('id')
+                proxy = Proxy.objects.get(id=id)
+                proxy.ip_address = data.get('ip_address')
+                proxy.port = data.get('port')
+                proxy.username = data.get('username')
+                proxy.password = data.get('password')
+                proxy.protocol = data.get('protocol')
+                proxy.save()
+                result = {'update': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'delete_proxy':
+            try:
+                id = data['id']
+                if id:
+                    proxy = Proxy.objects.get(id=id)
+                    proxy.delete()
                 result = {'delete': True}
             except Exception as e:
                 result = {"error": e}

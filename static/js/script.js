@@ -143,14 +143,14 @@ function checkField(el) {
     }
     if ($(el.target).parents('form').find('.error').length == 0) {
         sendAjax(field, el)
-        clearFields()
+        clearFields(el)
     }
 }
 
-function clearFields() {
-    $('input:not([type=checkbox]):not([name=csrfmiddlewaretoken])').val('')
-    $('textarea').val('')
-    $('.__select__title').removeClass('error')
+function clearFields(el) {
+    $(el.target).parents('form').find('input:not([type=checkbox]):not([name=csrfmiddlewaretoken])').val('')
+    $(el.target).parents('form').find('textarea').val('')
+    $(el.target).parents('form').find('.__select__title').removeClass('error')
 }
 
 function isValidEmail(email) {
@@ -172,8 +172,24 @@ function sendAjax(dataForm, el) {
                 obj[name] = value;
             }
         } else {
-            if (value) {
-                obj[name] = value;
+            if (name === 'proxy') {
+                let urls = value.split('\n'),
+                    arrayProxy = []
+                urls.forEach(function(url) {
+                    let new_url = new URL(url)
+                    arrayProxy.push({
+                        "ip_address": new_url.hostname,
+                        "port": new_url.port,
+                        "username": new_url.username,
+                        "password": new_url.password,
+                        "protocol": new_url.protocol.replace(":", "")
+                    })
+                })
+                obj['proxy'] = arrayProxy
+            } else {
+                if (value) {
+                    obj[name] = value;
+                }
             }
         }
     });
@@ -201,6 +217,9 @@ function sendAjax(dataForm, el) {
         })
         obj['id_array'] = id_array
         obj['status'] = $(el.target).parents('.change').find('select.status-all-change option:selected').val()
+    }
+    if (type === 'update_proxy' || type === 'delete_proxy') {
+        obj['id'] = Number($(el.target).attr('data-id'))
     }
 
     obj['type'] = type
@@ -253,6 +272,21 @@ function sendAjax(dataForm, el) {
                             $(block).parents('tr').fadeOut().find('td.status-td').text(value)
                             $(block).parents('tr').fadeOut().fadeIn()
                         })
+                    }
+                } else if (type === 'add_proxy') {
+                    $('.message_proxy').html('<span style="color:green;">Proxies added successfully</span>');
+                    setTimeout(function () {
+                        $('.message_proxy').html('')
+                    }, 1500)
+                    $('.proxyListSection .info-block-main').html(response);
+                } else if (type === 'update_proxy') {
+                    $(el.target).parents('form').find('.field').append('<div class="message_status"><span style="color:green;">Proxies have been successfully updated</span></div>')
+                     setTimeout(function () {
+                        $(el.target).parents('form').find('.field .message_status').remove()
+                    }, 1500)
+                } else if (type === 'delete_proxy') {
+                    if (response.delete) {
+                        $(el.target).parents('.proxy-item').fadeOut().remove()
                     }
                 }
             }
@@ -637,10 +671,9 @@ $('.checks_all').on('click', function(){
     }
 });
 
-$('.info-block-main .delete-selected').on('click', function(el) {
+$(document).on('click', '.info-block-main .delete-selected, .info-block-main .delete-proxy, .info-block-main .change-selected', function (el) {
     sendAjax('', el)
 })
-
-$('.info-block-main .change-selected').on('click', function(el) {
-    sendAjax('', el)
+$(document).on('click', '.info-block-main .update-proxy', function (el) {
+    sendAjax($(el.target).parents('form').find('input[name=proxy]'), el)
 })

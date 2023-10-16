@@ -1,0 +1,34 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <section class="addProxySection">
+        <div class="info-block-main">
+            <form class="add-proxy">
+                <div class="field">
+                    <span>Add new proxies (protocol://login:pass@ip:port)</span>
+                    <textarea rows="8" placeholder="Format: protocol://login:pass@ip:port" name="proxy"></textarea>
+                </div>
+                <div class="btn-block">
+                    <div class="btn checkField" data-request="add_proxy">Add proxy</div>
+                </div>
+            </form>
+            <div class="message_proxy"></div>
+        </div>
+    </section>
+    <section class="proxyListSection">
+        <div class="name">Proxy list</div>
+        <div class="info-block-main">
+            {% for i in proxies %}
+            <form class="proxy-item item">
+                <div class="field">
+                    <input type="text" placeholder="Format: protocol://login:pass@ip:port" name="proxy" value="{{i.protocol}}://{{i.username}}:{{i.password}}@{{i.ip_address}}:{{i.port}}">
+                </div>
+                <div class="btn-block">
+                    <div class="btn update-proxy" data-request="update_proxy" data-id="{{ i.id }}">Update</div>
+                    <div class="btn delete-proxy red-main" data-request="delete_proxy" data-id="{{ i.id }}">Delete</div>
+                </div>
+            </form>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

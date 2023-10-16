@@ -1,9 +1,7 @@
 {% url 'core:index' as index_url %}
-{% url 'core:phrases' as phrases_url %}
-{% url 'core:projects' as projects_url %}
 {% url 'core:domains' as domains_url %}
 {% url 'core:urls' as urls_url %}
-{% url 'core:shots' as shots_url %}
+{% url 'core:proxy' as proxy_url %}
 <div class="item-col left-column">
     {% if link %}
         <div class="filter">
@@ -13,22 +11,16 @@
         </div>
         <div class="links_g">
             <div class="filter-b{% if request.path == index_url %} active{% endif %}">
-                <a href="{{ index_url }}"><i class="fa-solid fa-angles-right"></i> <span>Home</span></a>
-            </div>
-            <div class="filter-b{% if request.path == phrases_url %} active{% endif %}">
-                <a href="{{ phrases_url }}"><i class="fa-solid fa-angles-right"></i> <span>Phrases</span></a>
-            </div>
-            <div class="filter-b{% if request.path == projects_url %} active{% endif %}">
-                <a href="{{ projects_url }}"><i class="fa-solid fa-angles-right"></i> <span>Projects</span></a>
+                <a href="{{ index_url }}"><i class="fa-solid fa-angles-right"></i> <span>Project</span></a>
             </div>
             <div class="filter-b{% if request.path == domains_url %} active{% endif %}">
                 <a href="{{ domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>All domains</span></a>
             </div>
             <div class="filter-b{% if request.path == urls_url %} active{% endif %}">
-                <a href="{{ urls_url }}"><i class="fa-solid fa-angles-right"></i> <span>All urls</span></a>
+                <a href="{{ urls_url }}"><i class="fa-solid fa-angles-right"></i> <span>All files</span></a>
             </div>
-            <div class="filter-b{% if request.path == shots_url %} active{% endif %}">
-                <a href="{{ shots_url }}"><i class="fa-solid fa-angles-right"></i> <span>All snapshot's</span></a>
+            <div class="filter-b{% if request.path == proxy_url %} active{% endif %}">
+                <a href="{{ proxy_url }}"><i class="fa-solid fa-angles-right"></i> <span>Proxy</span></a>
             </div>
         </div>
     {% endif %}
