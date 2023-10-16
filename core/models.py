@@ -35,13 +35,15 @@ class Project(models.Model):
         return self.name
 
 
+CHOICE_SEARCHQUERY_STATUS = (
+    (0, 'added'),
+    (1, 'done'),
+    (2, 'inprogress'),
+    (3, 'error')
+)
+
+
 class SearchQuery(models.Model):
-    CHOICE_SEARCHQUERY_STATUS = (
-        (0, 'added'),
-        (1, 'done'),
-        (2, 'inprogress'),
-        (3, 'error')
-    )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
     status = models.IntegerField(default=0, choices=CHOICE_SEARCHQUERY_STATUS)

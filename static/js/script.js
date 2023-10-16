@@ -194,8 +194,14 @@ function sendAjax(dataForm, el) {
         })
         obj['id_array'] = id_array
     }
-
-    console.log(obj)
+    if (type === 'change_selected_phrases' || type === 'change_selected_domains' || type === 'change_selected_urls' || type === 'change_selected_shots') {
+        let id_array = []
+        $(el.target).parents('.info-block-main').find('table td input:checked').map(function(i, item) {
+            id_array.push($(item).val())
+        })
+        obj['id_array'] = id_array
+        obj['status'] = $(el.target).parents('.change').find('select.status-all-change option:selected').val()
+    }
 
     obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
@@ -235,7 +241,17 @@ function sendAjax(dataForm, el) {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut().remove()
                         obj['id_array'].map(function(i, item) {
-                            $(`.accordion-item tr td input[value=${i}]`).parents('tr').fadeOut().remove()
+                            $(`table.table tr td input[value=${i}]`).parents('tr').fadeOut().remove()
+                        })
+                    }
+                } else if (type === 'change_selected_phrases' || type === 'change_selected_domains' || type === 'change_selected_urls' || type === 'change_selected_shots') {
+                    if (response.delete) {
+                        $(el.target).parents('tr').fadeOut().remove()
+                        obj['id_array'].map(function(i, item) {
+                            let value = $(el.target).parents('.change').find('select.status-all-change option:selected').text(),
+                                block = $(`table.table tr td input[value=${i}]`)
+                            $(block).parents('tr').fadeOut().find('td.status-td').text(value)
+                            $(block).parents('tr').fadeOut().fadeIn()
                         })
                     }
                 }
@@ -621,9 +637,10 @@ $('.checks_all').on('click', function(){
     }
 });
 
-$('.accordion .delete-selected').on('click', function(el) {
+$('.info-block-main .delete-selected').on('click', function(el) {
     sendAjax('', el)
 })
-$('.accordion .delete-selected').on('click', function(el) {
+
+$('.info-block-main .change-selected').on('click', function(el) {
     sendAjax('', el)
 })

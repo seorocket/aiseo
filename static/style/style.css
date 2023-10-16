@@ -739,4 +739,27 @@ table tbody tr.active {
 .accordion .accordion-body.with-del > .btn-block {
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.info-block-main .functions {
+  display: flex;
+  gap: 10px 0;
+}
+.info-block-main .functions .item {
+  padding: 0 15px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+.info-block-main .functions .item:first-of-type {
+  padding-left: 0;
+}
+.info-block-main .functions .item:last-of-type {
+  padding-right: 0;
+  border-right: 0;
+}
+.info-block-main .functions .change {
+  display: flex;
+  gap: 5px;
+}
+.info-block-main .functions .change .btn-block .btn {
+  height: 100%;
 }/*# sourceMappingURL=style.css.map */

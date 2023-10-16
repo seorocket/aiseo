@@ -20,6 +20,7 @@ from django.template.context_processors import csrf
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class UserFilter(filters.FilterSet):
@@ -94,8 +95,17 @@ def phrases(request):
 
     choices = dict()
 
-    for choice in CHOICE_DOMAIN_STATUS:
+    for choice in CHOICE_SEARCHQUERY_STATUS:
         choices[choice[0]] = {'name': choice[1]}
+
+    paginator = Paginator(projects, 250)
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
 
     context.update({
         'link': True,
@@ -111,6 +121,15 @@ def projects(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('projects.html')
     projects = Project.objects.all()
+
+    paginator = Paginator(projects, 250)
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
 
     context.update({
         'link': True,
@@ -159,6 +178,15 @@ def domains(request):
     if status_entry:
         domains = domains.filter(status=status_entry)
 
+    paginator = Paginator(domains, 250)
+    page = request.GET.get('page')
+    try:
+        domains = paginator.page(page)
+    except PageNotAnInteger:
+        domains = paginator.page(1)
+    except EmptyPage:
+        domains = paginator.page(paginator.num_pages)
+
     context.update({
         'link': True,
         'filter': True,
@@ -183,12 +211,26 @@ def domain_item(request, domain_id):
     for choice in CHOICE_FILE_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        urls = urls.filter(search_filter)
+
     status_entry = request.GET.get('status')
     if status_entry:
         urls = urls.filter(status=status_entry)
 
     urls_data = [{"name": url.url, "id": url.id} for url in urls]
     nested_urls = create_nested_url_list(urls_data)
+
+    paginator = Paginator(urls, 250)
+    page = request.GET.get('page')
+    try:
+        urls = paginator.page(page)
+    except PageNotAnInteger:
+        urls = paginator.page(1)
+    except EmptyPage:
+        urls = paginator.page(paginator.num_pages)
 
     context = {
         'link': True,
@@ -242,6 +284,15 @@ def urls(request):
     if status_entry:
         urls = urls.filter(status=status_entry)
 
+    paginator = Paginator(urls, 250)
+    page = request.GET.get('page')
+    try:
+        urls = paginator.page(page)
+    except PageNotAnInteger:
+        urls = paginator.page(1)
+    except EmptyPage:
+        urls = paginator.page(paginator.num_pages)
+
     context.update({
         'link': True,
         'filter': True,
@@ -264,9 +315,23 @@ def url_item(request, url_id):
     for choice in CHOICE_FILE_STATUS:
         choices[choice[0]] = {'name': choice[1]}
 
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        shots = shots.filter(search_filter)
+
     status_entry = request.GET.get('status')
     if status_entry:
         shots = shots.filter(status=status_entry)
+
+    paginator = Paginator(shots, 250)
+    page = request.GET.get('page')
+    try:
+        shots = paginator.page(page)
+    except PageNotAnInteger:
+        shots = paginator.page(1)
+    except EmptyPage:
+        shots = paginator.page(paginator.num_pages)
 
     context = {
         'link': True,
@@ -318,6 +383,15 @@ def shots(request):
     status_entry = request.GET.get('status')
     if status_entry:
         shots = shots.filter(status=status_entry)
+
+    paginator = Paginator(shots, 250)
+    page = request.GET.get('page')
+    try:
+        shots = paginator.page(page)
+    except PageNotAnInteger:
+        shots = paginator.page(1)
+    except EmptyPage:
+        shots = paginator.page(paginator.num_pages)
 
     context.update({
         'link': True,
@@ -623,6 +697,37 @@ def ajax(request):
                     for id_item in id_array:
                         phrase = SearchQuery.objects.get(id=id_item)
                         phrase.delete()
+                result = {'delete': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'delete_selected_projects':
+            try:
+                id_array = data['id_array']
+                if id_array:
+                    for id_item in id_array:
+                        phrase = Project.objects.get(id=id_item)
+                        phrase.delete()
+                result = {'delete': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'change_selected_phrases' or data.get('type') == 'change_selected_domains' or data.get('type') == 'change_selected_urls' or data.get('type') == 'change_selected_shots':
+            try:
+                model = ''
+                if data.get('type') == 'change_selected_phrases':
+                    model = SearchQuery
+                elif data.get('type') == 'change_selected_domains':
+                    model = Domain
+                elif data.get('type') == 'change_selected_urls':
+                    model = File
+                elif data.get('type') == 'change_selected_shots':
+                    model = Shot
+                status = data['status']
+                id_array = data['id_array']
+                if id_array:
+                    for id_item in id_array:
+                        item = model.objects.get(id=id_item)
+                        item.status = status
+                        item.save()
                 result = {'delete': True}
             except Exception as e:
                 result = {"error": e}

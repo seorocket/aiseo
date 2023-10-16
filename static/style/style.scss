@@ -768,3 +768,29 @@ table {
         }
     }
 }
+.info-block-main {
+    .functions {
+        display: flex;
+        gap: 10px 0;
+        .item {
+            padding: 0 15px;
+            border-right: 1px solid $border;
+            &:first-of-type {
+                padding-left: 0;
+            }
+            &:last-of-type {
+                padding-right: 0;
+                border-right: 0;
+            }
+        }
+        .change {
+            display: flex;
+            gap: 5px;
+            .btn-block {
+                .btn {
+                    height: 100%;
+                }
+            }
+        }
+    }
+}

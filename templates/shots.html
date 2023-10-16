@@ -3,18 +3,33 @@
 {% block content %}
     <div class="domainsSection">
         <div class="info-block-main">
-            <div class="status-all-search-block">
-                <label class="select">
-                    <select class="status-all-search" name="status">
-                        <option selected disabled>Search by status</option>
-                        {% for kst, st in statuses.items %}
-                            <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <div class="btn-block">
-                    <div class="btn f-status">Search</div>
-                    <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
+            <div class="functions">
+                <div class="item status-all-search-block">
+                    <label class="select">
+                        <select class="status-all-search" name="status">
+                            <option selected disabled>Search by status</option>
+                            {% for kst, st in statuses.items %}
+                                <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="btn-block">
+                        <div class="btn f-status">Search</div>
+                        <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
+                    </div>
+                </div>
+                <div class="item change">
+                    <label class="select">
+                        <select class="status-all-change" name="status">
+                            <option selected disabled>Change Status</option>
+                            {% for kst, st in statuses.items %}
+                                <option value="{{ kst }}">{{ st.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="btn-block">
+                        <div class="btn change-selected" data-request="change_selected_shots">Change</div>
+                    </div>
                 </div>
             </div>
             <div class="_titleBlock">
@@ -38,11 +53,49 @@
                         <td>{{ i.name }}</td>
                         <td>{% if i.file.url %}{{ i.file.url }}{% else %}-{% endif %}</td>
                         <td>{% if i.date %}{{ i.date }}{% else %}-{% endif %}</td>
-                        <td>{{ i.get_status_display }}</td>
+                        <td class="status-td">{{ i.get_status_display }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <nav>
+                <ul class="pagination">
+                    {% if shots.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ shots.previous_page_number }}{{ dop_url }}">Prev</a></li>
+                    {% endif %}
+                    {% if shots.paginator %}
+                        {% for i in shots.paginator.page_range %}
+                            {% if shots.number == 1 and i <= 5 %}
+                                {% if i == shots.number %}
+                                    <li class="page-item"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif shots.number == 2 and i <= 5 %}
+                                {% if i == 1 %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% elif i == shots.number %}
+                                    <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif i >= shots.number|add:'-2' and i <= shots.number|add:'2' %}
+                                {% if i == shots.number %}
+                                    <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif i == shots.paginator.num_pages %}
+                                <li class="page-item more"><span>...</span></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if shots.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ shots.next_page_number }}{{ dop_url }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
 {% endblock %}
