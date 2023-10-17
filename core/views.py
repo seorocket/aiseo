@@ -78,11 +78,10 @@ def index(request):
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
-        keys = SearchQuery.objects.all()
     else:
         # Иначе, показываем только записи, принадлежащие текущему пользователю
         projects = Project.objects.filter(user=current_user)
-        keys = SearchQuery.objects.filter(user=current_user)
+    keys = SearchQuery.objects.all()
 
     status_entry = request.GET.get('status')
     if status_entry:
@@ -174,14 +173,12 @@ def index(request):
 def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
+    domains = Domain.objects.all()
     current_user = request.user
     if current_user.is_staff:
-        domains = Domain.objects.all()
         projects = Project.objects.all()
     else:
-        domains = Domain.objects.filter(user=current_user)
         projects = Project.objects.filter(user=current_user)
-
 
     choices = dict()
 
@@ -242,14 +239,9 @@ def domains(request):
 
 @login_required
 def domain_item(request, domain_id):
-    current_user = request.user
-    data = get_object_or_404(Domain, id=domain_id, user=current_user)
+    data = get_object_or_404(Domain, id=domain_id)
     template = loader.get_template('domain-item.html')
-
-    if current_user.is_staff:
-        urls = File.objects.filter(domain=domain_id)
-    else:
-        urls = File.objects.filter(domain=domain_id, user=current_user)
+    urls = File.objects.filter(domain=domain_id)
 
     choices = dict()
 
@@ -299,13 +291,8 @@ def domain_item(request, domain_id):
 def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
-    current_user = request.user
-    if current_user.is_staff:
-        urls = File.objects.all()
-        domains = Domain.objects.all()
-    else:
-        urls = File.objects.filter(user=current_user)
-        domains = Domain.objects.filter(user=current_user)
+    urls = File.objects.all()
+    domains = Domain.objects.all()
 
     choices = dict()
 
@@ -364,14 +351,9 @@ def urls(request):
 
 @login_required
 def url_item(request, url_id):
-    current_user = request.user
-    data = get_object_or_404(File, id=url_id, user=current_user)
+    data = get_object_or_404(File, id=url_id)
     template = loader.get_template('url-item.html')
-
-    if current_user.is_staff:
-        shots = Shot.objects.filter(file=url_id)
-    else:
-        shots = Shot.objects.filter(file=url_id, user=current_user)
+    shots = Shot.objects.filter(file=url_id)
 
     choices = dict()
 
@@ -417,14 +399,8 @@ def url_item(request, url_id):
 def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
-
-    current_user = request.user
-    if current_user.is_staff:
-        shots = Shot.objects.all()
-        urls = File.objects.all()
-    else:
-        shots = Shot.objects.filter(user=current_user)
-        urls = File.objects.filter(user=current_user)
+    shots = Shot.objects.all()
+    urls = File.objects.all()
 
     choices = dict()
 
@@ -485,11 +461,7 @@ def shots(request):
 def proxy(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('proxy.html')
-    current_user = request.user
-    if current_user.is_staff:
-        proxies = Proxy.objects.all()
-    else:
-        proxies = Proxy.objects.filter(user=current_user)
+    proxies = Proxy.objects.all()
 
     context.update({
         'link': True,
