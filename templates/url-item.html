@@ -35,27 +35,29 @@
             <div class="_titleBlock">
                 <span class="name">{{ shots_count }} result{{ shots_count|pluralize }} found</span>
             </div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i in shots %}
+            <div class="table-block">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td><input type="checkbox" value="{{ i.id }}"
-                                   class="checks group-{{ g.id }}"></td>
-                        <td>{{ i.name }}</td>
-                        <td>{% if i.date %}{{ i.date }}{% else %}-{% endif %}</td>
-                        <td class="status-td">{{ i.get_status_display }}</td>
+                        <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Status</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for i in shots %}
+                        <tr>
+                            <td><input type="checkbox" value="{{ i.id }}"
+                                       class="checks group-{{ g.id }}"></td>
+                            <td>{{ i.name }}</td>
+                            <td>{% if i.date %}{{ i.date }}{% else %}-{% endif %}</td>
+                            <td class="status-td">{{ i.get_status_display }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <nav>
                 <ul class="pagination">
                     {% if shots.has_previous %}

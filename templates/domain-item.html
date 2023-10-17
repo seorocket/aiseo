@@ -37,71 +37,75 @@
             <div class="_titleBlock">
                 <span class="name">{{ urls_count }} result{{ urls_count|pluralize }} found</span>
             </div>
-            <table class="table tree-count-results">
-                <thead>
-                <tr>
-                    <th>URL</th>
-                    <th class="count-th">COUNT <span>(0)</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for key, value in nested_urls.items %}
+            <div class="table-block">
+                <table class="table tree-count-results">
+                    <thead>
                     <tr>
-                        <td>
-                            {% if value.link %}
-                                {% with value.link as url_without_protocol %}
-                                    <li class="1"><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>
-                                {% endwith %}
-                            {% else %}
-                                <ul class="first-list">
-                                    {% include "include/nested_urls.html" with nested_urls=value %}
-                                </ul>
-                            {% endif %}
-                        </td>
-                        <td class="count-td">
-                            {% for key, v in value.items %}
-                                <span class="d-none">{{ v.count }}</span>
-                            {% endfor %}
-                        </td>
+                        <th>URL</th>
+                        <th class="count-th">COUNT <span>(0)</span></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
-                    <th>Urls</th>
-                    <th>Mimetype</th>
-                    <th>Timestamp</th>
-                    <th>Endtimestamp</th>
-                    <th>Shots</th>
-                    <th>GC</th>
-                    <th>UC</th>
-                    <th>Domain</th>
-                    <th>Status</th>
-                    <th>Content</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i in urls %}
+                    </thead>
+                    <tbody>
+                    {% for key, value in nested_urls.items %}
+                        <tr>
+                            <td>
+                                {% if value.link %}
+                                    {% with value.link as url_without_protocol %}
+                                        <li class="1"><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>
+                                    {% endwith %}
+                                {% else %}
+                                    <ul class="first-list">
+                                        {% include "include/nested_urls.html" with nested_urls=value %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                            <td class="count-td">
+                                {% for key, v in value.items %}
+                                    <span class="d-none">{{ v.count }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-block">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td><input type="checkbox" value="{{ i.id }}"
-                                   class="checks group-{{ g.id }}"></td>
-                        <td><a href="{% url 'core:url_item' i.id %}">{{ i.url }}</a></td>
-                        <td>{% if i.mimetype %}{{ i.mimetype }}{% else %}-{% endif %}</td>
-                        <td>{% if i.timestamp %}{{ i.timestamp }}{% else %}-{% endif %}</td>
-                        <td>{% if i.endtimestamp %}{{ i.endtimestamp }}{% else %}-{% endif %}</td>
-                        <td>{% if i.shots %}{{ i.shots }}{% else %}-{% endif %}</td>
-                        <td>{% if i.groupcount %}{{ i.groupcount }}{% else %}-{% endif %}</td>
-                        <td>{% if i.uniqcount %}{{ i.uniqcount }}{% else %}-{% endif %}</td>
-                        <td>{% if i.domain %}{{ i.domain.name }}{% else %}-{% endif %}</td>
-                        <td class="status-td">{{ i.get_status_display }}</td>
-                        <td>{% if i.content %}{{ i.content }}{% else %}-{% endif %}</td>
+                        <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                        <th>Urls</th>
+                        <th>Mimetype</th>
+                        <th>Timestamp</th>
+                        <th>Endtimestamp</th>
+                        <th>Shots</th>
+                        <th>GC</th>
+                        <th>UC</th>
+                        <th>Domain</th>
+                        <th>Status</th>
+                        <th>Content</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for i in urls %}
+                        <tr>
+                            <td><input type="checkbox" value="{{ i.id }}"
+                                       class="checks group-{{ g.id }}"></td>
+                            <td><a href="{% url 'core:url_item' i.id %}">{{ i.url }}</a></td>
+                            <td>{% if i.mimetype %}{{ i.mimetype }}{% else %}-{% endif %}</td>
+                            <td>{% if i.timestamp %}{{ i.timestamp }}{% else %}-{% endif %}</td>
+                            <td>{% if i.endtimestamp %}{{ i.endtimestamp }}{% else %}-{% endif %}</td>
+                            <td>{% if i.shots %}{{ i.shots }}{% else %}-{% endif %}</td>
+                            <td>{% if i.groupcount %}{{ i.groupcount }}{% else %}-{% endif %}</td>
+                            <td>{% if i.uniqcount %}{{ i.uniqcount }}{% else %}-{% endif %}</td>
+                            <td>{% if i.domain %}{{ i.domain.name }}{% else %}-{% endif %}</td>
+                            <td class="status-td">{{ i.get_status_display }}</td>
+                            <td>{% if i.content %}{{ i.content }}{% else %}-{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <nav>
                 <ul class="pagination">
                     {% if urls.has_previous %}
