@@ -336,7 +336,7 @@ header {
         }
     }
     .right-col {
-        width: 100%;
+        width: calc(100% - 370px);
         margin-left: calc(350px + 20px);
         .info-block {
             display: flex;
@@ -854,4 +854,7 @@ table {
             }
         }
     }
+}
+.table-block {
+    overflow: auto;
 }

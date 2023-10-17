@@ -338,7 +338,7 @@ header .header nav ul li a:hover {
   transition: all 0.3s;
 }
 .main-container .right-col {
-  width: 100%;
+  width: calc(100% - 370px);
   margin-left: 370px;
 }
 .main-container .right-col .info-block {
@@ -820,4 +820,8 @@ table tbody tr.active {
 .proxyListSection .info-block-main .item .btn-block {
   display: flex;
   gap: 5px;
+}
+
+.table-block {
+  overflow: auto;
 }/*# sourceMappingURL=style.css.map */
