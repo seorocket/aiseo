@@ -217,7 +217,7 @@ def domains(request):
 
     domains_count = domains.count()
 
-    paginator = Paginator(domains, 1)
+    paginator = Paginator(domains, 250)
     page = request.GET.get('page')
     try:
         domains = paginator.page(page)
