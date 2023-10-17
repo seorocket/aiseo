@@ -108,7 +108,7 @@ class File(models.Model):
     content = models.TextField(max_length=314572800, null=True, blank=True)
 
     # Добавляем поле для загрузки файла
-    file = models.FileField(upload_to='')  # '/' - это путь для сохранения файлов на сервере
+    file = models.FileField(upload_to='', null=True, blank=True)  # '/' - это путь для сохранения файлов на сервере
 
     def __str__(self):
         return self.url
