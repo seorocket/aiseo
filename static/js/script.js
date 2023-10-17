@@ -684,7 +684,7 @@ $('.page-item .page-link').on('click', function(el) {
         filter = window.location.search,
         type = 'page',
         regex = new RegExp(`[?&]?${type}=[^&]+`, 'gi');
-    selectedValue = selectedValue.replace('page=', '');
+    selectedValue = selectedValue.replace('?page=', '');
 
     if (window.location.href.indexOf(type) !== -1) {
         window.location.search = `${filter.replace(regex, '')}&${type}=${selectedValue}`
