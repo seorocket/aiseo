@@ -682,7 +682,7 @@ $('.page-item .page-link').on('click', function(el) {
     el.preventDefault()
     let selectedValue = $(this).attr('href'),
         filter = window.location.search,
-        type = $('.status-all-search').attr('name'),
+        type = 'page',
         regex = new RegExp(`[?&]?${type}=[^&]+`, 'gi');
     selectedValue = selectedValue.replace('page=', '');
 
