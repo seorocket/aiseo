@@ -219,6 +219,7 @@ header {
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   z-index: 50;
+  color: #FFFFFF;
 }
 header a {
   color: #FFFFFF;
@@ -256,6 +257,16 @@ header .header nav ul li a i {
 }
 header .header nav ul li a:hover {
   opacity: 0.6;
+}
+header .header .info {
+  display: flex;
+  align-items: center;
+  gap: 10px 30px;
+}
+header .header .info .logout {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #ff1330;
 }
 
 .main-container {
@@ -824,4 +835,23 @@ table tbody tr.active {
 
 .table-block {
   overflow: auto;
+}
+
+.authSection .info-block-main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.authSection .info-block-main .login-form p .field {
+  position: relative;
+  width: 100%;
+}
+.authSection .info-block-main .login-form p .field i {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+}
+.authSection .info-block-main .login-form p .field input {
+  padding-left: 50px;
 }/*# sourceMappingURL=style.css.map */

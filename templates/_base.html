@@ -30,6 +30,12 @@
             <a href="{% url 'core:index' %}" class="logo">
                 <img src="{% static 'img/logo/logo-main.png' %}" alt="">
             </a>
+            {% if user.is_authenticated %}
+            <div class="info">
+                <div class="name">{{ user.username }}</div>
+                <a class="logout" href="{% url 'logout' %}">Logout</a>
+            </div>
+            {% endif %}
 {#            <nav>#}
 {#                <ul>#}
 {#                    <li><a href="{% url 'cms:add_project' %}"><i class="fa-solid fa-wrench"></i><span>Восстановить сайт</span></a></li>#}

@@ -212,6 +212,7 @@ header {
     background: $gr;
     backdrop-filter: blur(10px);
     z-index: 50;
+    color: $white;
     a {
         color: $white;
         &:hover {
@@ -250,6 +251,16 @@ header {
                         }
                     }
                 }
+            }
+        }
+        .info {
+            display: flex;
+            align-items: center;
+            gap: 10px 30px;
+            .logout {
+                padding: 5px 10px;
+                border-radius: 5px;
+                background-color: $red;
             }
         }
     }
@@ -857,4 +868,28 @@ table {
 }
 .table-block {
     overflow: auto;
+}
+.authSection {
+    .info-block-main {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        .login-form {
+            p {
+                .field {
+                    position: relative;
+                    width: 100%;
+                    i {
+                        position: absolute;
+                        top: 50%;
+                        left: 15px;
+                        transform: translateY(-50%);
+                    }
+                    input {
+                        padding-left: 50px;
+                    }
+                }
+            }
+        }
+    }
 }

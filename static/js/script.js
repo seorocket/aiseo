@@ -537,7 +537,7 @@ function checkStatus() {
                     } else {
                         status = 'In process'
                     }
-                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span>${done}/${count} (${((done/count)*100).toFixed(0)}%)</span><span>${status}</span>`)
+                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span>${done}/${count} (${((done/count)*100).toFixed(1)}%)</span><span>${status}</span>`)
                 }
             }
         });

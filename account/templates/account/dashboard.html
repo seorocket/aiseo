@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+            <div class="col-2"></div>
+            <div class="col-3 offers_in"><a href="{% url 'add_offers' %}">
+                <p>Подключить офферы</p></a>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-3 offers_in"><a href="{% url 'my_offers' %}">
+                <p>Мои офферы</p></a>
+            </div>
+            <div class="col-2"></div>
+        </div>
+</div>
+
+{% endblock %}

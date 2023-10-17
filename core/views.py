@@ -21,6 +21,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 
 
 class UserFilter(filters.FilterSet):
@@ -70,11 +71,18 @@ def robots(request):
     return HttpResponse(template.render(context), content_type="text/plain")
 
 
+@login_required
 def index(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('index.html')
-    projects = Project.objects.all()
-    keys = SearchQuery.objects.all()
+    current_user = request.user
+    if current_user.is_staff:
+        projects = Project.objects.all()
+        keys = SearchQuery.objects.all()
+    else:
+        # Иначе, показываем только записи, принадлежащие текущему пользователю
+        projects = Project.objects.filter(user=current_user)
+        keys = SearchQuery.objects.filter(user=current_user)
 
     status_entry = request.GET.get('status')
     if status_entry:
@@ -104,6 +112,7 @@ def index(request):
     return HttpResponse(template.render(context))
 
 
+# @login_required
 # def phrases(request):
 #     context = default_context(request, "index", TextPage)
 #     template = loader.get_template('phrases.html')
@@ -138,6 +147,7 @@ def index(request):
 #     return HttpResponse(template.render(context))
 
 
+# @login_required
 # def projects(request):
 #     context = default_context(request, "index", TextPage)
 #     template = loader.get_template('projects.html')
@@ -160,17 +170,23 @@ def index(request):
 #     return HttpResponse(template.render(context))
 
 
+@login_required
 def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
-    domains = Domain.objects.all()
+    current_user = request.user
+    if current_user.is_staff:
+        domains = Domain.objects.all()
+        projects = Project.objects.all()
+    else:
+        domains = Domain.objects.filter(user=current_user)
+        projects = Project.objects.filter(user=current_user)
+
 
     choices = dict()
 
     for choice in CHOICE_DOMAIN_STATUS:
         choices[choice[0]] = {'name': choice[1]}
-
-    projects = Project.objects.all()
 
     search_query = request.GET.get('search')
     if search_query:
@@ -224,10 +240,16 @@ def domains(request):
     return HttpResponse(template.render(context))
 
 
+@login_required
 def domain_item(request, domain_id):
-    data = get_object_or_404(Domain, id=domain_id)
+    current_user = request.user
+    data = get_object_or_404(Domain, id=domain_id, user=current_user)
     template = loader.get_template('domain-item.html')
-    urls = File.objects.filter(domain=domain_id)
+
+    if current_user.is_staff:
+        urls = File.objects.filter(domain=domain_id)
+    else:
+        urls = File.objects.filter(domain=domain_id, user=current_user)
 
     choices = dict()
 
@@ -265,18 +287,25 @@ def domain_item(request, domain_id):
         'urls_count': urls_count,
         'statuses': choices,
         'request': request,
-        'nested_urls': nested_urls
+        'nested_urls': nested_urls,
+        'user': request.user
     }
     context.update(csrf(request))
 
     return HttpResponse(template.render(context))
 
 
+@login_required
 def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
-    urls = File.objects.all()
-    domains = Domain.objects.all()
+    current_user = request.user
+    if current_user.is_staff:
+        urls = File.objects.all()
+        domains = Domain.objects.all()
+    else:
+        urls = File.objects.filter(user=current_user)
+        domains = Domain.objects.filter(user=current_user)
 
     choices = dict()
 
@@ -333,10 +362,16 @@ def urls(request):
     return HttpResponse(template.render(context))
 
 
+@login_required
 def url_item(request, url_id):
-    data = get_object_or_404(File, id=url_id)
+    current_user = request.user
+    data = get_object_or_404(File, id=url_id, user=current_user)
     template = loader.get_template('url-item.html')
-    shots = Shot.objects.filter(file=url_id)
+
+    if current_user.is_staff:
+        shots = Shot.objects.filter(file=url_id)
+    else:
+        shots = Shot.objects.filter(file=url_id, user=current_user)
 
     choices = dict()
 
@@ -371,17 +406,25 @@ def url_item(request, url_id):
         'shots_count': shots_count,
         'statuses': choices,
         'request': request,
+        'user': request.user
     }
     context.update(csrf(request))
 
     return HttpResponse(template.render(context))
 
 
+@login_required
 def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
-    shots = Shot.objects.all()
-    urls = File.objects.all()
+
+    current_user = request.user
+    if current_user.is_staff:
+        shots = Shot.objects.all()
+        urls = File.objects.all()
+    else:
+        shots = Shot.objects.filter(user=current_user)
+        urls = File.objects.filter(user=current_user)
 
     choices = dict()
 
@@ -438,10 +481,15 @@ def shots(request):
     return HttpResponse(template.render(context))
 
 
+@login_required
 def proxy(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('proxy.html')
-    proxies = Proxy.objects.all()
+    current_user = request.user
+    if current_user.is_staff:
+        proxies = Proxy.objects.all()
+    else:
+        proxies = Proxy.objects.filter(user=current_user)
 
     context.update({
         'link': True,
@@ -451,6 +499,7 @@ def proxy(request):
     return HttpResponse(template.render(context))
 
 
+@login_required
 def get_urls_domain(request, domen_id):
     urls = File.objects.filter(domain__id=domen_id).select_related('domain')
     urls_data = [{"name": url.url, "id": url.id} for url in urls]

@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container">
+    <div id="siteform" class="row m-top-50">
+        {% for m in my_offers%}
+            {% for k in m.service.all %}
+                <div class="col-2">
+                    <a href="{% url 'action_offers'%}?offer_id={{ k.id }}">
+                        <div class="offers_in">
+                            {% if k.photo %}
+                                <p><img src="{{k.photo.url}}" width="90px" height="80px" /></p>
+                            {% endif %}
+                            <p>{{k.name}}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+         {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+

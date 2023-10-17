@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+{% block content %}
+<div class="container">
+    <div id="siteform" class="row m-top-50">
+        <div class="col-12 col-lg-4">
+            <a href="{% url 'list_data'%}?services={{offers}}">
+                <div class="offers_in">
+                    Посмотреть статистику по Email
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-lg-4">
+            <a href="{% url 'list_file'%}?offers_id={{offers}}" >
+                <div class="offers_in">
+                    Посмотреть статистику по файлам
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="offers_in">
+                <h3> Добавить файл </h3>
+                <form action="/account/action_offers/?offer_id={{offers}}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Добавить файл" class="btn-add-files" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+#id_service,
+.offers_in form label[for='id_service']{
+display:none;
+}
+</style>
+<script>
+    jQuery(function() {
+        jQuery('#id_service option[value="{{offers}}"]').prop('selected', true);
+    });
+</script>
+{% endblock %}

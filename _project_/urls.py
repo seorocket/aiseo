@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls, 'core-api'))),
     re_path(r'^', include('core.urls', namespace="core")),
+    re_path(r'^', include('account.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

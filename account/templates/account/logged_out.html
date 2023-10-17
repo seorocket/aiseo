@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% block title %}Logged out{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-2"></div>
+        <div class="col-8 offers_in" style="margin-top:150px;">
+           <h1>Вы вышли из аккаунта</h1>
+           <p>Вы можете <a href='{% url "login" %}'>войти снова</a>.
+           </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

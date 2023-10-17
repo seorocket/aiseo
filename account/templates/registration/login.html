@@ -1,0 +1,32 @@
+{% extends "_base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+    <section class="authSection">
+        <div class="info-block-main">
+            <h1 class="home_h1">AiSEO authentication</h1>
+            <div class="login-form">
+                <form action="{% url 'login' %}" method="post">
+                    <p>
+                        <label class="field">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            <input type="text" name="username" placeholder="Login" autofocus="" required="" id="id_username">
+                        </label>
+                    </p>
+                    <p>
+                        <label class="field">
+                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                            <input type="password" name="password" placeholder="Password"  required="" id="id_password">
+                        </label>
+                    </p>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <p><input type="submit" class="btn home_login" value="Log in"></p>
+              </form>
+                {{error}}
+              {% if error == 'error' %}
+                <p lass="text-danger">Ваше имя пользователя и пароль не совпадают. Пожалуйста, попробуйте еще раз.</p>
+              {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

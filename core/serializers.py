@@ -10,7 +10,7 @@ class ProxySerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = '__all__'
+        exclude = ('user',)
 
 class DomainSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,7 +20,7 @@ class DomainSerializer(serializers.ModelSerializer):
 class SearchQuerySerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchQuery
-        fields = '__all__'
+        exclude = ('user',)
 
 
 class FileSerializer(serializers.ModelSerializer):

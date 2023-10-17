@@ -1,0 +1,61 @@
+{% extends "_base.html" %}
+{% block content %}
+<div id="myAlert" class="alert alert-success" role="alert" data-dismiss="alert" style="display:none">
+    <strong>Офферы обнавлены</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="container">
+    <div id="siteform" class="row m-top-50">
+            {% for k in offers %}
+                <div class="col-2 offers_check">
+                    <div class="offers_in">
+                        <p>
+                        {% if k.photo %}
+                            <p><img src="{{k.photo.url}}" width="90px" height="80px" /></p>
+                        {% endif %}
+                            <input type="checkbox" name="{{ k.id }}" value="{{ k.id }}" {% if k.id in my_offers %} checked="checked" {% endif %} />
+                            <label>{{ k.name }}</label>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        <div class="col-12" style="text-align: right; margin-top: 20px;"><button class="save-button">Сохранить</button></div>
+
+    </div>
+</div>
+
+<script>
+$(function() {
+jQuery('.save-button').click(function(){
+    var formData = [];
+    var formDataRemove = [];
+    jQuery('#siteform input:checkbox').each(function(){
+        if($(this).prop('checked')){
+            formData.push($(this).val());
+        }else{
+            formDataRemove.push($(this).val());
+        }
+    });
+   $.ajax({
+        url: '/account/ajax/',
+        method: "POST",
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            type: 'save_offers',
+            jsonData: JSON.stringify(formData),
+            jsonDataRemove: JSON.stringify(formDataRemove)
+        },
+        success: function (data, textStatus){
+            if (data.status == 'ok'){
+                $('#myAlert').css('display','block');
+            }
+        }
+    })
+    });
+});
+</script>
+{% endblock %}
+
+

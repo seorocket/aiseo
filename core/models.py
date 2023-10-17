@@ -1,5 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 
 
 class Proxy(models.Model):
@@ -22,6 +23,7 @@ class Proxy(models.Model):
     password = models.CharField(max_length=100)
     protocol = models.CharField(default='http', max_length=10, choices=CHOICE_PROXY_PROTOCOL)
     status = models.IntegerField(default=0, choices=CHOICE_PROXY_STATUS)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return f"{self.protocol}://{self.username}:{self.password}@{self.ip_address}:{self.port}"
@@ -30,6 +32,7 @@ class Proxy(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.name
@@ -47,6 +50,7 @@ class SearchQuery(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
     status = models.IntegerField(default=0, choices=CHOICE_SEARCHQUERY_STATUS)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.query
@@ -80,6 +84,8 @@ class Domain(models.Model):
     webpage = models.IntegerField(default=0)
     audio = models.IntegerField(default=0)
     last_captured = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
     def __str__(self):
         return self.name
 
@@ -106,6 +112,7 @@ class File(models.Model):
 
     # Добавляем поле для загрузки файла
     file = models.FileField(upload_to='')  # '/' - это путь для сохранения файлов на сервере
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.url
@@ -128,6 +135,7 @@ class Shot(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     date = models.DateField(default='1000-01-01')
     status = models.IntegerField(default=1,choices=CHOICE_SHOT_STATUS)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.name
