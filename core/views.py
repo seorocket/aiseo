@@ -643,6 +643,16 @@ class FileViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
 
+    @action(detail=False, methods=['post'])
+    def bulk_create_files(self, request):
+        data = request.data
+        serializer = FileSerializer(data=data, many=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # ... Ваш существующий код ...
 
     @action(detail=False, methods=['get'])
