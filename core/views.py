@@ -96,7 +96,9 @@ def index(request):
 
     context.update({
         'link': True,
-        'projects': projects
+        'projects': projects,
+        'keys': keys,
+        'statuses': choices,
     })
 
     return HttpResponse(template.render(context))
@@ -108,14 +110,14 @@ def index(request):
 #     projects = Project.objects.all()
 #     keys = SearchQuery.objects.all()
 #
-#     status_entry = request.GET.get('status')
-#     if status_entry:
-#         keys = keys.filter(status=status_entry)
-#
-#     choices = dict()
-#
-#     for choice in CHOICE_SEARCHQUERY_STATUS:
-#         choices[choice[0]] = {'name': choice[1]}
+    # status_entry = request.GET.get('status')
+    # if status_entry:
+    #     keys = keys.filter(status=status_entry)
+    #
+    # choices = dict()
+    #
+    # for choice in CHOICE_SEARCHQUERY_STATUS:
+    #     choices[choice[0]] = {'name': choice[1]}
 #
 #     paginator = Paginator(projects, 250)
 #     page = request.GET.get('page')

@@ -264,7 +264,7 @@ function sendAjax(dataForm, el) {
                         })
                     }
                 } else if (type === 'change_selected_phrases' || type === 'change_selected_domains' || type === 'change_selected_urls' || type === 'change_selected_shots') {
-                    if (response.delete) {
+                    if (response.change) {
                         $(el.target).parents('tr').fadeOut().remove()
                         obj['id_array'].map(function(i, item) {
                             let value = $(el.target).parents('.change').find('select.status-all-change option:selected').text(),
