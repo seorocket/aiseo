@@ -97,12 +97,12 @@ CHOICE_FILE_STATUS = (
 
 class File(models.Model):
     url = models.CharField(max_length=1255, unique=True)
-    mimetype = models.CharField(max_length=255)
-    timestamp = models.CharField(max_length=20)
-    endtimestamp = models.CharField(max_length=20)
+    mimetype = models.CharField(max_length=255, null=True, blank=True)
+    timestamp = models.CharField(max_length=20, null=True, blank=True)
+    endtimestamp = models.CharField(max_length=20, null=True, blank=True)
     shots = models.TextField(null=True, blank=True)
-    groupcount = models.IntegerField()
-    uniqcount = models.IntegerField()
+    groupcount = models.IntegerField(null=True, blank=True)
+    uniqcount = models.IntegerField(null=True, blank=True)
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
     status = models.IntegerField(choices=CHOICE_FILE_STATUS, default=1)
     content = models.TextField(max_length=314572800, null=True, blank=True)
