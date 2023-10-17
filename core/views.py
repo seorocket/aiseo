@@ -164,7 +164,6 @@ def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
     domains = Domain.objects.all()
-    domains_count = domains.count()
 
     choices = dict()
 
@@ -200,6 +199,8 @@ def domains(request):
     if status_entry:
         domains = domains.filter(status=status_entry)
 
+    domains_count = domains.count()
+
     paginator = Paginator(domains, 250)
     page = request.GET.get('page')
     try:
@@ -227,7 +228,6 @@ def domain_item(request, domain_id):
     data = get_object_or_404(Domain, id=domain_id)
     template = loader.get_template('domain-item.html')
     urls = File.objects.filter(domain=domain_id)
-    urls_count = urls.count()
 
     choices = dict()
 
@@ -242,6 +242,8 @@ def domain_item(request, domain_id):
     status_entry = request.GET.get('status')
     if status_entry:
         urls = urls.filter(status=status_entry)
+
+    urls_count = urls.count()
 
     urls_data = [{"name": url.url, "id": url.id} for url in urls]
     nested_urls = create_nested_url_list(urls_data)
@@ -274,7 +276,6 @@ def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
     urls = File.objects.all()
-    urls_count = urls.count()
     domains = Domain.objects.all()
 
     choices = dict()
@@ -309,6 +310,8 @@ def urls(request):
     if status_entry:
         urls = urls.filter(status=status_entry)
 
+    urls_count = urls.count()
+
     paginator = Paginator(urls, 250)
     page = request.GET.get('page')
     try:
@@ -334,7 +337,6 @@ def url_item(request, url_id):
     data = get_object_or_404(File, id=url_id)
     template = loader.get_template('url-item.html')
     shots = Shot.objects.filter(file=url_id)
-    shots_count = shots.count()
 
     choices = dict()
 
@@ -349,6 +351,8 @@ def url_item(request, url_id):
     status_entry = request.GET.get('status')
     if status_entry:
         shots = shots.filter(status=status_entry)
+
+    shots_count = shots.count()
 
     paginator = Paginator(shots, 250)
     page = request.GET.get('page')
@@ -377,7 +381,6 @@ def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
     shots = Shot.objects.all()
-    shots_count = shots.count()
     urls = File.objects.all()
 
     choices = dict()
@@ -411,6 +414,8 @@ def shots(request):
     status_entry = request.GET.get('status')
     if status_entry:
         shots = shots.filter(status=status_entry)
+
+    shots_count = shots.count()
 
     paginator = Paginator(shots, 250)
     page = request.GET.get('page')
