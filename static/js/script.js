@@ -677,3 +677,22 @@ $(document).on('click', '.info-block-main .delete-selected, .info-block-main .de
 $(document).on('click', '.info-block-main .update-proxy', function (el) {
     sendAjax($(el.target).parents('form').find('input[name=proxy]'), el)
 })
+
+$('.page-item .page-link').on('click', function(el) {
+    el.preventDefault()
+    let selectedValue = $(this).attr('href'),
+        filter = window.location.search,
+        type = $('.status-all-search').attr('name'),
+        regex = new RegExp(`[?&]?${type}=[^&]+`, 'gi');
+    selectedValue = selectedValue.replace('page=', '');
+
+    if (window.location.href.indexOf(type) !== -1) {
+        window.location.search = `${filter.replace(regex, '')}&${type}=${selectedValue}`
+    } else {
+        if (window.location.href.indexOf('?') !== -1) {
+            window.location.search = `${filter}&${type}=${selectedValue}`
+        } else {
+            window.location.search = `?${type}=${selectedValue}`
+        }
+    }
+});
