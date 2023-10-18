@@ -78,9 +78,9 @@ def index(request):
     template = loader.get_template('index.html')
     current_user = request.user
     if current_user.is_staff:
-        projects = Project.objects.all()
+        projects = Project.objects.all().order_by('-id')
     else:
-        projects = Project.objects.filter(user=current_user)
+        projects = Project.objects.filter(user=current_user).order_by('-id')
     keys = SearchQuery.objects.all()
 
     status_entry = request.GET.get('status')
