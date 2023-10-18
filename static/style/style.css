@@ -561,7 +561,14 @@ table tbody tr:hover {
   background-color: #F9F9F9;
 }
 table tbody tr td {
-  padding: 5px 3px;
+  padding: 0 3px;
+  max-width: 200px;
+}
+table tbody tr td > .text {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 table tbody tr td a {
   color: #066BF9;

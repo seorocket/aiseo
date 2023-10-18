@@ -66,8 +66,8 @@
                             <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>
                             <td>{{ i.pages }}</td>
                             <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
-                            <td>{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</td>
-                            <td>{% if i.text %}{{ i.text }}{% else %}-{% endif %}</td>
+                            <td><div class="text">{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</div></td>
+                            <td><div class="text">{% if i.text %}{{ i.text }}{% else %}-{% endif %}</div></td>
                             <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
                             <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
                             <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
