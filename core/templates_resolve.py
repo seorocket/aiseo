@@ -2,6 +2,7 @@ from django.template import Context
 from django.template import loader
 from django.http import HttpResponse
 from django.utils import translation
+from .views import *
 
 
 def render_groups(request, queryset):
@@ -40,8 +41,14 @@ def render_phrases(request, queryset):
 def render_accordion_projects(request, queryset):
     template = loader.get_template('ajax/ajax_accordion_projects.html')
 
+    choices = dict()
+
+    for choice in CHOICE_SEARCHQUERY_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
     context_data = {
-        'projects': queryset
+        'projects': queryset,
+        'statuses': choices,
     }
     result = template.render(context_data)
 

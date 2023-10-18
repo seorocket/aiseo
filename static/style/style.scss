@@ -575,6 +575,9 @@ table {
             &:nth-child(2n+1) {
                 background-color: $lgrey2;
             }
+            &.active {
+                background-color: $white!important;
+            }
             td {
                 padding: 0 3px;
                 max-width: 200px;
@@ -587,9 +590,6 @@ table {
                 a {
                     color: $blue2;
                 }
-            }
-            &.active {
-                background-color: $white;
             }
         }
     }
@@ -752,7 +752,7 @@ table {
     }
 }
 .list-images-block {
-    background-color: $white;
+    background-color: $white!important;
     &:hover {
         background-color: $white;
     }

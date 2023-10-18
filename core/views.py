@@ -80,7 +80,6 @@ def index(request):
     if current_user.is_staff:
         projects = Project.objects.all()
     else:
-        # Иначе, показываем только записи, принадлежащие текущему пользователю
         projects = Project.objects.filter(user=current_user)
     keys = SearchQuery.objects.all()
 
@@ -174,7 +173,7 @@ def index(request):
 def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
-    domains = Domain.objects.all()
+    domains = Domain.objects.all().order_by('-id')
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
@@ -242,7 +241,7 @@ def domains(request):
 def domain_item(request, domain_id):
     data = get_object_or_404(Domain, id=domain_id)
     template = loader.get_template('domain-item.html')
-    urls = File.objects.filter(domain=domain_id)
+    urls = File.objects.filter(domain=domain_id).order_by('-id')
 
     choices = dict()
 
@@ -292,7 +291,7 @@ def domain_item(request, domain_id):
 def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
-    urls = File.objects.all()
+    urls = File.objects.all().order_by('-id')
     domains = Domain.objects.all()
 
     choices = dict()
@@ -354,7 +353,7 @@ def urls(request):
 def url_item(request, url_id):
     data = get_object_or_404(File, id=url_id)
     template = loader.get_template('url-item.html')
-    shots = Shot.objects.filter(file=url_id)
+    shots = Shot.objects.filter(file=url_id).order_by('-id')
 
     choices = dict()
 
@@ -787,11 +786,15 @@ def ajax(request):
         data = json.loads(request.body)
         if data.get('type') == 'new_group':
             try:
+                current_user = request.user
                 for name in data:
                     if name != 'type':
                         obj_info[name] = data.get(name, '')
-                Project.objects.create(**obj_info)
-                project = Project.objects.all()
+                Project.objects.create(user=current_user, **obj_info)
+                if current_user.is_staff:
+                    project = Project.objects.all()
+                else:
+                    project = Project.objects.filter(user=current_user)
                 result = render_groups(request, project)
                 return HttpResponse(result)
             except Exception as e:
@@ -801,6 +804,7 @@ def ajax(request):
                 project = data['project']
                 phrases = data['phrases']
                 if project:
+                    current_user = request.user
                     project = Project.objects.get(id=project)
                     if phrases:
                         p = phrases.split("\n")
@@ -812,7 +816,10 @@ def ajax(request):
                                 else:
                                     ph = SearchQuery(query=query, project=project)
                                     ph.save()
-                        project = Project.objects.all()
+                        if current_user.is_staff:
+                            project = Project.objects.all().order_by('-id')
+                        else:
+                            project = Project.objects.filter(user=current_user).order_by('-id')
                         result = render_accordion_projects(request, project)
                         return HttpResponse(result)
                     else:

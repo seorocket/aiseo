@@ -563,6 +563,9 @@ table tbody tr:hover {
 table tbody tr:nth-child(2n+1) {
   background-color: #f1f1f1;
 }
+table tbody tr.active {
+  background-color: #FFFFFF !important;
+}
 table tbody tr td {
   padding: 0 3px;
   max-width: 200px;
@@ -575,9 +578,6 @@ table tbody tr td > .text {
 }
 table tbody tr td a {
   color: #066BF9;
-}
-table tbody tr.active {
-  background-color: #FFFFFF;
 }
 
 .phrasesSection .info-block-main {
@@ -730,7 +730,7 @@ table tbody tr.active {
 }
 
 .list-images-block {
-  background-color: #FFFFFF;
+  background-color: #FFFFFF !important;
 }
 .list-images-block:hover {
   background-color: #FFFFFF;
