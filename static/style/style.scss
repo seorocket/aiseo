@@ -935,6 +935,13 @@ tr.more_urls {
     &:hover {
         background-color: $white;
     }
+    &.active {
+        td {
+            > .text {
+                -webkit-line-clamp: inherit;
+            }
+        }
+    }
 }
 .loader-block {
     text-align: center;

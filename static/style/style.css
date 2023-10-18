@@ -900,6 +900,9 @@ tr.more_urls {
 tr.more_urls:hover {
   background-color: #FFFFFF;
 }
+tr.more_urls.active td > .text {
+  -webkit-line-clamp: inherit;
+}
 
 .loader-block {
   text-align: center;
