@@ -17,6 +17,12 @@ class DomainSerializer(serializers.ModelSerializer):
         model = Domain
         fields = '__all__'
 
+class DomainImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DomainImages
+        fields = '__all__'
+
+
 class SearchQuerySerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchQuery

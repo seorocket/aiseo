@@ -223,6 +223,8 @@ function sendAjax(dataForm, el) {
     }
     if (type === 'get_phrases') {
         obj['id'] = Number($(el.target).parents('.accordion-item').attr('data-id'))
+
+        $(`.accordion-phrase .accordion-item[data-id=${obj['id']}] .accordion-body .table tbody`).html('<td colspan="3" class="loader-block"><span class="loader"></span></td>')
     }
 
     obj['type'] = type
@@ -619,37 +621,37 @@ $(document).on('click', '.more_urls', function (el) {
             }
         });
 
-        // const imageSliderBlock = $(el.target).parents('tbody').find('tr.list-images-block td.list-images .list-images-main')
-        // $.ajax({
-        //     url: `/api/domain_photo/?domain_id=${id}`, // Передаем URL как часть запроса
-        //     type: 'get',
-        //     dataType: 'json',
-        //     headers: {
-        //         'X-CSRFToken': getCookie('csrftoken'),
-        //     },
-        //     success: function(response) {
-        //         $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>`)
-        //         let imageSlider = $(imageSliderBlock).find('.swiper .swiper-wrapper')
-        //         new Swiper(".galleryDomainSlider", {
-        //           navigation: {
-        //             nextEl: ".swiper-button-next",
-        //             prevEl: ".swiper-button-prev",
-        //           },
-        //         });
-        //         if (response) {
-        //             for (let i=0; i<response.length; i++) {
-        //                 $(imageSlider).append(`
-        //                     <div class="swiper-slide"><img src="${response[i].photo}" alt=""></div>
-        //                 `)
-        //             }
-        //         } else {
-        //             console.log('Ошибка при получении скриншота');
-        //         }
-        //     },
-        //     error: function(response) {
-        //         console.log(response);
-        //     }
-        // });
+        const imageSliderBlock = $(el.target).parents('tbody').find('tr.list-images-block td.list-images .list-images-main')
+        $.ajax({
+            url: `/api/domain_images/?domain_id=${id}`, // Передаем URL как часть запроса
+            type: 'get',
+            dataType: 'json',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            success: function(response) {
+                $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>`)
+                let imageSlider = $(imageSliderBlock).find('.swiper .swiper-wrapper')
+                new Swiper(".galleryDomainSlider", {
+                  navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  },
+                });
+                if (response) {
+                    for (let i=0; i<response.length; i++) {
+                        $(imageSlider).append(`
+                            <div class="swiper-slide"><img src="${response[i].photo}" alt=""></div>
+                        `)
+                    }
+                } else {
+                    console.log('Ошибка при получении скриншота');
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
     } else {
         $('.table .list-images-block').remove()
         $('.table tr').removeClass('active')
@@ -682,14 +684,21 @@ $('.checks_all').on('click', function(){
     }
 });
 
-$(document).on('click', '.info-block-main .delete-selected, .info-block-main .delete-proxy, .info-block-main .change-selected, .phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
+$(document).on('click', '.info-block-main .delete-selected, .info-block-main .delete-proxy, .info-block-main .change-selected', function (el) {
     sendAjax('', el)
 })
 $(document).on('click', '.info-block-main .update-proxy', function (el) {
     sendAjax($(el.target).parents('form').find('input[name=proxy]'), el)
 })
 $(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
-    $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
+    if (!$(this).hasClass('active-search')) {
+        sendAjax('', el)
+        $('.phrasesSection .accordion-phrase .accordion-item .accordion-header').removeClass('active-search')
+        $(this).addClass('active-search')
+    } else {
+        $(this).removeClass('active-search')
+        $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
+    }
 })
 
 $('.page-item .page-link').on('click', function(el) {

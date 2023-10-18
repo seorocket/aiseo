@@ -746,6 +746,28 @@ table {
         background-color: $white;
     }
     .list-images-main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
+        .slider {
+            padding: 10px 0;
+            .swiper-slide {
+                height: auto;
+                &::after {
+                    content: '';
+                    display: block;
+                    padding-bottom: 56.25%;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            }
+        }
         .list-domain {
             display: flex;
             flex-direction: column;
@@ -903,5 +925,27 @@ tr.more_urls {
     cursor: pointer;
     &:hover {
         background-color: $white;
+    }
+}
+.loader-block {
+    text-align: center;
+    padding: 30px 0;
+}
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid $blue;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

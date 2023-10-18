@@ -570,6 +570,21 @@ class DomainViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class DomainImagesFilter(filters.FilterSet):
+    domain_id = django_filters.CharFilter(field_name="domain_id")
+
+    class Meta:
+        model = DomainImages
+        fields = ['domain_id']
+
+
+class DomainImagesViewSet(viewsets.ModelViewSet):
+    queryset = DomainImages.objects.all()
+    serializer_class = DomainImagesSerializer
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    filterset_class = DomainImagesFilter
+
+
 class SearchQueryFilter(filters.FilterSet):
     project = django_filters.CharFilter(field_name="project")
     status = django_filters.CharFilter(field_name="status")
@@ -854,7 +869,6 @@ def ajax(request):
                 id = data.get('id')
                 phrases = SearchQuery.objects.filter(project=id)
                 result = render_phrases(request, phrases)
-                print(result)
                 return HttpResponse(result)
             except Exception as e:
                 result = {"error": e}

@@ -87,6 +87,15 @@ class Domain(models.Model):
         return self.name
 
 
+class DomainImages(models.Model):
+    class Meta:
+        verbose_name = u"Domain Image"
+        verbose_name_plural = u"Domain Images"
+
+    photo = models.FileField('Image', upload_to='image_domain', null=True, blank=True)
+    domain_id = models.ForeignKey(Domain, on_delete=models.CASCADE, default=1, related_name='images_domain')
+
+
 CHOICE_FILE_STATUS = (
     (3, 'Done'),
     (2, 'Inprogress'),

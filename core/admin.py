@@ -39,11 +39,17 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 
+class DomainImagesInline(admin.TabularInline):
+    model = DomainImages
+    extra = 1
+
+
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
     list_display = ('name', 'project', 'pages', 'history', 'status', 'snippet', 'image', 'first_captured', 'stripped_snippet', 'display_name', 'text', 'link', 'thumb', 'capture', 'video', 'webpage', 'audio', 'last_captured')
     list_filter = ('project', 'status')
     search_fields = ('name', 'project__name')  # поиск по имени и имени проекта
+    inlines = [DomainImagesInline]
 
 
 @admin.register(SearchQuery)
