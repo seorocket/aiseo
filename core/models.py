@@ -58,6 +58,9 @@ CHOICE_DOMAIN_STATUS = (
     (0, 'added'),
     (1, 'check files'),
     (2, 'inprogress')
+    (3, 'get images'),
+    (4, 'checked'),
+    (5, 'get files')
 )
 
 
