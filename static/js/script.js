@@ -2,7 +2,7 @@ $(document).ready(function () {
     maskField()
     checkSize()
     checkFilter()
-    checkStatus()
+    if (!document.hidden || !document.webkitHidden) checkStatus()
     checkStatusFilter()
     count_table_td()
 })
@@ -221,6 +221,9 @@ function sendAjax(dataForm, el) {
     if (type === 'update_proxy' || type === 'delete_proxy') {
         obj['id'] = Number($(el.target).attr('data-id'))
     }
+    if (type === 'get_phrases') {
+        obj['id'] = Number($(el.target).parents('.accordion-item').attr('data-id'))
+    }
 
     obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
@@ -245,6 +248,7 @@ function sendAjax(dataForm, el) {
                     setTimeout(function () {
                         $('.message_phrase').html('')
                     }, 1500)
+                    $('.accordion-phrase').html(response);
                 } else if (type === 'delete_phrases' || type === 'delete_projects') {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut().remove()
@@ -288,6 +292,9 @@ function sendAjax(dataForm, el) {
                     if (response.delete) {
                         $(el.target).parents('.proxy-item').fadeOut().remove()
                     }
+                } else if (type === 'get_phrases') {
+                    $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
+                    $(`.accordion-phrase .accordion-item[data-id=${obj['id']}] .accordion-body .table tbody`).html(response)
                 }
             }
         }
@@ -341,13 +348,13 @@ function infoOpenModal(elem) {
     bodyText.html('')
     if (type === 'add-group') {
         titleText.html(`
-            <div class="h1 _title36 modal-title" id="exampleModalLabel">Добавить группу</div>
+            <div class="h1 _title36 modal-title" id="exampleModalLabel">Добавить проект</div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
         `)
         bodyText.html(`
             <form class="application-block">
-                <input class="group_add" placeholder="Новая группа" name="name">
-                <div class="btn checkField" data-request="new_group">Создать новую группу</div>
+                <input class="group_add" placeholder="Новый проект" name="name">
+                <div class="btn checkField" data-request="new_group">Создать новый проект</div>
             </form>
         `)
     }
@@ -537,7 +544,7 @@ function checkStatus() {
                     } else {
                         status = 'In process'
                     }
-                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span>${done}/${count} (${((done/count)*100).toFixed(1)}%)</span><span>${status}</span>`)
+                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span data-request="get_phrases">${done}/${count} (${((done/count)*100).toFixed(1)}%)</span><span data-request="get_phrases">${status}</span>`)
                 }
             }
         });
@@ -545,7 +552,7 @@ function checkStatus() {
 }
 
 setInterval(function() {
-    checkStatus()
+    if (!document.hidden || !document.webkitHidden) checkStatus()
 }, 5000)
 
 $('.status-all-search').on('change', function() {
@@ -586,6 +593,10 @@ function createNestedStructure(data, el) {
     $(el).append(ul);
     return ul;
 }
+
+$(document).on('click', '.more_urls a', function (el) {
+    el.stopPropagation();
+})
 
 $(document).on('click', '.more_urls', function (el) {
     const id = Number($(this).attr('data-id'));
@@ -671,7 +682,7 @@ $('.checks_all').on('click', function(){
     }
 });
 
-$(document).on('click', '.info-block-main .delete-selected, .info-block-main .delete-proxy, .info-block-main .change-selected', function (el) {
+$(document).on('click', '.info-block-main .delete-selected, .info-block-main .delete-proxy, .info-block-main .change-selected, .phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
     sendAjax('', el)
 })
 $(document).on('click', '.info-block-main .update-proxy', function (el) {
@@ -696,3 +707,20 @@ $('.page-item .page-link').on('click', function(el) {
         }
     }
 });
+
+$('.search-name input').on('input', function() {
+    let temp = $(this).val()
+    if (temp) {
+        $(this).parents('.info-block-main').find('.accordion .accordion-item').each(function () {
+            if ($(this).find('.accordion-button').text().toLowerCase().indexOf(temp.toLowerCase()) > -1) {
+                $(this).removeClass('d-none')
+            } else {
+                $(this).addClass('d-none')
+            }
+        })
+    } else {
+        $(this).parents('.info-block-main').find('.accordion .accordion-item').each(function () {
+            $(this).removeClass('d-none')
+        })
+    }
+})

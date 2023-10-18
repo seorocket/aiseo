@@ -24,3 +24,25 @@ def render_proxy(request, queryset):
     result = template.render(context_data)
 
     return HttpResponse(result)
+
+
+def render_phrases(request, queryset):
+    template = loader.get_template('ajax/ajax_phrases.html')
+
+    context_data = {
+        'keys': queryset
+    }
+    result = template.render(context_data)
+
+    return HttpResponse(result)
+
+
+def render_accordion_projects(request, queryset):
+    template = loader.get_template('ajax/ajax_accordion_projects.html')
+
+    context_data = {
+        'projects': queryset
+    }
+    result = template.render(context_data)
+
+    return HttpResponse(result)

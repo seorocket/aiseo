@@ -512,6 +512,12 @@ form.application-block {
             }
         }
     }
+    .accordion-body {
+        .table-block {
+            max-height: 425px;
+            overflow: auto;
+        }
+    }
 }
 .accordion {
     .accordion-button {
@@ -891,5 +897,11 @@ table {
                 }
             }
         }
+    }
+}
+tr.more_urls {
+    cursor: pointer;
+    &:hover {
+        background-color: $white;
     }
 }

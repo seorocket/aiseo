@@ -40,6 +40,7 @@
                     <thead>
                     <tr>
                         <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                        <th></th>
                         <th>Domains</th>
                         <th>Project</th>
                         <th>Pages</th>
@@ -57,14 +58,14 @@
                         <th>V</th>
                         <th>W</th>
                         <th>A</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for i in domains %}
-                        <tr>
+                        <tr class="more_urls" data-id="{{ i.id }}">
                             <td><input type="checkbox" value="{{ i.id }}"
                                        class="checks group-{{ g.id }}"></td>
+                            <td><i class="fa-solid fa-angles-down"></i></td>
                             <td>
                                 <a href="{{ i.id }}">{{ i.name }}</a>
                             </td>
@@ -84,9 +85,9 @@
                             <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
                             <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
                             <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
-                            <td>
-                                <div type="button" class="btn more_urls" data-id="{{ i.id }}">More</div>
-                            </td>
+{#                            <td>#}
+{#                                <div type="button" class="btn more_urls" data-id="{{ i.id }}">More</div>#}
+{#                            </td>#}
                         </tr>
                     {% endfor %}
                     </tbody>

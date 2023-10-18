@@ -747,7 +747,9 @@ def ajax(request):
                                 else:
                                     ph = SearchQuery(query=query, project=project)
                                     ph.save()
-                                    result = {"status": True}
+                        project = Project.objects.all()
+                        result = render_accordion_projects(request, project)
+                        return HttpResponse(result)
                     else:
                         result = {"error": 'The list of phrases is empty'}
                 else:
@@ -845,6 +847,15 @@ def ajax(request):
                     proxy = Proxy.objects.get(id=id)
                     proxy.delete()
                 result = {'delete': True}
+            except Exception as e:
+                result = {"error": e}
+        if data.get('type') == 'get_phrases':
+            try:
+                id = data.get('id')
+                phrases = SearchQuery.objects.filter(project=id)
+                result = render_phrases(request, phrases)
+                print(result)
+                return HttpResponse(result)
             except Exception as e:
                 result = {"error": e}
 

@@ -514,6 +514,10 @@ form.application-block {
   align-items: center;
   gap: 5px;
 }
+.accordion-phrase .accordion-body .table-block {
+  max-height: 425px;
+  overflow: auto;
+}
 
 .accordion .accordion-button {
   padding: 10px 15px;
@@ -854,4 +858,11 @@ table tbody tr.active {
 }
 .authSection .info-block-main .login-form p .field input {
   padding-left: 50px;
+}
+
+tr.more_urls {
+  cursor: pointer;
+}
+tr.more_urls:hover {
+  background-color: #FFFFFF;
 }/*# sourceMappingURL=style.css.map */

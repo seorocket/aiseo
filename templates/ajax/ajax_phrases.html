@@ -1,0 +1,8 @@
+{% load i18n %}
+{% for i in keys %}
+    <tr>
+        <td><input type="checkbox" value="{{ i.id }}" class="checks group-{{ g.id }}"></td>
+        <td>{{ i.query }}</td>
+        <td class="status-td">{{ i.get_status_display }}</td>
+    </tr>
+{% endfor %}
