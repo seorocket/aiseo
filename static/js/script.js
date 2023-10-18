@@ -603,7 +603,7 @@ $(document).on('click', '.more_urls', function (el) {
     if (!$(el.target).parents('tr').next('tr.list-images-block').hasClass('list-images-block')) {
         $('.table .list-images-block').remove()
         $('.table tr').removeClass('active')
-        $(el.target).parents('tr').after(`<tr class="list-images-block"><td colspan="19" class="list-images"><div class="list-images-main"></div></td></tr>`)
+        $(el.target).parents('tr').after(`<tr class="list-images-block"><td colspan="13" class="list-images"><div class="list-images-main"></div></td></tr>`)
         const tr = $(el.target).parents('tbody').find('tr.list-images-block td.list-images .list-images-main')
         $.ajax({
             url: `/get-urls-domain/${id}/`,
@@ -687,6 +687,9 @@ $(document).on('click', '.info-block-main .delete-selected, .info-block-main .de
 })
 $(document).on('click', '.info-block-main .update-proxy', function (el) {
     sendAjax($(el.target).parents('form').find('input[name=proxy]'), el)
+})
+$(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
+    $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
 })
 
 $('.page-item .page-link').on('click', function(el) {
