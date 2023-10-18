@@ -642,6 +642,51 @@ class SearchQueryViewSet(viewsets.ModelViewSet):
 
         return Response(SearchQuerySerializer(created_queries, many=True).data, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['get'])
+    def check_status(self, request):
+        project_id = self.request.query_params.get('project', None)
+
+        if project_id is not None:
+            search_queries = SearchQuery.objects.filter(project_id=project_id)
+        else:
+            search_queries = SearchQuery.objects.all()
+
+        count = search_queries.count()
+        message = ''
+        if count:
+            added = search_queries.filter(status=0).count()
+            done = search_queries.filter(status=1).count()
+            inprogress = search_queries.filter(status=2).count()
+            error = search_queries.filter(status=3).count()
+
+            percentage = round((done / count) * 100, 1) if count > 0 else 0
+            status_message = ""
+
+            if done == count:
+                status_message = 'Completed'
+            elif done+added == count:
+                status_message = 'There are not verified'
+            elif done+error == count:
+                status_message = 'There are errors'
+            elif done+error+added == count:
+                status_message = 'There are tested, not tested and errors'
+            elif error+added == count:
+                status_message = 'There are errors and not verified'
+            elif error == count:
+                status_message = 'Error'
+            elif added == count:
+                status_message = 'Added'
+            else:
+                status_message = 'In process'
+                
+            message = f'{done}/{count} ({percentage}%) {status_message}'
+
+        response_data = {
+            'status': message
+        }
+
+        return Response(data=response_data, status=status.HTTP_200_OK)
+
 '''
 Формат запроса: 
 /api/searchqueries/bulk_create/?format=json

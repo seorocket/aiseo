@@ -508,46 +508,10 @@ function checkStatus() {
     for (let i=0; i<accordion.length; i++) {
         let id = $(accordion).eq(i).attr('data-id')
         $.ajax({
-            url: `/api/searchqueries/?project=${id}`,
+            url: `/api/searchqueries/check_status/?project=${id}`,
             method: "GET",
             success: function (response) {
-                if (response.length) {
-                    let count = response.length, // всего
-                        added = 0, // добавлен
-                        done = 0, // сделано
-                        inprogress = 0, // в процессе
-                        error = 0, // ошибка
-                        status
-                    for (let j=0; j<count; j++) {
-                        if (response[j].status === 0) {
-                            added++
-                        } else if (response[j].status === 1) {
-                            done++
-                        } else if (response[j].status === 2) {
-                            inprogress++
-                        } else if (response[j].status === 3) {
-                            error++
-                        }
-                    }
-                    if (done === count) {
-                        status = 'Completed'
-                    } else if (done+added === count) {
-                        status = 'There are not verified'
-                    } else if (done+error === count) {
-                        status = 'There are errors'
-                    } else if (done+error+added === count) {
-                        status = 'There are tested, not tested and errors'
-                    } else if (error+added === count) {
-                        status = 'There are errors and not verified'
-                    } else if (error === count) {
-                        status = 'Error'
-                    } else if (added === count) {
-                        status = 'Added'
-                    } else {
-                        status = 'In process'
-                    }
-                    $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span data-request="get_phrases">${done}/${count} (${((done/count)*100).toFixed(1)}%)</span><span data-request="get_phrases">${status}</span>`)
-                }
+                $('.accordion-phrase').find(`.accordion-item[data-id=${id}] .status`).html(`<span data-request="get_phrases">${response.status}</span>`)
             }
         });
     }
