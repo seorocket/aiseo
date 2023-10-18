@@ -761,6 +761,8 @@ table tbody tr.active {
   padding: 0;
   margin: 0;
   list-style: none;
+  max-height: 400px;
+  overflow: auto;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain {
   padding: 0;

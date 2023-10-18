@@ -57,9 +57,9 @@
                     <tbody>
                     {% for i in domains %}
                         <tr {% if i.images_domain.all or i.files_count != 0 %}class="more_urls"{% endif %} data-id="{{ i.id }}">
-                            <td><input type="checkbox" value="{{ i.id }}"
+                            <td style="width: 22px"><input type="checkbox" value="{{ i.id }}"
                                        class="checks group-{{ g.id }}"></td>
-                            <td>{% if i.images_domain.all or i.files_count != 0 %}<i class="fa-solid fa-angles-down"></i>{% endif %}</td>
+                            <td style="width: 25px">{% if i.images_domain.all or i.files_count != 0 %}<i class="fa-solid fa-angles-down"></i>{% endif %}</td>
                             <td>{% if i.display_name %}<a href="{% url 'core:domain_item' i.id %}">{{ i.display_name }}</a>{% else %}-{% endif %}</td>
                             <td class="status-td">{{ i.get_status_display }}</td>
                             <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>

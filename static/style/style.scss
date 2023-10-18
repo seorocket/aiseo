@@ -779,6 +779,8 @@ table {
             padding: 0;
             margin: 0;
             list-style: none;
+            max-height: 400px;
+            overflow: auto;
             > .list-domain {
                 padding: 0;
                 margin: 0;
