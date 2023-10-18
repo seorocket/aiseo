@@ -56,11 +56,11 @@
                     </thead>
                     <tbody>
                     {% for i in domains %}
-                        <tr class="more_urls" data-id="{{ i.id }}">
+                        <tr {% if i.images_domain.all or i.files_count != 0 %}class="more_urls"{% endif %} data-id="{{ i.id }}">
                             <td><input type="checkbox" value="{{ i.id }}"
                                        class="checks group-{{ g.id }}"></td>
-                            <td><i class="fa-solid fa-angles-down"></i></td>
-                            <td>{% if i.display_name %}<a href="{% url 'core:domain_item' i.id %}{{ i.id }}">{{ i.display_name }}</a>{% else %}-{% endif %}</td>
+                            <td>{% if i.images_domain.all or i.files_count != 0 %}<i class="fa-solid fa-angles-down"></i>{% endif %}</td>
+                            <td>{% if i.display_name %}<a href="{% url 'core:domain_item' i.id %}">{{ i.display_name }}</a>{% else %}-{% endif %}</td>
                             <td class="status-td">{{ i.get_status_display }}</td>
                             <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>
                             <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>

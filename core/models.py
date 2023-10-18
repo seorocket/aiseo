@@ -83,6 +83,10 @@ class Domain(models.Model):
     audio = models.IntegerField(default=0)
     last_captured = models.IntegerField(default=0)
 
+    @property
+    def files_count(self):
+        return File.objects.filter(domain=self).count()
+
     def __str__(self):
         return self.name
 
