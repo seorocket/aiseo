@@ -38,3 +38,4 @@ traitlets==5.5.0
 typing-extensions==4.4.0
 urllib3==1.26.7
 wcwidth==0.2.5
+validators

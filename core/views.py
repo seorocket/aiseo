@@ -2,6 +2,7 @@ import django_filters
 import random
 from django_filters import rest_framework as filters
 import json
+import validators
 
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
@@ -485,6 +486,10 @@ def create_nested_url_list(urls_data):
 
     for idx, url_info in enumerate(urls_data):
         url = url_info['name']
+        if not validators.url(url):
+            # Если ссылка невалидна, пропускаем ее и переходим к следующей итерации цикла
+            continue
+
         # Добавляем слеш в конец URL, если его там нет
         if not url.endswith('/'):
             url_with_slash = url + '/'
