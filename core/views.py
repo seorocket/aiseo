@@ -678,7 +678,7 @@ class SearchQueryViewSet(viewsets.ModelViewSet):
                 status_message = 'Added'
             else:
                 status_message = 'In process'
-                
+
             message = f'{done}/{count} ({percentage}%) {status_message}'
 
         response_data = {

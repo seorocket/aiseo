@@ -41,15 +41,15 @@
                     <tr>
                         <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
                         <th></th>
-                        <th>DN</th>
+                        <th>Dn</th>
+                        <th>FC-LC</th>
                         <th>Status</th>
                         <th>C</th>
-                        <th>W</th>
                         <th>Pages</th>
-                        <th>Img</th>
-                        <th>FC-LC</th>
+                        <th>W</th>
                         <th>Sn</th>
                         <th>T</th>
+                        <th>Img</th>
                         <th>V</th>
                         <th>A</th>
                     </tr>
@@ -61,14 +61,14 @@
                                        class="checks group-{{ g.id }}"></td>
                             <td style="width: 25px">{% if i.images_domain.all or i.files_count != 0 %}<i class="fa-solid fa-angles-down"></i>{% endif %}</td>
                             <td>{% if i.display_name %}<a href="{% url 'core:domain_item' i.id %}">{{ i.display_name }}</a>{% else %}-{% endif %}</td>
+                            <td>{% if i.first_captured %}{{ i.first_captured }}{% else %}-{% endif %}-{% if i.last_captured %}{{ i.last_captured }}{% else %}-{% endif %}</td>
                             <td class="status-td">{{ i.get_status_display }}</td>
                             <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>
-                            <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
                             <td>{{ i.pages }}</td>
-                            <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
-                            <td>{% if i.first_captured %}{{ i.first_captured }}{% else %}-{% endif %}-{% if i.last_captured %}{{ i.last_captured }}{% else %}-{% endif %}</td>
+                            <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
                             <td>{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</td>
-                            <td>{% if i.thumb %}{{ i.thumb }}{% else %}-{% endif %}</td>
+                            <td>{% if i.text %}{{ i.text }}{% else %}-{% endif %}</td>
+                            <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
                             <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
                             <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
                         </tr>
