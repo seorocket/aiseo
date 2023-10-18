@@ -7,6 +7,7 @@ $black: #000000;
 $white: #FFFFFF;
 $lgrey: #F9F9F9;
 $dgrey: #828B8D;
+$dgrey2: #e8e8e8;
 $grey: #e5e5e5;
 $border: rgba(0, 0, 0, .2);
 $gr: linear-gradient(90deg, #1C1C1C 0%, #111 100%);
@@ -570,6 +571,9 @@ table {
             }
             &:hover {
                 background-color: $lgrey;
+            }
+            &:nth-child(2n+1) {
+                background-color: $dgrey2;
             }
             td {
                 padding: 0 3px;
