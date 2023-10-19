@@ -945,7 +945,11 @@ def ajax(request):
         if data.get('type') == 'get_phrases':
             try:
                 id = data.get('id')
-                phrases = SearchQuery.objects.filter(project=id)
+                status = data.get('status')
+                if status:
+                    phrases = SearchQuery.objects.filter(project=id, status=status)
+                else:
+                    phrases = SearchQuery.objects.filter(project=id)
                 result = render_phrases(request, phrases)
                 return HttpResponse(result)
             except Exception as e:

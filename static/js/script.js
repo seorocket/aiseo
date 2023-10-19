@@ -175,7 +175,7 @@ function sendAjax(dataForm, el) {
             if (name === 'proxy') {
                 let urls = value.split('\n'),
                     arrayProxy = []
-                urls.forEach(function(url) {
+                urls.forEach(function (url) {
                     let new_url = new URL(url)
                     arrayProxy.push({
                         "ip_address": new_url.hostname,
@@ -198,21 +198,21 @@ function sendAjax(dataForm, el) {
     }
     if (type === 'delete_selected_phrases') {
         let id_array = []
-        $(el.target).parents('.accordion-item').find('td input:checked').map(function(i, item) {
+        $(el.target).parents('.accordion-item').find('td input:checked').map(function (i, item) {
             id_array.push($(item).val())
         })
         obj['id_array'] = id_array
     }
     if (type === 'delete_selected_projects') {
         let id_array = []
-        $(el.target).parents('.info-block-main').find('table td input:checked').map(function(i, item) {
+        $(el.target).parents('.info-block-main').find('table td input:checked').map(function (i, item) {
             id_array.push($(item).val())
         })
         obj['id_array'] = id_array
     }
     if (type === 'change_selected_phrases' || type === 'change_selected_domains' || type === 'change_selected_urls' || type === 'change_selected_shots') {
         let id_array = []
-        $(el.target).parents('.info-block-main').find('table td input:checked').map(function(i, item) {
+        $(el.target).parents('.info-block-main').find('table td input:checked').map(function (i, item) {
             id_array.push($(item).val())
         })
         obj['id_array'] = id_array
@@ -223,7 +223,9 @@ function sendAjax(dataForm, el) {
     }
     if (type === 'get_phrases') {
         obj['id'] = Number($(el.target).parents('.accordion-item').attr('data-id'))
-
+        let url = window.location.href,
+            urlObject = new URL(url);
+        obj['status'] = urlObject.searchParams.get('status')
         $(`.accordion-phrase .accordion-item[data-id=${obj['id']}] .accordion-body .table tbody`).html('<td colspan="3" class="loader-block"><span class="loader"></span></td>')
     }
 
@@ -258,21 +260,21 @@ function sendAjax(dataForm, el) {
                 } else if (type === 'delete_selected_phrases') {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut().remove()
-                        obj['id_array'].map(function(i, item) {
+                        obj['id_array'].map(function (i, item) {
                             $(`.accordion-item tr td input[value=${i}]`).parents('tr').fadeOut().remove()
                         })
                     }
                 } else if (type === 'delete_selected_projects') {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut().remove()
-                        obj['id_array'].map(function(i, item) {
+                        obj['id_array'].map(function (i, item) {
                             $(`table.table tr td input[value=${i}]`).parents('tr').fadeOut().remove()
                         })
                     }
                 } else if (type === 'change_selected_phrases' || type === 'change_selected_domains' || type === 'change_selected_urls' || type === 'change_selected_shots') {
                     if (response.change) {
                         $(el.target).parents('tr').fadeOut().remove()
-                        obj['id_array'].map(function(i, item) {
+                        obj['id_array'].map(function (i, item) {
                             let value = $(el.target).parents('.change').find('select.status-all-change option:selected').text(),
                                 block = $(`table.table tr td input[value=${i}]`)
                             $(block).parents('tr').fadeOut().find('td.status-td').text(value)
@@ -287,7 +289,7 @@ function sendAjax(dataForm, el) {
                     $('.proxyListSection .info-block-main').html(response);
                 } else if (type === 'update_proxy') {
                     $(el.target).parents('form').find('.field').append('<div class="message_status"><span style="color:green;">Proxies have been successfully updated</span></div>')
-                     setTimeout(function () {
+                    setTimeout(function () {
                         $(el.target).parents('form').find('.field .message_status').remove()
                     }, 1500)
                 } else if (type === 'delete_proxy') {
@@ -387,7 +389,7 @@ $('.select-block input').on('click', function (el) {
     el.stopPropagation();
 });
 
-$('table .delete').on('click', function(el) {
+$('table .delete').on('click', function (el) {
     el.preventDefault()
     sendAjax('', el)
 })
@@ -423,17 +425,17 @@ $('form .search_filter_btn').on('click', function (el) {
         urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.get("filter_p_sort") !== null) {
-    if (urlParams.get("p") !== null) {
-      window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}&p=${urlParams.get("p")}`;
+        if (urlParams.get("p") !== null) {
+            window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}&p=${urlParams.get("p")}`;
+        } else {
+            window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}`;
+        }
     } else {
-      window.location.search = decodedSerializedData + `&filter_p_sort=${urlParams.get("filter_p_sort")}`;
-    }
-    } else {
-    if (urlParams.get("p") !== null) {
-      window.location.search = decodedSerializedData + `&p=${urlParams.get("p")}`;
-    } else {
-      window.location.search = decodedSerializedData;
-    }
+        if (urlParams.get("p") !== null) {
+            window.location.search = decodedSerializedData + `&p=${urlParams.get("p")}`;
+        } else {
+            window.location.search = decodedSerializedData;
+        }
     }
 });
 
@@ -465,16 +467,16 @@ function checkFilter() {
     });
 }
 
-$('form .reset').on('click', function(el) {
+$('form .reset').on('click', function (el) {
     el.preventDefault()
     window.location.search = ''
 })
 
-$('.group_select').on('change', function() {
+$('.group_select').on('change', function () {
     $('.indexSection .item.phrase').removeClass('d-none')
 })
 
-$('.status-all-search-block .f-status').on('click', function() {
+$('.status-all-search-block .f-status').on('click', function () {
     let selectedValue = $('.status-all-search').val(),
         filter = window.location.search,
         type = $('.status-all-search').attr('name'),
@@ -491,21 +493,21 @@ $('.status-all-search-block .f-status').on('click', function() {
     }
 });
 
-$('.status-all-search-block .reset-status').on('click', function() {
+$('.status-all-search-block .reset-status').on('click', function () {
     let currentUrl = window.location.href;
     let searchParams = new URLSearchParams(window.location.search);
     let paramName = $('.status-all-search').attr('name');
     if (searchParams.has(paramName)) {
         searchParams.delete(paramName);
         let newUrl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
-        window.history.replaceState({ path: newUrl }, '', newUrl);
+        window.history.replaceState({path: newUrl}, '', newUrl);
         location.reload();
     }
 });
 
 function checkStatus() {
     let accordion = $('.accordion-phrase .accordion-item')
-    for (let i=0; i<accordion.length; i++) {
+    for (let i = 0; i < accordion.length; i++) {
         let id = $(accordion).eq(i).attr('data-id')
         $.ajax({
             url: `/api/searchqueries/check_status/?project=${id}`,
@@ -517,11 +519,11 @@ function checkStatus() {
     }
 }
 
-setInterval(function() {
+setInterval(function () {
     if (!document.hidden || !document.webkitHidden) checkStatus()
 }, 5000)
 
-$('.status-all-search').on('change', function() {
+$('.status-all-search').on('change', function () {
     checkStatusFilter()
 })
 
@@ -534,7 +536,7 @@ function checkStatusFilter() {
 function createNestedStructure(data, el) {
     const ul = $('<ul class="list-domain">');
     if (typeof data === 'object') {
-        $.each(data, function(key, value) {
+        $.each(data, function (key, value) {
             if (key !== 'count') {
                 if (value.count > 0) {
                     if (value.link) {
@@ -582,7 +584,7 @@ $(document).on('click', '.more_urls', function (el) {
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
-            success: function(response) {
+            success: function (response) {
                 createNestedStructure(response.nested_urls, tr);
                 $('.list-images-block').prev(tr).addClass('active')
             }
@@ -596,26 +598,29 @@ $(document).on('click', '.more_urls', function (el) {
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
-            success: function(response) {
+            success: function (response) {
                 $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>`)
                 let imageSlider = $(imageSliderBlock).find('.swiper .swiper-wrapper')
                 new Swiper(".galleryDomainSlider", {
-                  navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  },
+                    spaceBetween: 20,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
                 });
                 if (response) {
-                    for (let i=0; i<response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
+                        const imageUrl = response[i].photo;
+                        const fileNameWithoutExtension = imageUrl.split('/').pop().split('.')[0];
                         $(imageSlider).append(`
-                            <div class="swiper-slide"><img src="${response[i].photo}" alt=""></div>
+                            <div class="swiper-slide"><img src="${imageUrl}" alt=""><div class="info"><span>${fileNameWithoutExtension}</span><div class="copy"><i class="fa-regular fa-copy"></i></div></div></div>
                         `)
                     }
                 } else {
                     console.log('Ошибка при получении скриншота');
                 }
             },
-            error: function(response) {
+            error: function (response) {
                 console.log(response);
             }
         });
@@ -626,26 +631,26 @@ $(document).on('click', '.more_urls', function (el) {
 });
 
 function count_table_td() {
-  let count_table = 0;
-  for (let i = 0; i < $('.table.tree-count-results td.count-td').length; i++) {
-    let block = $('.table.tree-count-results td.count-td').eq(i);
-    let count = 0;
-    for (let j = 0; j < $(block).find('> span').length; j++) {
-      count += Number($(block).find('> span').eq(j).text());
+    let count_table = 0;
+    for (let i = 0; i < $('.table.tree-count-results td.count-td').length; i++) {
+        let block = $('.table.tree-count-results td.count-td').eq(i);
+        let count = 0;
+        for (let j = 0; j < $(block).find('> span').length; j++) {
+            count += Number($(block).find('> span').eq(j).text());
+        }
+        count_table += count;
+        $(block).append(count);
     }
-    count_table += count;
-    $(block).append(count);
-  }
-  $('.table.tree-count-results .count-th > span').text(`(${count_table})`);
+    $('.table.tree-count-results .count-th > span').text(`(${count_table})`);
 }
 
-$('.checks_all').on('click', function(){
-    if($(this).prop('checked')){
-        let checking = $(this).parents('table').find('.checks').map(function(i, el){
+$('.checks_all').on('click', function () {
+    if ($(this).prop('checked')) {
+        let checking = $(this).parents('table').find('.checks').map(function (i, el) {
             return $(el).prop('checked', true);
         }).get();
-    }else{
-        let checking = $(this).parents('table').find('.checks').map(function(i, el){
+    } else {
+        let checking = $(this).parents('table').find('.checks').map(function (i, el) {
             return $(el).prop('checked', false);
         }).get();
     }
@@ -668,7 +673,7 @@ $(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .acco
     }
 })
 
-$('.page-item .page-link').on('click', function(el) {
+$('.page-item .page-link').on('click', function (el) {
     el.preventDefault()
     let selectedValue = $(this).attr('href'),
         filter = window.location.search,
@@ -687,7 +692,7 @@ $('.page-item .page-link').on('click', function(el) {
     }
 });
 
-$('.search-name input').on('input', function() {
+$('.search-name input').on('input', function () {
     let temp = $(this).val()
     if (temp) {
         $(this).parents('.info-block-main').find('.accordion .accordion-item').each(function () {
@@ -707,3 +712,53 @@ $('.search-name input').on('input', function() {
 $(document).on('click', 'ul.first-list li.subMenu .down, .list-images-block .list-images-main > .list-domain > .list-domain li .down', function (el) {
     $(this).parent('.subMenu').toggleClass('open')
 })
+
+$(document).on('click', '.list-images-block .list-images-main .slider .swiper-slide', function (el) {
+    el.stopPropagation();
+    let content = `<img src="${$(this).find('img').attr('src')}" alt="">`,
+        title = $(this).find('.info > span').text()
+    if (!$('.modal#imgFull').length) {
+        $('body').append(`
+            <div class="modal fade" id="imgFull" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="h1 _title36 modal-title" id="exampleModalLabel"><div class="info"><span>${title}</span><div class="copy"><i class="fa-regular fa-copy"></i></div></div></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">${content}</div>
+                    </div>
+                </div>
+            </div>
+        `)
+    } else {
+        $('.modal#imgFull .modal-content .modal-header .modal-title .info > span').html(`${title}`)
+        $('.modal#imgFull .modal-content .modal-body').html(`${content}`)
+    }
+    $('#imgFull').modal('show')
+})
+
+$(document).on('click', '.info .copy', function (el) {
+    el.stopPropagation();
+    let text = $(this).parents('.info').find('> span').text(),
+        input = $('<textarea>').val(text).appendTo(this).select();
+    document.execCommand('copy');
+    input.remove();
+    showToasts('Успешно скопировано!', 'text-bg-success')
+});
+
+function showToasts(text, color) {
+    if (!$('.toast').length) {
+        $('body').append(`
+            <div class="toast ${color} align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">${text}</div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+            </div>
+        `)
+    } else {
+        $('.toast .toast-body').html(`${text}`)
+    }
+    $('.toast').toast('show')
+}

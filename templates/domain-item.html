@@ -109,7 +109,8 @@
             <nav>
                 <ul class="pagination">
                     {% if urls.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ urls.previous_page_number }}{{ dop_url }}">Prev</a></li>
+                        <li class="page-item"><a class="page-link"
+                                                 href="?page={{ urls.previous_page_number }}{{ dop_url }}">Prev</a></li>
                     {% endif %}
                     {% if urls.paginator %}
                         {% for i in urls.paginator.page_range %}
@@ -117,30 +118,36 @@
                                 {% if i == urls.number %}
                                     <li class="page-item"><a class="page-link active">{{ i }}</a></li>
                                 {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
                                 {% endif %}
                             {% elif urls.number == 2 and i <= 5 %}
                                 {% if i == 1 %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
                                 {% elif i == urls.number %}
                                     <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
                                 {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
                                 {% endif %}
                             {% elif i >= urls.number|add:'-2' and i <= urls.number|add:'2' %}
                                 {% if i == urls.number %}
                                     <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
                                 {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
                                 {% endif %}
                             {% elif i == urls.paginator.num_pages %}
                                 <li class="page-item more"><span class="page-link">...</span></li>
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a>
+                                </li>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
                     {% if urls.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ urls.next_page_number }}{{ dop_url }}">Next</a></li>
+                        <li class="page-item"><a class="page-link"
+                                                 href="?page={{ urls.next_page_number }}{{ dop_url }}">Next</a></li>
                     {% endif %}
                 </ul>
             </nav>

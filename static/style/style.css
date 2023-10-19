@@ -773,7 +773,6 @@ table tbody tr td a {
   padding: 0;
   margin: 0;
   list-style: none;
-  max-height: 400px;
   overflow: auto;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain {
@@ -999,4 +998,48 @@ ul.first-list ul li.main-title {
 }
 ul.first-list ul > li:not(.main-title) {
   display: none;
+}
+
+.modal#imgFull .modal-content .modal-header .modal-title .info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.modal#imgFull .modal-content .modal-header .modal-title .info .copy {
+  cursor: pointer;
+}
+.modal#imgFull .modal-content .modal-body img {
+  width: 100%;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.swiper.galleryDomainSlider .swiper-wrapper .swiper-slide {
+  position: relative;
+}
+.swiper.galleryDomainSlider .swiper-wrapper .swiper-slide img {
+  cursor: pointer;
+}
+.swiper.galleryDomainSlider .swiper-wrapper .swiper-slide .info {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  padding: 10px 15px;
+  background-color: #000000;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+}
+.swiper.galleryDomainSlider .swiper-wrapper .swiper-slide .info .copy {
+  cursor: pointer;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1100;
 }/*# sourceMappingURL=style.css.map */
