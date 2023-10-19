@@ -588,6 +588,27 @@ class DomainImagesViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = DomainImagesFilter
 
+    @action(detail=False, methods=['get'])
+    def add_domain_image(self, request):
+        if request.method == 'GET':
+            file_names = request.GET.get('file', '').split(',')
+            domain_id = request.GET.get('domain_id')
+            if domain_id:
+                try:
+                    domain_id = int(domain_id)
+                    domain = Domain.objects.get(id=domain_id)  # Получаем объект Domain по id
+                except (ValueError, Domain.DoesNotExist):
+                    return JsonResponse({'error': 'Invalid domain_id'}, status=400)
+
+                for file_name in file_names:
+                    DomainImages.objects.create(photo=f'image_domain/{file_name}', domain_id=domain)
+
+                return JsonResponse({'success': 'DomainImages records added successfully'}, status=200)
+
+            return JsonResponse({'error': 'domain_id parameter is missing'}, status=400)
+
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 class SearchQueryFilter(filters.FilterSet):
     project = django_filters.CharFilter(field_name="project")
