@@ -55,6 +55,8 @@ class DomainAdmin(admin.ModelAdmin):
 @admin.register(SearchQuery)
 class SearchQueryAdmin(admin.ModelAdmin):
     list_display = ('query', 'project')
+    search_fields = ['query']
+    list_filter = ['status', 'project']
 
 
 @admin.register(File)
