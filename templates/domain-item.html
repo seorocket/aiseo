@@ -51,7 +51,7 @@
                             <td>
                                 {% if value.link %}
                                     {% with value.link as url_without_protocol %}
-                                        <li class="1"><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>
+                                        <li><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>
                                     {% endwith %}
                                 {% else %}
                                     <ul class="first-list">

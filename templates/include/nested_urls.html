@@ -1,10 +1,11 @@
 {% for key, value in nested_urls.items %}
     {% if value.count %}
-    <li {% if not key %}class="main-title"{% endif %}>
+    <li class="{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
+        {% if value.count > 1 %}<div class="down"><i class="fa-solid fa-angle-right"></i></div>{% endif %}
         {% if value.link %}
           <a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a>
         {% else %}
-          <ul>
+          <ul {% if value.count > 1 %}class="sub-ul-menu"{% endif %}>
             {% include "include/nested_urls.html" with nested_urls=value %}
           </ul>
         {% endif %}

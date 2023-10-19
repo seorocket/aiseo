@@ -545,7 +545,10 @@ function createNestedStructure(data, el) {
                         ul.append(li);
                     } else {
                         const nestedUl = createNestedStructure(value);
-                        const li = $('<li>').append(nestedUl);
+                        let li = $('<li class="subMenu">').append(nestedUl)
+                        if (value.count > 1) {
+                            li.append(`<div class="down"><i class="fa-solid fa-angle-right"></i></div>`);
+                        }
                         li.append(`<div class="count">${value.count}</div>`);
                         ul.append(li);
                     }
@@ -699,4 +702,8 @@ $('.search-name input').on('input', function() {
             $(this).removeClass('d-none')
         })
     }
+})
+
+$(document).on('click', 'ul.first-list li.subMenu .down, .list-images-block .list-images-main > .list-domain > .list-domain li .down', function (el) {
+    $(this).parent('.subMenu').toggleClass('open')
 })

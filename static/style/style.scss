@@ -776,6 +776,7 @@ table {
                     position: absolute;
                     left: 0;
                     top: 0;
+                    object-position: top;
                 }
             }
         }
@@ -796,10 +797,52 @@ table {
                 padding: 0;
                 margin: 0;
                 list-style: none;
+                li {
+                    &.subMenu {
+                        display: flex;
+                        gap: 7px;
+                        padding-left: 16px;
+                        &.open {
+                            > .down {
+                                i {
+                                    transform: rotate(90deg);
+                                }
+                            }
+                            > ul {
+                                > li {
+                                    &:not(.main-title) {
+                                        display: flex;
+                                    }
+                                }
+                            }
+                        }
+                        .down {
+                            cursor: pointer;
+                            i {
+                                transition: all .3s;
+                            }
+                        }
+                        > ul {
+                            padding-left: 0;
+                            list-style: none;
+                            li {
+                                &:not(.main-title) {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
                 > li {
                     display: flex;
                     > .count {
-                        order: -1;
+                        order: 1;
+                    }
+                    .down {
+                        order: 2;
+                    }
+                    .list-domain {
+                        order: 3;
                     }
                     ul {
                         li {
@@ -967,5 +1010,55 @@ tr.more_urls {
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+ul.first-list {
+    padding: 0;
+    li {
+        list-style: none;
+        &.subMenu {
+            display: flex;
+            gap: 7px;
+            &.open {
+                > .down {
+                    i {
+                        transform: rotate(90deg);
+                    }
+                }
+                > ul {
+                    > li {
+                        &:not(.main-title) {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+            .down {
+                margin-left: 16px;
+                cursor: pointer;
+                i {
+                    transition: all .3s;
+                }
+            }
+            > ul {
+                padding-left: 0;
+            }
+        }
+    }
+    ul {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        li {
+            &.main-title {
+                order: -1;
+            }
+        }
+        > li {
+            &:not(.main-title) {
+                display: none;
+            }
+        }
     }
 }

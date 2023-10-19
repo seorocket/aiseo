@@ -759,6 +759,8 @@ table tbody tr td a {
   position: absolute;
   left: 0;
   top: 0;
+  -o-object-position: top;
+     object-position: top;
 }
 .list-images-block .list-images-main .list-domain {
   display: flex;
@@ -779,11 +781,41 @@ table tbody tr td a {
   margin: 0;
   list-style: none;
 }
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu {
+  display: flex;
+  gap: 7px;
+  padding-left: 16px;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu.open > .down i {
+  transform: rotate(90deg);
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu.open > ul > li:not(.main-title) {
+  display: flex;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu .down {
+  cursor: pointer;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu .down i {
+  transition: all 0.3s;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu > ul {
+  padding-left: 0;
+  list-style: none;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu > ul li:not(.main-title) {
+  display: none;
+}
 .list-images-block .list-images-main > .list-domain > .list-domain > li {
   display: flex;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain > li > .count {
-  order: -1;
+  order: 1;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain > li .down {
+  order: 2;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain > li .list-domain {
+  order: 3;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain > li ul li .count {
   display: none;
@@ -930,4 +962,41 @@ tr.more_urls.active td > .text {
   100% {
     transform: rotate(360deg);
   }
+}
+ul.first-list {
+  padding: 0;
+}
+ul.first-list li {
+  list-style: none;
+}
+ul.first-list li.subMenu {
+  display: flex;
+  gap: 7px;
+}
+ul.first-list li.subMenu.open > .down i {
+  transform: rotate(90deg);
+}
+ul.first-list li.subMenu.open > ul > li:not(.main-title) {
+  display: flex;
+}
+ul.first-list li.subMenu .down {
+  margin-left: 16px;
+  cursor: pointer;
+}
+ul.first-list li.subMenu .down i {
+  transition: all 0.3s;
+}
+ul.first-list li.subMenu > ul {
+  padding-left: 0;
+}
+ul.first-list ul {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+ul.first-list ul li.main-title {
+  order: -1;
+}
+ul.first-list ul > li:not(.main-title) {
+  display: none;
 }/*# sourceMappingURL=style.css.map */
