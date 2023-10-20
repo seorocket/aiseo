@@ -277,8 +277,12 @@ function sendAjax(dataForm, el) {
                         obj['id_array'].map(function (i, item) {
                             let value = $(el.target).parents('.change').find('select.status-all-change option:selected').text(),
                                 block = $(`table.table tr td input[value=${i}]`)
-                            $(block).parents('tr').fadeOut().find('td.status-td').text(value)
-                            $(block).parents('tr').fadeOut().fadeIn()
+                            if (type === 'change_selected_domains' && obj['status'] === '4') {
+                                $(block).parents('tr').remove()
+                            } else {
+                                $(block).parents('tr').fadeOut().find('td.status-td').text(value)
+                                $(block).parents('tr').fadeOut().fadeIn()
+                            }
                         })
                     }
                 } else if (type === 'add_proxy') {
@@ -568,6 +572,9 @@ function createNestedStructure(data, el) {
 $(document).on('click', '.more_urls a', function (el) {
     el.stopPropagation();
 })
+$(document).on('click', '.more_urls input', function (el) {
+    el.stopPropagation();
+})
 
 $(document).on('click', '.more_urls', function (el) {
     const id = Number($(this).attr('data-id'));
@@ -762,3 +769,19 @@ function showToasts(text, color) {
     }
     $('.toast').toast('show')
 }
+
+const socket = new WebSocket('ws://127.0.0.1:8000/ws');
+
+socket.onopen = function(e) {
+  socket.send(JSON.stringify({
+    message: 'Hello from Js client'
+  }));
+};
+
+socket.onmessage = function(event) {
+  try {
+    console.log(event);
+  } catch (e) {
+    console.log('Error:', e.message);
+  }
+};

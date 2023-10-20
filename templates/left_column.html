@@ -1,5 +1,7 @@
 {% url 'core:index' as index_url %}
 {% url 'core:domains' as domains_url %}
+{% url 'core:check_domains' as check_domains_url %}
+{% url 'core:domains_timestamps' as domains_timestamps_url %}
 {% url 'core:urls' as urls_url %}
 {% url 'core:proxy' as proxy_url %}
 <div class="item-col left-column">
@@ -15,6 +17,12 @@
             </div>
             <div class="filter-b{% if request.path == domains_url %} active{% endif %}">
                 <a href="{{ domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>All domains</span></a>
+            </div>
+            <div class="filter-b{% if request.path == check_domains_url %} active{% endif %}">
+                <a href="{{ check_domains_url }}"><i class="fa-solid fa-angles-right"></i> <span>Check Domains</span></a>
+            </div>
+            <div class="filter-b{% if request.path == domains_timestamps_url %} active{% endif %}">
+                <a href="{{ domains_timestamps_url }}"><i class="fa-solid fa-angles-right"></i> <span>Domains Timestamps</span></a>
             </div>
             <div class="filter-b{% if request.path == urls_url %} active{% endif %}">
                 <a href="{{ urls_url }}"><i class="fa-solid fa-angles-right"></i> <span>All files</span></a>
@@ -43,7 +51,7 @@
                 {% if domains and not domains_filter %}
                     {% include "include/domains.html" %}
                 {% endif %}
-                {% if urls %}
+                {% if urls and not urls_filter %}
                     {% include "include/urls.html" %}
                 {% endif %}
                 </div>

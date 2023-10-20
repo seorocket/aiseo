@@ -173,7 +173,7 @@ def index(request):
 def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
-    domains = Domain.objects.all().order_by('-id')
+    domains = Domain.objects.exclude(status=4).order_by('-id')
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
@@ -343,7 +343,7 @@ def urls(request):
         'statuses': choices,
         'urls': urls,
         'urls_count': urls_count,
-        'domains': domains,
+        'urls_filter': True
     })
 
     return HttpResponse(template.render(context))
@@ -458,6 +458,142 @@ def shots(request):
 
 
 @login_required
+def check_domains(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('check-domains.html')
+    domains = Domain.objects.filter(status=4).order_by('-id')
+    current_user = request.user
+    if current_user.is_staff:
+        projects = Project.objects.all()
+    else:
+        projects = Project.objects.filter(user=current_user)
+
+    choices = dict()
+
+    for choice in CHOICE_DOMAIN_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        domains = domains.filter(search_filter)
+
+    # фильтр по левому меню
+    left_filter = request.GET.dict()
+    if left_filter.get('left_filter'):
+        left_filter.pop('filter_p_sort')
+
+    for key in left_filter.keys():
+        value = left_filter.get(key)
+        if ',' in value:
+            values = [int(v) for v in value.split(',')]
+            q_objects = Q()
+            for v in values:
+                q_objects |= Q(**{key: v})
+            domains = domains.filter(q_objects)
+        try:
+            domains = domains.filter(**{key: value})
+        except Exception:
+            pass
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        domains = domains.filter(status=status_entry)
+
+    domains_count = domains.count()
+
+    paginator = Paginator(domains, 250)
+    page = request.GET.get('page')
+    try:
+        domains = paginator.page(page)
+    except PageNotAnInteger:
+        domains = paginator.page(1)
+    except EmptyPage:
+        domains = paginator.page(paginator.num_pages)
+
+    context.update({
+        'link': True,
+        'filter': True,
+        'domains': domains,
+        'domains_count': domains_count,
+        'statuses': choices,
+        'projects': projects,
+        'ahrefs_rank': True,
+        'domains_filter': True,
+    })
+
+    return HttpResponse(template.render(context))
+
+
+@login_required
+def domains_timestamps(request):
+    context = default_context(request, "index", TextPage)
+    template = loader.get_template('domains-timestamps.html')
+    domains = Domain.objects.filter(status=6).order_by('-id')
+    current_user = request.user
+    if current_user.is_staff:
+        projects = Project.objects.all()
+    else:
+        projects = Project.objects.filter(user=current_user)
+
+    choices = dict()
+
+    for choice in CHOICE_DOMAIN_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    search_query = request.GET.get('search')
+    if search_query:
+        search_filter = Q(name__icontains=search_query)
+        domains = domains.filter(search_filter)
+
+    # фильтр по левому меню
+    left_filter = request.GET.dict()
+    if left_filter.get('left_filter'):
+        left_filter.pop('filter_p_sort')
+
+    for key in left_filter.keys():
+        value = left_filter.get(key)
+        if ',' in value:
+            values = [int(v) for v in value.split(',')]
+            q_objects = Q()
+            for v in values:
+                q_objects |= Q(**{key: v})
+            domains = domains.filter(q_objects)
+        try:
+            domains = domains.filter(**{key: value})
+        except Exception:
+            pass
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        domains = domains.filter(status=status_entry)
+
+    domains_count = domains.count()
+
+    paginator = Paginator(domains, 250)
+    page = request.GET.get('page')
+    try:
+        domains = paginator.page(page)
+    except PageNotAnInteger:
+        domains = paginator.page(1)
+    except EmptyPage:
+        domains = paginator.page(paginator.num_pages)
+
+    context.update({
+        'link': True,
+        'filter': True,
+        'domains': domains,
+        'domains_count': domains_count,
+        'statuses': choices,
+        'projects': projects,
+        'ahrefs_rank': True,
+        'domains_filter': True
+    })
+
+    return HttpResponse(template.render(context))
+
+
+@login_required
 def proxy(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('proxy.html')
@@ -546,6 +682,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class DomainViewSet(viewsets.ModelViewSet):
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer
+    changed_objects = []
 
     @action(detail=False, methods=['get'])
     def update_status(self, request):
