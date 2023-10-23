@@ -753,7 +753,12 @@ function showToasts(text, color) {
     $('.toast').toast('show')
 }
 
-const socket = new WebSocket('ws://127.0.0.1:8000/ws');
+
+let domain_main = window.location.hostname
+if (window.location.port) {
+    domain_main += `:${window.location.port}`
+}
+const socket = new WebSocket(`ws://${domain_main}/ws`);
 
 socket.onopen = function(e) {
   socket.send(JSON.stringify({
@@ -868,11 +873,11 @@ function uploadSearchQuery(el) {
 }
 
 $('.accordion-phrase .accordion-body .table-block').scroll(function() {
-    let el = $(this).parents('.accordion-item').find('.accordion-header');
-    var $this = $(this);
-    var scrollTop = $this.scrollTop();
-    var scrollHeight = $this.prop('scrollHeight');
-    var innerHeight = $this.innerHeight();
+    let el = $(this).parents('.accordion-item').find('.accordion-header'),
+        $this = $(this),
+        scrollTop = $this.scrollTop(),
+        scrollHeight = $this.prop('scrollHeight'),
+        innerHeight = $this.innerHeight();
     if (scrollTop + innerHeight >= scrollHeight) {
         uploadSearchQuery(el);
     }
