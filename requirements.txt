@@ -41,3 +41,4 @@ wcwidth==0.2.5
 validators
 daphne
 channels
+channels-redis
