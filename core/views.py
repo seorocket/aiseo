@@ -684,9 +684,19 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
 
+class DomainFilter(filters.FilterSet):
+    project = django_filters.CharFilter(field_name="project")
+
+    class Meta:
+        model = Domain
+        fields = ['project']
+
+
 class DomainViewSet(viewsets.ModelViewSet):
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    filterset_class = DomainFilter
     changed_objects = []
 
     @action(detail=False, methods=['get'])
