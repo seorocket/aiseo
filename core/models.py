@@ -51,6 +51,11 @@ class SearchQuery(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     query = models.CharField(max_length=255)
     status = models.IntegerField(default=0, choices=CHOICE_SEARCHQUERY_STATUS)
+    status_name = models.CharField(max_length=50, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.status_name = dict(CHOICE_SEARCHQUERY_STATUS).get(int(self.status))
+        super(SearchQuery, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.query

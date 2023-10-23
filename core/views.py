@@ -28,6 +28,7 @@ from django.db.models.signals import post_save
 from django.core.serializers import serialize
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from rest_framework.pagination import PageNumberPagination
 
 
 class UserFilter(filters.FilterSet):
@@ -46,6 +47,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return User.objects.all()
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 30
+    page_size_query_param = 'page_size'  # Параметр запроса для изменения количества объектов на странице
+    max_page_size = 100
 
 
 def default_context(request, alias, obj):
@@ -772,6 +779,7 @@ class SearchQueryFilter(filters.FilterSet):
 
 
 class SearchQueryViewSet(viewsets.ModelViewSet):
+    pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = SearchQueryFilter
     queryset = SearchQuery.objects.all()

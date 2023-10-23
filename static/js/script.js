@@ -221,13 +221,6 @@ function sendAjax(dataForm, el) {
     if (type === 'update_proxy' || type === 'delete_proxy') {
         obj['id'] = Number($(el.target).attr('data-id'))
     }
-    if (type === 'get_phrases') {
-        obj['id'] = Number($(el.target).parents('.accordion-item').attr('data-id'))
-        let url = window.location.href,
-            urlObject = new URL(url);
-        obj['status'] = urlObject.searchParams.get('status')
-        $(`.accordion-phrase .accordion-item[data-id=${obj['id']}] .accordion-body .table tbody`).html('<td colspan="3" class="loader-block"><span class="loader"></span></td>')
-    }
 
     obj['type'] = type
     let csrftoken = $("input[name='csrfmiddlewaretoken']").val();
@@ -279,8 +272,10 @@ function sendAjax(dataForm, el) {
                                 block = $(`table.table tr td input[value=${i}]`)
                             $(block).prop('checked', false)
                             $('.checks_all').prop('checked', false)
-                            // $(block).parents('tr').fadeOut().find('td.status-td').text(value)
-                            // $(block).parents('tr').fadeOut().fadeIn()
+                            if (type !== 'change_selected_domains') {
+                                $(block).parents('tr').fadeOut().find('td.status-td').text(value)
+                                $(block).parents('tr').fadeOut().fadeIn()
+                            }
                         })
                     }
                 } else if (type === 'add_proxy') {
@@ -667,16 +662,6 @@ $(document).on('click', '.info-block-main .delete-selected, .info-block-main .de
 $(document).on('click', '.info-block-main .update-proxy', function (el) {
     sendAjax($(el.target).parents('form').find('input[name=proxy]'), el)
 })
-$(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
-    if (!$(this).hasClass('active-search')) {
-        sendAjax('', el)
-        $('.phrasesSection .accordion-phrase .accordion-item .accordion-header').removeClass('active-search')
-        $(this).addClass('active-search')
-    } else {
-        $(this).removeClass('active-search')
-        $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
-    }
-})
 
 $('.page-item .page-link').on('click', function (el) {
     el.preventDefault()
@@ -841,3 +826,69 @@ socket.onmessage = function(event) {
         console.log('Error:', e.message);
     }
 };
+
+let page_size_start = 50,
+    page_size = page_size_start,
+    page = 1,
+    isDataExhausted = false;
+
+function uploadSearchQuery(el) {
+    if (isDataExhausted) {
+        return;
+    }
+    $.ajax({
+        url: `/api/searchqueries/?project=${$(el).parents('.accordion-item').attr('data-id')}&page_size=` + page_size + '&page=' + page,
+        method: 'GET',
+        success: function(data) {
+            if (data.results.length > 0) {
+                for (let i = 0; i < data.results.length; i++) {
+                    $(el).parents('.accordion-item').find('.accordion-body .table tbody').append(`
+                        <tr>
+                            <td><input type="checkbox" value="${data.results[i].id}" class="checks group-${data.results[i].id}"></td>
+                            <td>${data.results[i].query}</td>
+                            <td class="status-td">${data.results[i].status_name}</td>
+                        </tr>
+                    `);
+                }
+                // Если получено записей меньше, чем page_size, это означает, что данных больше нет
+                if (data.results.length < page_size) {
+                    isDataExhausted = true;
+                }
+                page++;
+            } else {
+                // Если получено ноль записей, это также означает, что данных больше нет
+                isDataExhausted = true;
+                console.log('Больше нет данных для загрузки.');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+$('.accordion-phrase .accordion-body .table-block').scroll(function() {
+    let el = $(this).parents('.accordion-item').find('.accordion-header');
+    var $this = $(this);
+    var scrollTop = $this.scrollTop();
+    var scrollHeight = $this.prop('scrollHeight');
+    var innerHeight = $this.innerHeight();
+    if (scrollTop + innerHeight >= scrollHeight) {
+        uploadSearchQuery(el);
+    }
+});
+
+$(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .accordion-header', function (el) {
+    isDataExhausted = false
+    page_size = page_size_start
+    page = 1
+    if (!$(this).hasClass('active-search')) {
+        $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
+        uploadSearchQuery($(this))
+        $('.phrasesSection .accordion-phrase .accordion-item .accordion-header').removeClass('active-search')
+        $(this).addClass('active-search')
+    } else {
+        $(this).removeClass('active-search')
+        $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
+    }
+})
