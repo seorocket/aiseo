@@ -755,7 +755,8 @@ function showToasts(text, color) {
 
 
 let domain_main = window.location.hostname
-window.location.port ? domain_main += `:${window.location.port}` : domain_main += `:443`
+window.location.port ? domain_main += `:${window.location.port}` : domain_main += `:80`
+console.log(domain_main)
 const socket = new WebSocket(`ws://${domain_main}/ws`);
 
 socket.onopen = function(e) {
