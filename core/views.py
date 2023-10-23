@@ -931,7 +931,14 @@ class ShotViewSet(viewsets.ModelViewSet):
     queryset = Shot.objects.all()
     serializer_class = ShotSerializer
 
-    # ... Ваш существующий код ...
+    @action(detail=False, methods=['post'])
+    def bulk_create_shots(self, request):
+        data = request.data
+        serializer = ShotSerializer(data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
     def update_status(self, request):

@@ -156,10 +156,14 @@ CHOICE_SHOT_STATUS = (
 
 
 class Shot(models.Model):
-    name = models.CharField(max_length=99999, verbose_name=u"ID")
+    name = models.CharField(max_length=99999, verbose_name=u"Shot")
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     date = models.DateField(default='1000-01-01')
     status = models.IntegerField(default=1,choices=CHOICE_SHOT_STATUS)
+    timestamp = models.IntegerField()
+    statuscode = models.IntegerField()
+    digest = models.CharField(max_length=30)
+    length = models.IntegerField()
 
     def __str__(self):
         return self.name
