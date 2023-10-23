@@ -277,12 +277,10 @@ function sendAjax(dataForm, el) {
                         obj['id_array'].map(function (i, item) {
                             let value = $(el.target).parents('.change').find('select.status-all-change option:selected').text(),
                                 block = $(`table.table tr td input[value=${i}]`)
-                            if (type === 'change_selected_domains' && obj['status'] === '4') {
-                                $(block).parents('tr').remove()
-                            } else {
-                                $(block).parents('tr').fadeOut().find('td.status-td').text(value)
-                                $(block).parents('tr').fadeOut().fadeIn()
-                            }
+                            $(block).prop('checked', false)
+                            $('.checks_all').prop('checked', false)
+                            // $(block).parents('tr').fadeOut().find('td.status-td').text(value)
+                            // $(block).parents('tr').fadeOut().fadeIn()
                         })
                     }
                 } else if (type === 'add_proxy') {
@@ -751,7 +749,7 @@ $(document).on('click', '.info .copy', function (el) {
         input = $('<textarea>').val(text).appendTo(this).select();
     document.execCommand('copy');
     input.remove();
-    showToasts('Успешно скопировано!', 'text-bg-success')
+    showToasts('Successfully copied!', 'text-bg-success')
 });
 
 function showToasts(text, color) {
@@ -779,9 +777,67 @@ socket.onopen = function(e) {
 };
 
 socket.onmessage = function(event) {
-  try {
-    console.log(event);
-  } catch (e) {
-    console.log('Error:', e.message);
-  }
+    try {
+        try {
+            let data = JSON.parse(event.data),
+                serialized_data = JSON.parse(data.serialized_data),
+                table = $('.domainsSection .domains-table'),
+                table_tbody = $(`.domainsSection .domains-table tbody`),
+                block = $(`.domainsSection .domains-table tbody tr[data-id=${serialized_data[0].pk}]`),
+                domains_count_not_checked = data.domains_count_not_checked,
+                domains_count_checked = data.domains_count_checked,
+                domains_count_timestamps = data.domains_count_timestamps,
+                domains_count = 0,
+                resultWord;
+
+            if ($(table).hasClass('main')) {
+                domains_count_not_checked === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_not_checked
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) === '4') {
+                        $(block).remove()
+                        showToasts('The domain has been moved to the "Check Domains" tab!', 'text-bg-success')
+                    } else {
+                        $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
+                        $(block).fadeOut().fadeIn()
+                    }
+                } else {
+                    $(table_tbody).append(data.html_content)
+                    block = $(`.domainsSection .domains-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
+                    $(block).fadeOut().fadeIn()
+                }
+            } else if ($(table).hasClass('check')) {
+                domains_count_checked === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_checked
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) !== '4') {
+                        $(block).remove()
+                    }
+                } else {
+                    $(table_tbody).append(data.html_content)
+                    block = $(`.domainsSection .domains-table.check tbody tr[data-id=${serialized_data[0].pk}]`)
+                    $(block).fadeOut().fadeIn()
+                }
+            } else if ($(table).hasClass('timestamps')) {
+                domains_count_timestamps === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_timestamps
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) !== '6') {
+                        $(block).remove()
+                    }
+                } else {
+                    if (String(serialized_data[0].fields.status) === '6') {
+                        $(table_tbody).append(data.html_content)
+                        block = $(`.domainsSection .domains-table.timestamps tbody tr[data-id=${serialized_data[0].pk}]`)
+                        $(block).fadeOut().fadeIn()
+                    }
+                }
+            }
+            $('._titleBlock .name').text(`${domains_count} ${resultWord} found`)
+        } catch (error) {
+            // console.log(event.data)
+        }
+    } catch (e) {
+        console.log('Error:', e.message);
+    }
 };

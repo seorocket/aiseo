@@ -1,0 +1,18 @@
+{% for i in domains %}
+    <tr {% if i.images_domain.all or i.files_count != 0 %}class="more_urls"{% endif %} data-id="{{ i.id }}">
+        <td style="width: 22px"><input type="checkbox" value="{{ i.id }}"
+                   class="checks group-{{ g.id }}"></td>
+        <td style="width: 25px">{% if i.images_domain.all or i.files_count != 0 %}<i class="fa-solid fa-angles-down"></i>{% endif %}</td>
+        <td><a href="{% url 'core:domain_item' i.id %}">{% if i.display_name %}{{ i.display_name }}{% else %}{{ i.name }}{% endif %}</a></td>
+        <td>{% if i.first_captured %}{{ i.first_captured }}{% else %}-{% endif %}-{% if i.last_captured %}{{ i.last_captured }}{% else %}-{% endif %}</td>
+        <td class="status-td">{{ i.get_status_display }}</td>
+        <td>{% if i.capture %}{{ i.capture }}{% else %}-{% endif %}</td>
+        <td>{{ i.pages }}</td>
+        <td>{% if i.webpage %}{{ i.webpage }}{% else %}-{% endif %}</td>
+        <td><div class="text">{% if i.snippet %}{{ i.snippet }}{% else %}-{% endif %}</div></td>
+        <td><div class="text">{% if i.text %}{{ i.text }}{% else %}-{% endif %}</div></td>
+        <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
+        <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
+        <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
+    </tr>
+{% endfor %}

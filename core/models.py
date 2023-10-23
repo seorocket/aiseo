@@ -1,6 +1,8 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class Proxy(models.Model):
@@ -86,10 +88,15 @@ class Domain(models.Model):
     webpage = models.IntegerField(default=0)
     audio = models.IntegerField(default=0)
     last_captured = models.IntegerField(default=0)
+    status_name = models.CharField(max_length=50, blank=True, null=True)
 
     @property
     def files_count(self):
         return File.objects.filter(domain=self).count()
+
+    def save(self, *args, **kwargs):
+        self.status_name = dict(CHOICE_DOMAIN_STATUS).get(int(self.status))
+        super(Domain, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

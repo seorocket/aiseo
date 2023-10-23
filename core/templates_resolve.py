@@ -3,6 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.utils import translation
 from .views import *
+from django.core import serializers
 
 
 def render_groups(request, queryset):
@@ -53,3 +54,14 @@ def render_accordion_projects(request, queryset):
     result = template.render(context_data)
 
     return HttpResponse(result)
+
+
+def render_domains(request, queryset):
+    template = loader.get_template('ajax/ajax_domains.html')
+
+    context_data = {
+        'domains': queryset
+    }
+    result = template.render(context_data)
+
+    return result
