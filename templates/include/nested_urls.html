@@ -1,7 +1,4 @@
 {% for key, value in nested_urls.items %}
-{#    {% if key != 'count' %}#}
-{#        <li class="main-title {{ value.count }}">{{ key }}</li>#}
-{#    {% endif %}#}
     {% if value.count %}
         <li class="{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
             {% if value.count > 1 %}
