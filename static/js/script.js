@@ -765,6 +765,7 @@ socket.onopen = function(e) {
 };
 
 socket.onmessage = function(event) {
+    console.log(event)
     try {
         try {
             let data = JSON.parse(event.data),
