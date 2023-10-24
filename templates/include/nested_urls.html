@@ -1,14 +1,19 @@
 {% for key, value in nested_urls.items %}
+{#    {% if key != 'count' %}#}
+{#        <li class="main-title {{ value.count }}">{{ key }}</li>#}
+{#    {% endif %}#}
     {% if value.count %}
-    <li class="{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
-        {% if value.count > 1 %}<div class="down"><i class="fa-solid fa-angle-right"></i></div>{% endif %}
-        {% if value.link %}
-          <a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a>
-        {% else %}
-          <ul {% if value.count > 1 %}class="sub-ul-menu"{% endif %}>
-            {% include "include/nested_urls.html" with nested_urls=value %}
-          </ul>
-        {% endif %}
-      </li>
+        <li class="{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
+            {% if value.count > 1 %}
+                <div class="down"><i class="fa-solid fa-angle-right"></i><span class="down-span">Down</span></div>
+            {% endif %}
+            {% if value.link %}
+                <a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a>
+            {% else %}
+                <ul {% if value.count > 1 %}class="sub-ul-menu"{% endif %}>
+                    {% include "include/nested_urls.html" with nested_urls=value %}
+                </ul>
+            {% endif %}
+        </li>
     {% endif %}
 {% endfor %}

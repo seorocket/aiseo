@@ -1014,6 +1014,11 @@ tr.more_urls {
 
 ul.first-list {
     padding: 0;
+    > li {
+        > .down {
+            margin-left: 16px;
+        }
+    }
     li {
         list-style: none;
         &.subMenu {
@@ -1034,10 +1039,15 @@ ul.first-list {
                 }
             }
             .down {
-                margin-left: 16px;
+                display: flex;
+                gap: 3px;
                 cursor: pointer;
                 i {
+                    height: fit-content;
                     transition: all .3s;
+                }
+                .down-span {
+                    font-size: var(--fz12);
                 }
             }
             > ul {
@@ -1049,6 +1059,7 @@ ul.first-list {
         display: flex;
         flex-direction: column;
         position: relative;
+        padding-left: 16px;
         li {
             &.main-title {
                 order: -1;
