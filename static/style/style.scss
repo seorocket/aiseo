@@ -816,9 +816,15 @@ table {
                             }
                         }
                         .down {
+                            display: flex;
+                            gap: 3px;
                             cursor: pointer;
                             i {
+                                height: fit-content;
                                 transition: all .3s;
+                            }
+                            .down-span {
+                                font-size: var(--fz12);
                             }
                         }
                         > ul {

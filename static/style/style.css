@@ -792,10 +792,17 @@ table tbody tr td a {
   display: flex;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain li.subMenu .down {
+  display: flex;
+  gap: 3px;
   cursor: pointer;
 }
 .list-images-block .list-images-main > .list-domain > .list-domain li.subMenu .down i {
+  height: -moz-fit-content;
+  height: fit-content;
   transition: all 0.3s;
+}
+.list-images-block .list-images-main > .list-domain > .list-domain li.subMenu .down .down-span {
+  font-size: var(--fz12);
 }
 .list-images-block .list-images-main > .list-domain > .list-domain li.subMenu > ul {
   padding-left: 0;

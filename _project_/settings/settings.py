@@ -82,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '_project_.wsgi.application'
+# WSGI_APPLICATION = '_project_.wsgi.application'
 
 ASGI_APPLICATION = '_project_.asgi.application'
 

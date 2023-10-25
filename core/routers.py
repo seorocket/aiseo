@@ -9,6 +9,6 @@ router.register(r'projects', ProjectViewSet, basename='project')
 router.register(r'domains', DomainViewSet, basename='domain')
 router.register(r"domain_images", DomainImagesViewSet),
 router.register(r'file', FileViewSet, basename='file')
-router.register(r'shot', FileViewSet, basename='shot')
+router.register(r'shot', ShotViewSet, basename='shot')
 router.register(r'searchqueries', SearchQueryViewSet, basename='searchquery')
 
