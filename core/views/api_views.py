@@ -353,36 +353,6 @@ class ShotViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@receiver(post_save, sender=Domain)
-def send_update_to_websocket(sender, instance, **kwargs):
-    channel_layer = get_channel_layer()
-
-    serialized_data = serialize('json', [instance])
-    deserialized_data = json.loads(serialized_data)[0]
-    domains = Domain.objects.filter(id=deserialized_data['pk'])
-    domains_main = Domain.objects.all()
-    domains_count_not_checked = domains_main.exclude(status=4).count()
-    domains_count_checked = domains_main.filter(status=4).count()
-    domains_count_timestamps = domains_main.filter(status=6).count()
-    html_content = render_domains(None, domains)
-    data = {
-        'html_content': html_content,
-        'serialized_data': serialized_data,
-        'domains_count_not_checked': domains_count_not_checked,
-        'domains_count_checked': domains_count_checked,
-        'domains_count_timestamps': domains_count_timestamps,
-    }
-    json_data = json.dumps(data)
-
-    async_to_sync(channel_layer.group_send)(
-        "domains_group",
-        {
-            "type": "send_update",
-            "text": 'json_data'
-        }
-    )
-
-
 def ajax(request):
     result = dict()
     if request.method == 'POST':
