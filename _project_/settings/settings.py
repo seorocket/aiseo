@@ -32,7 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,7 +50,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'core',
     'account',
-    'channels'
+    'channels',
 ]
 
 MIDDLEWARE = [
