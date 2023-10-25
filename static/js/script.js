@@ -760,19 +760,19 @@ function showToasts(text, color) {
 // const socket = new WebSocket(`ws://${window.location.hostname}:8000/ws/`);
 const socket = new WebSocket(`ws://91.107.125.114:80/ws/`);
 
-socket.onopen = function(e) {
-  socket.send(JSON.stringify({
-    message: 'Hello from Js client'
-  }));
-};
-
-socket.onmessage = function(event) {
-  try {
-    console.log(123, event);
-  } catch (e) {
-    console.log('Error:', e.message);
-  }
-};
+// socket.onopen = function(e) {
+//   socket.send(JSON.stringify({
+//     message: 'Hello from Js client'
+//   }));
+// };
+//
+// socket.onmessage = function(event) {
+//   try {
+//     console.log(123, event);
+//   } catch (e) {
+//     console.log('Error:', e.message);
+//   }
+// };
 
 
 // socket.onopen = function(e) {
@@ -796,72 +796,72 @@ socket.onmessage = function(event) {
 //     console.log(data)
 // }
 
-// socket.onmessage = function(event) {
-//     console.log(event)
-//     try {
-//         try {
-//             let data = JSON.parse(event.data),
-//                 serialized_data = JSON.parse(data.serialized_data),
-//                 table = $('.domainsSection .domains-table'),
-//                 table_tbody = $(`.domainsSection .domains-table tbody`),
-//                 block = $(`.domainsSection .domains-table tbody tr[data-id=${serialized_data[0].pk}]`),
-//                 domains_count_not_checked = data.domains_count_not_checked,
-//                 domains_count_checked = data.domains_count_checked,
-//                 domains_count_timestamps = data.domains_count_timestamps,
-//                 domains_count = 0,
-//                 resultWord;
-//
-//             if ($(table).hasClass('main')) {
-//                 domains_count_not_checked === 1 ? resultWord = 'result' : resultWord = 'results';
-//                 domains_count = domains_count_not_checked
-//                 if ($(block).length) {
-//                     if (String(serialized_data[0].fields.status) === '4') {
-//                         $(block).remove()
-//                         showToasts('The domain has been moved to the "Check Domains" tab!', 'text-bg-success')
-//                     } else {
-//                         $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
-//                         $(block).fadeOut().fadeIn()
-//                     }
-//                 } else {
-//                     $(table_tbody).append(data.html_content)
-//                     block = $(`.domainsSection .domains-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
-//                     $(block).fadeOut().fadeIn()
-//                 }
-//             } else if ($(table).hasClass('check')) {
-//                 domains_count_checked === 1 ? resultWord = 'result' : resultWord = 'results';
-//                 domains_count = domains_count_checked
-//                 if ($(block).length) {
-//                     if (String(serialized_data[0].fields.status) !== '4') {
-//                         $(block).remove()
-//                     }
-//                 } else {
-//                     $(table_tbody).append(data.html_content)
-//                     block = $(`.domainsSection .domains-table.check tbody tr[data-id=${serialized_data[0].pk}]`)
-//                     $(block).fadeOut().fadeIn()
-//                 }
-//             } else if ($(table).hasClass('timestamps')) {
-//                 domains_count_timestamps === 1 ? resultWord = 'result' : resultWord = 'results';
-//                 domains_count = domains_count_timestamps
-//                 if ($(block).length) {
-//                     if (String(serialized_data[0].fields.status) !== '6') {
-//                         $(block).remove()
-//                     }
-//                 } else {
-//                     if (String(serialized_data[0].fields.status) === '6') {
-//                         $(table_tbody).append(data.html_content)
-//                         block = $(`.domainsSection .domains-table.timestamps tbody tr[data-id=${serialized_data[0].pk}]`)
-//                         $(block).fadeOut().fadeIn()
-//                     }
-//                 }
-//             }
-//             $('._titleBlock .name').text(`${domains_count} ${resultWord} found`)
-//         } catch (error) {
-//             // console.log(event.data)
-//         }
-//     } catch (e) {
-//         console.log('Error:', e.message);
-//     }
-// };
+socket.onmessage = function(event) {
+    console.log(event)
+    try {
+        try {
+            let data = JSON.parse(event.data),
+                serialized_data = JSON.parse(data.serialized_data),
+                table = $('.domainsSection .domains-table'),
+                table_tbody = $(`.domainsSection .domains-table tbody`),
+                block = $(`.domainsSection .domains-table tbody tr[data-id=${serialized_data[0].pk}]`),
+                domains_count_not_checked = data.domains_count_not_checked,
+                domains_count_checked = data.domains_count_checked,
+                domains_count_timestamps = data.domains_count_timestamps,
+                domains_count = 0,
+                resultWord;
+
+            if ($(table).hasClass('main')) {
+                domains_count_not_checked === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_not_checked
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) === '4') {
+                        $(block).remove()
+                        showToasts('The domain has been moved to the "Check Domains" tab!', 'text-bg-success')
+                    } else {
+                        $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
+                        $(block).fadeOut().fadeIn()
+                    }
+                } else {
+                    $(table_tbody).append(data.html_content)
+                    block = $(`.domainsSection .domains-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
+                    $(block).fadeOut().fadeIn()
+                }
+            } else if ($(table).hasClass('check')) {
+                domains_count_checked === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_checked
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) !== '4') {
+                        $(block).remove()
+                    }
+                } else {
+                    $(table_tbody).append(data.html_content)
+                    block = $(`.domainsSection .domains-table.check tbody tr[data-id=${serialized_data[0].pk}]`)
+                    $(block).fadeOut().fadeIn()
+                }
+            } else if ($(table).hasClass('timestamps')) {
+                domains_count_timestamps === 1 ? resultWord = 'result' : resultWord = 'results';
+                domains_count = domains_count_timestamps
+                if ($(block).length) {
+                    if (String(serialized_data[0].fields.status) !== '6') {
+                        $(block).remove()
+                    }
+                } else {
+                    if (String(serialized_data[0].fields.status) === '6') {
+                        $(table_tbody).append(data.html_content)
+                        block = $(`.domainsSection .domains-table.timestamps tbody tr[data-id=${serialized_data[0].pk}]`)
+                        $(block).fadeOut().fadeIn()
+                    }
+                }
+            }
+            $('._titleBlock .name').text(`${domains_count} ${resultWord} found`)
+        } catch (error) {
+            // console.log(event.data)
+        }
+    } catch (e) {
+        console.log('Error:', e.message);
+    }
+};
 
 let page_size_start = 50,
     page_size = page_size_start,
