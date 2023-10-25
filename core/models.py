@@ -160,9 +160,9 @@ class Shot(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     date = models.DateField(default='1000-01-01')
     status = models.IntegerField(default=1,choices=CHOICE_SHOT_STATUS)
-    timestamp = models.IntegerField()
+    timestamp = models.BigIntegerField()
     statuscode = models.IntegerField()
-    digest = models.CharField(max_length=30)
+    digest = models.CharField(max_length=300)
     length = models.IntegerField()
 
     def __str__(self):
