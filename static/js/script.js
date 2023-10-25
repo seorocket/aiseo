@@ -757,47 +757,9 @@ function showToasts(text, color) {
 // let domain_main = window.location.hostname
 // window.location.port ? domain_main += `:${window.location.port}` : domain_main += `:80`
 
-// const socket = new WebSocket(`ws://${window.location.hostname}:8000/ws/`);
-const socket = new WebSocket(`ws://91.107.125.114:80/ws/`);
-
-// socket.onopen = function(e) {
-//   socket.send(JSON.stringify({
-//     message: 'Hello from Js client'
-//   }));
-// };
-//
-// socket.onmessage = function(event) {
-//   try {
-//     console.log(123, event);
-//   } catch (e) {
-//     console.log('Error:', e.message);
-//   }
-// };
-
-
-// socket.onopen = function(e) {
-//   socket.send(JSON.stringify({
-//     message: 'Hello from Js client'
-//   }));
-// };
-//
-// socket.onmessage = function(data) {
-//     console.log('onmessage')
-//     console.log(data)
-// }
-//
-// socket.onclose = function(data) {
-//     console.log('onclose')
-//     console.log(data)
-// }
-//
-// socket.onerror = function(data) {
-//     console.log('onerror')
-//     console.log(data)
-// }
+const socket = new WebSocket(`ws://${window.location.host}/ws/`);
 
 socket.onmessage = function(event) {
-    console.log(event)
     try {
         try {
             let data = JSON.parse(event.data),
