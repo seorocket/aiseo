@@ -975,45 +975,15 @@ ul.first-list {
 ul.first-list > li > .down {
   margin-left: 16px;
 }
-ul.first-list li {
-  list-style: none;
-}
-ul.first-list li.subMenu {
-  display: flex;
-  gap: 7px;
-}
-ul.first-list li.subMenu.open > .down i {
-  transform: rotate(90deg);
-}
-ul.first-list li.subMenu.open > ul > li:not(.main-title) {
-  display: flex;
-}
-ul.first-list li.subMenu .down {
-  display: flex;
-  gap: 3px;
-  cursor: pointer;
-}
-ul.first-list li.subMenu .down i {
-  height: -moz-fit-content;
-  height: fit-content;
-  transition: all 0.3s;
-}
-ul.first-list li.subMenu .down .down-span {
-  font-size: var(--fz12);
-}
-ul.first-list li.subMenu > ul {
-  padding-left: 0;
-}
 ul.first-list ul {
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-left: 16px;
 }
 ul.first-list ul li.main-title {
   order: -1;
 }
-ul.first-list ul > li:not(.main-title) {
+ul.first-list ul > li.test.test2:not(.subMenu) {
   display: none;
 }
 

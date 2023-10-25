@@ -1025,54 +1025,59 @@ ul.first-list {
             margin-left: 16px;
         }
     }
-    li {
-        list-style: none;
-        &.subMenu {
-            display: flex;
-            gap: 7px;
-            &.open {
-                > .down {
-                    i {
-                        transform: rotate(90deg);
-                    }
-                }
-                > ul {
-                    > li {
-                        &:not(.main-title) {
-                            display: flex;
-                        }
-                    }
-                }
-            }
-            .down {
-                display: flex;
-                gap: 3px;
-                cursor: pointer;
-                i {
-                    height: fit-content;
-                    transition: all .3s;
-                }
-                .down-span {
-                    font-size: var(--fz12);
-                }
-            }
-            > ul {
-                padding-left: 0;
-            }
-        }
-    }
+    // li {
+    //     list-style: none;
+    //     &.subMenu {
+    //         display: flex;
+    //         gap: 7px;
+    //         &.open {
+    //             > .down {
+    //                 i {
+    //                     transform: rotate(90deg);
+    //                 }
+    //             }
+    //             > ul {
+    //                 > li {
+    //                     &:not(.main-title) {
+    //                         display: flex;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         .down {
+    //             display: flex;
+    //             gap: 3px;
+    //             cursor: pointer;
+    //             i {
+    //                 height: fit-content;
+    //                 transition: all .3s;
+    //             }
+    //             .down-span {
+    //                 font-size: var(--fz12);
+    //             }
+    //         }
+    //         > ul {
+    //             padding-left: 0;
+    //         }
+    //     }
+    // }
     ul {
         display: flex;
         flex-direction: column;
         position: relative;
-        padding-left: 16px;
+        // padding-left: 16px;
         li {
             &.main-title {
                 order: -1;
             }
         }
+        // > li {
+        //     &:not(.main-title) {
+        //         display: none;
+        //     }
+        // }
         > li {
-            &:not(.main-title) {
+            &.test.test2:not(.subMenu) {
                 display: none;
             }
         }

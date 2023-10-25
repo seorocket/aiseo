@@ -1,9 +1,25 @@
 {% for key, value in nested_urls.items %}
+    {% if key != 'id' and key != 'count' and key != '' and key != 'last' %}
+        {% if value.link and value.link|slice:"-1" == "/" %}
+            <li><a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a></li>
+        {% else %}
+            <li>
+                {% if not value.last %}
+                    {{ value.link|default:key }}
+                {% else %}
+                    {% if value.count == 1 %}
+                        {% for key, value in value.items %}
+                            <a href="/urls/{{ value.id }}/">{{ value.link }}</a>
+                        {% endfor %}
+                    {% else %}
+                        {{ value.link|default:key }}
+                    {% endif %}
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endif %}
     {% if value.count %}
-        <li class="{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
-            {% if value.count > 1 %}
-                <div class="down"><i class="fa-solid fa-angle-right"></i><span class="down-span">Down</span></div>
-            {% endif %}
+        <li class="{% if key %}test {% endif %}{% if value.last %}test2 {% endif %}{% if not key %}main-title {% endif %}{% if value.count > 1 %}subMenu{% endif %}">
             {% if value.link %}
                 <a href="{% url 'core:url_item' value.id %}">{{ value.link }}</a>
             {% else %}

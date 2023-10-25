@@ -625,17 +625,25 @@ def create_nested_url_list(urls_data):
         parts = remaining_url.split('/')  # Разбиваем URL на части
 
         current_level = nested_urls
+        parent = None
+
         # Если учитываем протокол
         if protocol not in current_level:
             current_level[protocol] = {}
 
         current_level = current_level[protocol]
 
-        for part in parts:
+        for i, part in enumerate(parts):
+            is_last_part = i == len(parts) - 1
             if part not in current_level:
                 current_level[part] = {'count': 0}  # Создаем новый уровень и счетчик
+            parent = current_level  # Сохраняем текущий уровень как потенциального родителя
             current_level = current_level[part]  # Переходим на следующий уровень
             current_level['count'] += 1  # Увеличиваем счетчик на этом уровне
+
+            # Добавляем ключ 'last' со значением True к родителям объектов без 'id'
+            if is_last_part and len(parts) > 1:
+                parent['last'] = True
 
         # Добавляем id и ссылку к текущему уровню, только если есть id в urls_data
         if 'id' in url_info:
@@ -643,6 +651,50 @@ def create_nested_url_list(urls_data):
             current_level['link'] = url
 
     return nested_urls
+
+
+
+
+# def create_nested_url_list(urls_data):
+#     # Создаем пустой словарь для хранения вложенных уровней
+#     nested_urls = {}
+#
+#     for idx, url_info in enumerate(urls_data):
+#         url = url_info['name']
+#         if not validators.url(url):
+#             # Если ссылка невалидна, пропускаем ее и переходим к следующей итерации цикла
+#             continue
+#
+#         # Добавляем слеш в конец URL, если его там нет
+#         if not url.endswith('/'):
+#             url_with_slash = url + '/'
+#         else:
+#             url_with_slash = url
+#
+#         # Разделяем URL на протокол и оставшуюся часть
+#         protocol, remaining_url = url_with_slash.split('://')
+#
+#         parts = remaining_url.split('/')  # Разбиваем URL на части
+#
+#         current_level = nested_urls
+#         # Если учитываем протокол
+#         if protocol not in current_level:
+#             current_level[protocol] = {}
+#
+#         current_level = current_level[protocol]
+#
+#         for part in parts:
+#             if part not in current_level:
+#                 current_level[part] = {'count': 0}  # Создаем новый уровень и счетчик
+#             current_level = current_level[part]  # Переходим на следующий уровень
+#             current_level['count'] += 1  # Увеличиваем счетчик на этом уровне
+#
+#         # Добавляем id и ссылку к текущему уровню, только если есть id в urls_data
+#         if 'id' in url_info:
+#             current_level['id'] = url_info['id']
+#             current_level['link'] = url
+#
+#     return nested_urls
 
 
 @receiver(post_save, sender=Domain)
