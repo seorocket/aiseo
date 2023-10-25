@@ -759,6 +759,42 @@ function showToasts(text, color) {
 
 const socket = new WebSocket(`ws://${window.location.hostname}:8013/ws/`);
 
+socket.onopen = function(e) {
+  socket.send(JSON.stringify({
+    message: 'Hello from Js client'
+  }));
+};
+
+socket.onmessage = function(event) {
+  try {
+    console.log(123, event);
+  } catch (e) {
+    console.log('Error:', e.message);
+  }
+};
+
+
+// socket.onopen = function(e) {
+//   socket.send(JSON.stringify({
+//     message: 'Hello from Js client'
+//   }));
+// };
+//
+// socket.onmessage = function(data) {
+//     console.log('onmessage')
+//     console.log(data)
+// }
+//
+// socket.onclose = function(data) {
+//     console.log('onclose')
+//     console.log(data)
+// }
+//
+// socket.onerror = function(data) {
+//     console.log('onerror')
+//     console.log(data)
+// }
+
 socket.onmessage = function(event) {
     console.log(event)
     try {
