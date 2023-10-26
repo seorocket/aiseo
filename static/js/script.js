@@ -233,7 +233,7 @@ function sendAjax(dataForm, el) {
         },
         success: function (response) {
             if (response.error) {
-                console.log(response.error)
+                console.error(response.error)
             } else {
                 if (type === 'new_group') {
                     $('#infoModal').modal('hide')
@@ -285,10 +285,14 @@ function sendAjax(dataForm, el) {
                     }, 1500)
                     $('.proxyListSection .info-block-main').html(response);
                 } else if (type === 'update_proxy') {
-                    $(el.target).parents('form').find('.field').append('<div class="message_status"><span style="color:green;">Proxies have been successfully updated</span></div>')
+                    if (response.error_message) {
+                        $(el.target).parents('form').find('.field').append(`<div class="message_status"><span style="color:red;">${response.error_message}</span></div>`)
+                    } else {
+                        $(el.target).parents('form').find('.field').append(`<div class="message_status"><span style="color:green;">Proxies have been successfully updated</span></div>`)
+                    }
                     setTimeout(function () {
                         $(el.target).parents('form').find('.field .message_status').remove()
-                    }, 1500)
+                    }, 2000)
                 } else if (type === 'delete_proxy') {
                     if (response.delete) {
                         $(el.target).parents('.proxy-item').fadeOut().remove()
@@ -905,3 +909,12 @@ $('.list-domains-tree .func .item.open-all').on('click', function() {
 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+$(document).ready(function() {
+    $('form.proxy-item').keydown(function(event) {
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});

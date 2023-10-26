@@ -585,7 +585,7 @@ def domains_timestamps(request):
 def proxy(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('proxy.html')
-    proxies = Proxy.objects.all()
+    proxies = Proxy.objects.all().order_by('-id')
 
     context.update({
         'link': True,
@@ -835,21 +835,24 @@ def ajax(request):
             try:
                 proxies = data['proxy']
                 if proxies:
-                    for proxy in proxies:
-                        obj_info = {}
-                        for name in proxy:
-                            obj_info[name] = proxy.get(name, '')
-                        Proxy.objects.create(**obj_info)
-                    proxy = Proxy.objects.all()
+                    for proxy_data in proxies:
+                        ip_address = proxy_data.get('ip_address', '')
+                        port = proxy_data.get('port', '')
+                        if not Proxy.objects.filter(ip_address=ip_address, port=port).exists():
+                            obj_info = {}
+                            for name in proxy_data:
+                                obj_info[name] = proxy_data.get(name, '')
+                            Proxy.objects.create(**obj_info)
+                    proxy = Proxy.objects.all().order_by('-id')
                     result = render_proxy(request, proxy)
                     return HttpResponse(result)
                 else:
-                    result = {"error": 'The list of phrases is empty'}
+                    result = {"error": 'The proxy list is empty'}
             except Exception as e:
-                result = {"error": e}
+                result = {"error": str(e)}
         if data.get('type') == 'update_proxy':
             try:
-                proxies = data.get('proxy')  # Получаем список словарей с данными о прокси из JSON
+                proxies = data.get('proxy')
                 if proxies:
                     for proxy_data in proxies:
                         id = data.get('id')
@@ -859,17 +862,22 @@ def ajax(request):
                         username = proxy_data.get('username')
                         password = proxy_data.get('password')
                         protocol = proxy_data.get('protocol')
-
-                        proxy.ip_address = ip_address
-                        proxy.port = port
-                        proxy.username = username
-                        proxy.password = password
-                        proxy.protocol = protocol
-                        proxy.save()
-
-                    result = {'update': True}
+                        if Proxy.objects.filter(ip_address=ip_address, port=port).exclude(id=id).exists():
+                            result = {"error_message": "A proxy with this IP address and port already exists."}
+                            break
+                        else:
+                            proxy.ip_address = ip_address
+                            proxy.port = port
+                            proxy.username = username
+                            proxy.password = password
+                            proxy.protocol = protocol
+                            proxy.save()
+                    else:
+                        result = {'update': True}
+                else:
+                    result = {"error": 'The list of proxies is empty.'}
             except Exception as e:
-                result = {"error": e}
+                result = {"error": str(e)}
         if data.get('type') == 'delete_proxy':
             try:
                 id = data['id']

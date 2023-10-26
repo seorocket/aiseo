@@ -6,6 +6,9 @@ from django.dispatch import receiver
 
 
 class Proxy(models.Model):
+    class Meta:
+        unique_together = ('ip_address', 'port')
+
     CHOICE_PROXY_STATUS = (
         (0, 'valid'),
         (1, 'error'),
