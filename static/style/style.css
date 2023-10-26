@@ -1044,6 +1044,14 @@ ul.first-list ul > li.li_1.li_2:not(.subMenu) {
   background-color: #066BF9;
 }
 
+.modal#imgFull .modal-content .modal-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+.modal#imgFull .modal-content .modal-header .button-prevnext {
+  display: flex;
+  gap: 5px;
+}
 .modal#imgFull .modal-content .modal-header .modal-title .info {
   display: flex;
   align-items: center;
@@ -1079,6 +1087,33 @@ ul.first-list ul > li.li_1.li_2:not(.subMenu) {
 }
 .swiper.galleryDomainSlider .swiper-wrapper .swiper-slide .info .copy {
   cursor: pointer;
+}
+.swiper.galleryDomainSlider .swiper-button-prev,
+.swiper.galleryDomainSlider .swiper-button-next {
+  height: 100%;
+  margin-top: 0;
+  top: 0;
+  width: 50px;
+  transition: background 0.3s;
+}
+.swiper.galleryDomainSlider .swiper-button-prev:hover,
+.swiper.galleryDomainSlider .swiper-button-next:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.swiper.galleryDomainSlider .swiper-button-next, .swiper.galleryDomainSlider .swiper-rtl .swiper-button-prev {
+  right: 0;
+}
+.swiper.galleryDomainSlider .swiper-button-prev, .swiper.galleryDomainSlider .swiper-rtl .swiper-button-next {
+  left: 0;
+}
+.swiper.galleryDomainSlider .swiper-pagination {
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: -moz-fit-content;
+  width: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #FFFFFF;
 }
 
 .toast {

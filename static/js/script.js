@@ -201,7 +201,6 @@ function sendAjax(dataForm, el) {
             }
         }
     });
-    console.log(obj)
     if (type === 'delete_phrases' || type === 'delete_projects') {
         obj['id'] = $(el.target).attr('data-id')
     }
@@ -313,16 +312,6 @@ function sendAjax(dataForm, el) {
             }
         }
     });
-
-    // console.log(dataForm);
-    // // alert('Запрос Ajax')
-    // // titleText.html('')
-    // // bodyText.html('')
-    // if (type == 'success') {
-    //     window.location.href = '/success.html'
-    // } else if (type == 'reviews') {
-    //     window.location.href = '/success-review.html'
-    // }
 }
 
 function maskField() {
@@ -582,6 +571,7 @@ $(document).on('click', '.more_urls input', function (el) {
     el.stopPropagation();
 })
 
+let galleryDomainSlider
 $(document).on('click', '.more_urls', function (el) {
     const id = Number($(this).attr('data-id'));
     if (!$(el.target).parents('tr').next('tr.list-images-block').hasClass('list-images-block')) {
@@ -612,13 +602,20 @@ $(document).on('click', '.more_urls', function (el) {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
             success: function (response) {
-                $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>`)
+                $(imageSliderBlock).append(`<div class="slider"><div class="swiper galleryDomainSlider"><div class="swiper-wrapper"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div><div class="swiper-pagination"></div></div></div>`)
                 let imageSlider = $(imageSliderBlock).find('.swiper .swiper-wrapper')
-                new Swiper(".galleryDomainSlider", {
+                galleryDomainSlider = new Swiper(".galleryDomainSlider", {
                     spaceBetween: 20,
                     navigation: {
                         nextEl: ".swiper-button-next",
                         prevEl: ".swiper-button-prev",
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        type: "fraction",
+                    },
+                    keyboard: {
+                        enabled: true,
                     },
                 });
                 if (response) {
@@ -626,11 +623,11 @@ $(document).on('click', '.more_urls', function (el) {
                         const imageUrl = response[i].photo;
                         const fileNameWithoutExtension = imageUrl.split('/').pop().split('.')[0];
                         $(imageSlider).append(`
-                            <div class="swiper-slide"><img src="${imageUrl}" alt=""><div class="info"><span>${fileNameWithoutExtension}</span><div class="copy"><i class="fa-regular fa-copy"></i></div></div></div>
+                            <div class="swiper-slide"><img src="${imageUrl}" loading="lazy" alt=""><div class="info"><span>${fileNameWithoutExtension}</span><div class="copy"><i class="fa-regular fa-copy"></i></div></div><div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div></div>
                         `)
                     }
                 } else {
-                    console.log('Ошибка при получении скриншота');
+                    console.log('Error when getting a screenshot');
                 }
             },
             error: function (response) {
@@ -730,6 +727,10 @@ $(document).on('click', '.list-images-block .list-images-main .slider .swiper-sl
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="h1 _title36 modal-title" id="exampleModalLabel"><div class="info"><span>${title}</span><div class="copy"><i class="fa-regular fa-copy"></i></div></div></div>
+                            <div class="button-prevnext btn-block">
+                                <div class="btn prev">Prev</div>
+                                <div class="btn next">Next</div>
+                            </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                         </div>
                         <div class="modal-body">${content}</div>
@@ -872,7 +873,7 @@ function uploadSearchQuery(el) {
             } else {
                 // Если получено ноль записей, это также означает, что данных больше нет
                 isDataExhausted = true;
-                console.log('Больше нет данных для загрузки.');
+                console.log('There is no more data to download.');
             }
         },
         error: function(error) {
@@ -927,3 +928,21 @@ $(document).ready(function() {
         }
     });
 });
+
+$(document).on('click', '.button-prevnext .btn', function() {
+    let info_text = $(this).parents('.modal-header').find('.modal-title .info > span'),
+        img = $(this).parents('.modal-content').find('.modal-body img')
+
+    if ($(this).hasClass('prev')) {
+        galleryDomainSlider.slidePrev()
+    }
+    if ($(this).hasClass('next')) {
+        galleryDomainSlider.slideNext()
+    }
+
+    let info_text_new = $('.galleryDomainSlider').find('.swiper-slide.swiper-slide-active .info > span'),
+        img_new = $('.galleryDomainSlider').find('.swiper-slide.swiper-slide-active img')
+
+    $(info_text).text($(info_text_new).text())
+    $(img).attr('src', $(img_new).attr('src'))
+})
