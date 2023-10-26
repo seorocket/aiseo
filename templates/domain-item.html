@@ -47,8 +47,13 @@
                     </thead>
                     <tbody>
                     {% for key, value in nested_urls.items %}
-                        <tr>
-                            <td>
+                        <tr class="list-domains-tree">
+                            <td class="main-td">
+                                <div class="func">
+                                    <div class="item open-all" data-bs-toggle="tooltip" data-bs-title="Expand/hide">
+                                        <i class="fas fa-expand-alt fa-fw fa-rotate-90"></i>
+                                    </div>
+                                </div>
                                 {% if value.link %}
                                     {% with value.link as url_without_protocol %}
                                         <li><a href="{{ value.link }}">{{ url_without_protocol }}</a></li>

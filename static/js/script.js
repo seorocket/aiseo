@@ -699,7 +699,10 @@ $('.search-name input').on('input', function () {
     }
 })
 
-$(document).on('click', 'ul.first-list li.subMenu .down, .list-images-block .list-images-main > .list-domain > .list-domain li .down', function (el) {
+$(document).on('click', 'ul.first-list li.folder', function (el) {
+    $(this).toggleClass('open')
+})
+$(document).on('click', '.list-images-block .list-images-main > .list-domain > .list-domain li .down', function (el) {
     $(this).parent('.subMenu').toggleClass('open')
 })
 
@@ -890,3 +893,15 @@ $(document).on('click', '.phrasesSection .accordion-phrase .accordion-item .acco
         $(`.accordion-phrase .accordion-item .accordion-body .table tbody`).html('')
     }
 })
+
+$('.list-domains-tree .func .item.open-all').on('click', function() {
+    let tree = $(this).parents('.list-domains-tree')
+    if ($(tree).find('.folder').length == $(tree).find('.folder.open').length) {
+        $(tree).find('.folder').removeClass('open')
+    } else {
+        $(tree).find('.folder').addClass('open')
+    }
+})
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

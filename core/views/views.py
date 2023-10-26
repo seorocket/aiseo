@@ -849,15 +849,25 @@ def ajax(request):
                 result = {"error": e}
         if data.get('type') == 'update_proxy':
             try:
-                id = data.get('id')
-                proxy = Proxy.objects.get(id=id)
-                proxy.ip_address = data.get('ip_address')
-                proxy.port = data.get('port')
-                proxy.username = data.get('username')
-                proxy.password = data.get('password')
-                proxy.protocol = data.get('protocol')
-                proxy.save()
-                result = {'update': True}
+                proxies = data.get('proxy')  # Получаем список словарей с данными о прокси из JSON
+                if proxies:
+                    for proxy_data in proxies:
+                        id = data.get('id')
+                        proxy = Proxy.objects.get(id=id)
+                        ip_address = proxy_data.get('ip_address')
+                        port = proxy_data.get('port')
+                        username = proxy_data.get('username')
+                        password = proxy_data.get('password')
+                        protocol = proxy_data.get('protocol')
+
+                        proxy.ip_address = ip_address
+                        proxy.port = port
+                        proxy.username = username
+                        proxy.password = password
+                        proxy.protocol = protocol
+                        proxy.save()
+
+                    result = {'update': True}
             except Exception as e:
                 result = {"error": e}
         if data.get('type') == 'delete_proxy':

@@ -548,6 +548,9 @@ form.application-block {
   color: #128DC2;
 }
 
+table.tree-count-results tbody tr td {
+  max-width: none;
+}
 table thead tr th {
   padding: 10px 3px;
 }
@@ -971,9 +974,36 @@ tr.more_urls.active td > .text {
 }
 ul.first-list {
   padding: 0;
-}
-ul.first-list > li > .down {
   margin-left: 16px;
+  max-height: 400px;
+  overflow: auto;
+  flex: 1;
+}
+ul.first-list li {
+  list-style: none;
+}
+ul.first-list li.li_1 {
+  display: none;
+}
+ul.first-list li.open + li.li_1 {
+  display: block;
+}
+ul.first-list li.open .down i {
+  transform: rotate(90deg);
+}
+ul.first-list li.folder {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+ul.first-list li .down i {
+  height: -moz-fit-content;
+  height: fit-content;
+  font-size: var(--fz14);
+  transition: all 0.3s;
+}
+ul.first-list li.folder.not-nested + .li_1.li_2 {
+  display: none !important;
 }
 ul.first-list ul {
   display: flex;
@@ -983,8 +1013,35 @@ ul.first-list ul {
 ul.first-list ul li.main-title {
   order: -1;
 }
-ul.first-list ul > li.test.test2:not(.subMenu) {
-  display: none;
+ul.first-list ul > li.li_1.li_2:not(.subMenu) {
+  display: none !important;
+}
+
+.list-domains-tree .main-td {
+  display: flex;
+  padding: 5px 5px 0 5px;
+}
+.list-domains-tree .func {
+  display: flex;
+  gap: 5px;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+.list-domains-tree .func .item {
+  background-color: #128DC2;
+  width: 30px;
+  height: 30px;
+  color: #FFFFFF;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.list-domains-tree .func .item:hover {
+  background-color: #066BF9;
 }
 
 .modal#imgFull .modal-content .modal-header .modal-title .info {
