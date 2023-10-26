@@ -533,30 +533,59 @@ function checkStatusFilter() {
 }
 
 function createNestedStructure(data, el) {
-    const ul = $('<ul class="list-domain">');
+    const ul = $('<ul>');
     if (typeof data === 'object') {
         $.each(data, function (key, value) {
-            if (key !== 'count') {
-                if (value.count > 0) {
-                    if (value.link) {
-                        const link = $('<a>')
-                            .attr('href', `/urls/${value.id}/`)
-                            .text(value.link);
-                        const li = $('<li class="main-title">').append(link);
+            if (value.count > 1) {
+                $(ul).addClass('sub-ul-menu')
+            }
+
+            if (key !== 'id' && key !== 'count' && key !== '' && key !== 'last') {
+                if (value.link && value.link.slice(-1) === "/") {
+                    const li = $(`<li><a href="/urls/${value.id}">${value.link}</a></li>`);
+                    ul.append(li);
+                } else {
+                    const li = $('<li class="folder"></li>');
+                    if (value.last && value.count === 1) $(li).addClass('not-nested')
+                    if (!value.last) {
+                        let arrow = $(`<div class="down"><i class="fa-solid fa-chevron-right"></i></div><span>${value.link || key}</span>`)
+                        li.append(arrow);
                         ul.append(li);
                     } else {
-                        const nestedUl = createNestedStructure(value);
-                        let li = $('<li class="subMenu">').append(nestedUl)
-                        if (value.count > 1) {
-                            li.append(`<div class="down"><i class="fa-solid fa-angle-right"></i><span class="down-span">Down</span></div>`);
+                        if (value.count === 1) {
+                            $.each(data, function (key, value) {
+                                if (value.id) {
+                                    li.append(`<a href="/urls/${value.id}">${value.link}</a>`);
+                                    ul.append(li);
+                                }
+                            })
+                        } else {
+                            let arrow = $(`<div class="down"><i class="fa-solid fa-chevron-right"></i></div><span>${value.link || key}</span>`)
+                            li.append(arrow);
+                            ul.append(li);
                         }
-                        li.append(`<div class="count">${value.count}</div>`);
-                        ul.append(li);
                     }
+                }
+            }
+
+            if (value.count) {
+                let li_main = $('<li>');
+                if (key !== '') $(li_main).addClass('li_1')
+                if (value.last) $(li_main).addClass('li_2')
+                if (!key) $(li_main).addClass('main-title')
+                if (value.count > 1) $(li_main).addClass('subMenu')
+
+                if (value.link) {
+                    const link = $(`<a href="/urls/${value.id}">${value.link}</a>`)
+                    li_main.append(link)
+                    ul.append(li_main);
                 } else {
                     const nestedUl = createNestedStructure(value, el);
                     ul.append(nestedUl);
                 }
+            } else {
+                const nestedUl = createNestedStructure(value, el);
+                ul.append(nestedUl);
             }
         });
     }
@@ -712,8 +741,8 @@ $('.search-name input').on('input', function () {
 $(document).on('click', 'ul.first-list li.folder', function (el) {
     $(this).toggleClass('open')
 })
-$(document).on('click', '.list-images-block .list-images-main > .list-domain > .list-domain li .down', function (el) {
-    $(this).parent('.subMenu').toggleClass('open')
+$(document).on('click', '.list-images-block .list-images-main > ul li.folder', function (el) {
+    $(this).toggleClass('open')
 })
 
 $(document).on('click', '.list-images-block .list-images-main .slider .swiper-slide', function (el) {

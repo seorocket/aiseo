@@ -789,6 +789,57 @@ table {
                 }
             }
         }
+        > ul {
+            list-style: none;
+            padding-left: 16px;
+            li {
+                list-style: none;
+                &:not(.open) + ul {
+                    display: none;
+                }
+                &.open + ul {
+                    display: block;
+                }
+                &.open {
+                    .down {
+                        i {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
+                &.folder {
+                    display: flex;
+                    gap: 5px;
+                    cursor: pointer;
+                }
+                .down {
+                    i {
+                        height: fit-content;
+                        font-size: var(--fz14);
+                        transition: all .3s;
+                    }
+                }
+                &.folder.not-nested {
+                    display: none!important;
+                }
+            }
+            ul {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                list-style: none;
+                li {
+                    &.main-title {
+                        order: -1;
+                    }
+                }
+                > li {
+                    &.li_1.li_2:not(.subMenu) {
+                        display: none!important;
+                    }
+                }
+            }
+        }
         .list-domain {
             display: flex;
             flex-direction: column;

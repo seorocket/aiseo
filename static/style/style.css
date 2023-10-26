@@ -765,6 +765,48 @@ table tbody tr td a {
   -o-object-position: top;
      object-position: top;
 }
+.list-images-block .list-images-main > ul {
+  list-style: none;
+  padding-left: 16px;
+}
+.list-images-block .list-images-main > ul li {
+  list-style: none;
+}
+.list-images-block .list-images-main > ul li:not(.open) + ul {
+  display: none;
+}
+.list-images-block .list-images-main > ul li.open + ul {
+  display: block;
+}
+.list-images-block .list-images-main > ul li.open .down i {
+  transform: rotate(90deg);
+}
+.list-images-block .list-images-main > ul li.folder {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+.list-images-block .list-images-main > ul li .down i {
+  height: -moz-fit-content;
+  height: fit-content;
+  font-size: var(--fz14);
+  transition: all 0.3s;
+}
+.list-images-block .list-images-main > ul li.folder.not-nested {
+  display: none !important;
+}
+.list-images-block .list-images-main > ul ul {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  list-style: none;
+}
+.list-images-block .list-images-main > ul ul li.main-title {
+  order: -1;
+}
+.list-images-block .list-images-main > ul ul > li.li_1.li_2:not(.subMenu) {
+  display: none !important;
+}
 .list-images-block .list-images-main .list-domain {
   display: flex;
   flex-direction: column;
