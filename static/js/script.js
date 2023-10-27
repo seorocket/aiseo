@@ -542,7 +542,7 @@ function createNestedStructure(data, el) {
 
             if (key !== 'id' && key !== 'count' && key !== '' && key !== 'last') {
                 if (value.link && value.link.slice(-1) === "/") {
-                    const li = $(`<li><a href="/urls/${value.id}">${value.link}</a></li>`);
+                    const li = $(`<li><a href="/urls/${value.id}/">${value.link}</a></li>`);
                     ul.append(li);
                 } else {
                     const li = $('<li class="folder"></li>');
@@ -555,7 +555,7 @@ function createNestedStructure(data, el) {
                         if (value.count === 1) {
                             $.each(data, function (key, value) {
                                 if (value.id) {
-                                    li.append(`<a href="/urls/${value.id}">${value.link}</a>`);
+                                    li.append(`<a href="/urls/${value.id}/">${value.link}</a>`);
                                     ul.append(li);
                                 }
                             })
@@ -576,7 +576,7 @@ function createNestedStructure(data, el) {
                 if (value.count > 1) $(li_main).addClass('subMenu')
 
                 if (value.link) {
-                    const link = $(`<a href="/urls/${value.id}">${value.link}</a>`)
+                    const link = $(`<a href="/urls/${value.id}/">${value.link}</a>`)
                     li_main.append(link)
                     ul.append(li_main);
                 } else {
@@ -642,9 +642,6 @@ $(document).on('click', '.more_urls', function (el) {
                     pagination: {
                         el: ".swiper-pagination",
                         type: "fraction",
-                    },
-                    keyboard: {
-                        enabled: true,
                     },
                 });
                 if (response) {
@@ -880,11 +877,22 @@ function uploadSearchQuery(el) {
     if (isDataExhausted) {
         return;
     }
+    let status = ''
+    var params = window.location.search.substring(1).split("&");
+    for (let i = 0; i < params.length; i++) {
+        let param = params[i].split("=");
+        if (param[0] === "status") {
+            status = param[1]
+            break;
+        }
+    }
+    $(el).parents('.accordion-item').find('.accordion-body .table tbody').append('<tr class="tr-loader"><td class="loader-block" colspan="3"><span class="loader"></span></td></tr>')
     $.ajax({
-        url: `/api/searchqueries/?project=${$(el).parents('.accordion-item').attr('data-id')}&page_size=` + page_size + '&page=' + page,
+        url: `/api/searchqueries/?project=${$(el).parents('.accordion-item').attr('data-id')}&status=${status}&page_size=` + page_size + '&page=' + page,
         method: 'GET',
         success: function(data) {
             if (data.results.length > 0) {
+                $(el).parents('.accordion-item').find('.accordion-body .table tbody .tr-loader').remove()
                 for (let i = 0; i < data.results.length; i++) {
                     $(el).parents('.accordion-item').find('.accordion-body .table tbody').append(`
                         <tr>
@@ -975,3 +983,30 @@ $(document).on('click', '.button-prevnext .btn', function() {
     $(info_text).text($(info_text_new).text())
     $(img).attr('src', $(img_new).attr('src'))
 })
+
+function handleLeftArrowKeyPress(event) {
+    if (event.which === 37) {
+        galleryDomainSlider.slidePrev()
+        console.log(1)
+    }
+}
+function handleRightArrowKeyPress(event) {
+    if (event.which === 39) {
+        galleryDomainSlider.slideNext()
+        console.log(2)
+    }
+}
+$(document).keydown(function(el) {
+    let info_text = $(el.target).find('.modal-header').find('.modal-title .info > span'),
+        img = $(el.target).find('.modal-content').find('.modal-body img')
+    if ($('.modal#imgFull').length && $('.modal#imgFull').hasClass('show')) {
+        handleLeftArrowKeyPress(el);
+        handleRightArrowKeyPress(el);
+    }
+
+    let info_text_new = $('.galleryDomainSlider').find('.swiper-slide.swiper-slide-active .info > span'),
+        img_new = $('.galleryDomainSlider').find('.swiper-slide.swiper-slide-active img')
+
+    $(info_text).text($(info_text_new).text())
+    $(img).attr('src', $(img_new).attr('src'))
+});

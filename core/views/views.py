@@ -68,11 +68,6 @@ def index(request):
         projects = Project.objects.all().order_by('-id')
     else:
         projects = Project.objects.filter(user=current_user).order_by('-id')
-    keys = SearchQuery.objects.all()
-
-    status_entry = request.GET.get('status')
-    if status_entry:
-        keys = keys.filter(status=status_entry)
 
     choices = dict()
 
@@ -91,81 +86,22 @@ def index(request):
     context.update({
         'link': True,
         'projects': projects,
-        'keys': keys,
         'statuses': choices,
     })
 
     return HttpResponse(template.render(context))
 
 
-# @login_required
-# def phrases(request):
-#     context = default_context(request, "index", TextPage)
-#     template = loader.get_template('phrases.html')
-#     projects = Project.objects.all()
-#     keys = SearchQuery.objects.all()
-#
-    # status_entry = request.GET.get('status')
-    # if status_entry:
-    #     keys = keys.filter(status=status_entry)
-    #
-    # choices = dict()
-    #
-    # for choice in CHOICE_SEARCHQUERY_STATUS:
-    #     choices[choice[0]] = {'name': choice[1]}
-#
-#     paginator = Paginator(projects, 250)
-#     page = request.GET.get('page')
-#     try:
-#         projects = paginator.page(page)
-#     except PageNotAnInteger:
-#         projects = paginator.page(1)
-#     except EmptyPage:
-#         projects = paginator.page(paginator.num_pages)
-#
-#     context.update({
-#         'link': True,
-#         'projects': projects,
-#         'keys': keys,
-#         'statuses': choices,
-#     })
-#
-#     return HttpResponse(template.render(context))
-
-
-# @login_required
-# def projects(request):
-#     context = default_context(request, "index", TextPage)
-#     template = loader.get_template('projects.html')
-#     projects = Project.objects.all()
-#
-#     paginator = Paginator(projects, 250)
-#     page = request.GET.get('page')
-#     try:
-#         projects = paginator.page(page)
-#     except PageNotAnInteger:
-#         projects = paginator.page(1)
-#     except EmptyPage:
-#         projects = paginator.page(paginator.num_pages)
-#
-#     context.update({
-#         'link': True,
-#         'projects': projects,
-#     })
-#
-#     return HttpResponse(template.render(context))
-
-
 @login_required
 def domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains.html')
-    domains = Domain.objects.exclude(status=4).order_by('-id')
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
     else:
         projects = Project.objects.filter(user=current_user)
+    domains = Domain.objects.filter(project__in=projects).exclude(status=4).order_by('-id')
 
     choices = dict()
 
@@ -279,8 +215,13 @@ def domain_item(request, domain_id):
 def urls(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('urls.html')
-    urls = File.objects.all().order_by('-id')
-    domains = Domain.objects.all()
+    current_user = request.user
+    if current_user.is_staff:
+        accessible_projects = Project.objects.all()
+    else:
+        accessible_projects = Project.objects.filter(user=current_user)
+    domains = Domain.objects.filter(project__in=accessible_projects)
+    urls = File.objects.filter(domain__in=domains).order_by('-id')
 
     choices = dict()
 
@@ -387,8 +328,15 @@ def url_item(request, url_id):
 def shots(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('shots.html')
-    shots = Shot.objects.all()
-    urls = File.objects.all()
+
+    current_user = request.user
+    if current_user.is_staff:
+        accessible_projects = Project.objects.all()
+    else:
+        accessible_projects = Project.objects.filter(user=current_user)
+    domains = Domain.objects.filter(project__in=accessible_projects)
+    urls = File.objects.filter(domain__in=domains).order_by('-id')
+    shots = Shot.objects.filter(file__in=urls).order_by('-id')
 
     choices = dict()
 
@@ -439,7 +387,6 @@ def shots(request):
         'statuses': choices,
         'shots': shots,
         'shots_count': shots_count,
-        'urls': urls
     })
 
     return HttpResponse(template.render(context))
@@ -449,12 +396,12 @@ def shots(request):
 def check_domains(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('check-domains.html')
-    domains = Domain.objects.filter(status=4).order_by('-id')
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
     else:
         projects = Project.objects.filter(user=current_user)
+    domains = Domain.objects.filter(project__in=projects, status=4).order_by('-id')
 
     choices = dict()
 
@@ -517,12 +464,12 @@ def check_domains(request):
 def domains_timestamps(request):
     context = default_context(request, "index", TextPage)
     template = loader.get_template('domains-timestamps.html')
-    domains = Domain.objects.filter(status=6).order_by('-id')
     current_user = request.user
     if current_user.is_staff:
         projects = Project.objects.all()
     else:
         projects = Project.objects.filter(user=current_user)
+    domains = Domain.objects.filter(project__in=projects, status=6).order_by('-id')
 
     choices = dict()
 
