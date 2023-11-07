@@ -56,7 +56,7 @@ class CustomPagination(PageNumberPagination):
 
 
 class ProxyViewSet(viewsets.ModelViewSet):
-    queryset = Proxy.objects.all()
+    queryset = Proxy.objects.all().order_by('-id')
     serializer_class = ProxySerializer
 
     @action(detail=False, methods=['get'])
@@ -73,7 +73,7 @@ class ProxyViewSet(viewsets.ModelViewSet):
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
 
 
@@ -86,7 +86,7 @@ class DomainFilter(filters.FilterSet):
 
 
 class DomainViewSet(viewsets.ModelViewSet):
-    queryset = Domain.objects.all()
+    queryset = Domain.objects.all().order_by('-id')
     serializer_class = DomainSerializer
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = DomainFilter
@@ -128,7 +128,7 @@ class DomainImagesFilter(filters.FilterSet):
 
 
 class DomainImagesViewSet(viewsets.ModelViewSet):
-    queryset = DomainImages.objects.all()
+    queryset = DomainImages.objects.all().order_by('-id')
     serializer_class = DomainImagesSerializer
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = DomainImagesFilter
@@ -168,7 +168,7 @@ class SearchQueryViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = SearchQueryFilter
-    queryset = SearchQuery.objects.all()
+    queryset = SearchQuery.objects.all().order_by('-id')
     serializer_class = SearchQuerySerializer
 
     @action(detail=False, methods=['get'])
@@ -271,7 +271,7 @@ class SearchQueryViewSet(viewsets.ModelViewSet):
 
 
 class FileViewSet(viewsets.ModelViewSet):
-    queryset = File.objects.all()
+    queryset = File.objects.all().order_by('-id')
     serializer_class = FileSerializer
 
     @action(detail=False, methods=['post'])
@@ -314,7 +314,7 @@ class FileViewSet(viewsets.ModelViewSet):
 
 
 class ShotViewSet(viewsets.ModelViewSet):
-    queryset = Shot.objects.all()
+    queryset = Shot.objects.all().order_by('-id')
     serializer_class = ShotSerializer
 
     @action(detail=False, methods=['post'])
