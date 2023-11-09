@@ -176,21 +176,23 @@ function sendAjax(dataForm, el) {
                 let urls = value.split('\n'),
                     arrayProxy = []
                 urls.forEach(function (url) {
-                    let regex = /^([^:]+:\/\/)?([^:]+):([^@]+)@([^:]+):(\d+)$/;
+                    let regex = /^([^:]+)(:\/\/)?([^:]+):([^@]+)@([^:]+):(\d+)$/;
                     let match = url.match(regex);
                     if (match) {
-                        let protocol = match[1] || "socks5";
-                        let username = match[2];
-                        let password = match[3];
-                        let ipAddress = match[4];
-                        let port = match[5];
-                        arrayProxy.push({
-                            "ip_address": ipAddress,
-                            "port": port,
-                            "username": username,
-                            "password": password,
-                            "protocol": protocol
-                        })
+                        if (match[2] === '://') {
+                            let protocol = match[1];
+                            let username = match[3];
+                            let password = match[4];
+                            let ipAddress = match[5];
+                            let port = match[6];
+                            arrayProxy.push({
+                                "ip_address": ipAddress,
+                                "port": port,
+                                "username": username,
+                                "password": password,
+                                "protocol": protocol
+                            })
+                        }
                     }
                 })
                 obj['proxy'] = arrayProxy
@@ -201,6 +203,7 @@ function sendAjax(dataForm, el) {
             }
         }
     });
+
     if (type === 'delete_phrases' || type === 'delete_projects') {
         obj['id'] = $(el.target).attr('data-id')
     }
