@@ -798,7 +798,7 @@ table {
                     display: none;
                 }
                 &.open + ul {
-                    display: block;
+                    display: flex;
                 }
                 &.open {
                     .down {
@@ -1103,6 +1103,7 @@ ul.first-list {
             display: flex;
             gap: 5px;
             cursor: pointer;
+            order: 2;
         }
         .down {
             i {
@@ -1112,6 +1113,7 @@ ul.first-list {
             }
         }
         &.folder.not-nested {
+            order: 3;
             & + .li_1.li_2 {
                 display: none!important;
             }
