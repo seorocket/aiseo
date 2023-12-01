@@ -43,8 +43,6 @@ def render_phrases(request, queryset):
 def render_accordion_projects(request, queryset):
     template = loader.get_template('ajax/ajax_accordion_projects.html')
 
-    queryset = queryset.order_by('-id')
-
     choices = dict()
 
     for choice in CHOICE_SEARCHQUERY_STATUS:

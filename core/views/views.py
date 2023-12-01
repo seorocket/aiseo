@@ -688,9 +688,9 @@ def ajax(request):
                         obj_info[name] = data.get(name, '')
                 Project.objects.create(user=current_user, **obj_info)
                 if current_user.is_staff:
-                    project = Project.objects.all()
+                    project = Project.objects.all().order_by('id')
                 else:
-                    project = Project.objects.filter(user=current_user)
+                    project = Project.objects.filter(user=current_user).order_by('id')
                 result = render_groups(request, project)
                 return HttpResponse(result)
             except Exception as e:
