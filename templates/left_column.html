@@ -66,8 +66,10 @@
                 {#                {% endif %}#}
 
                 {% if ahrefs_rank or projects or domains or urls %}
-                    <button type="button" class="btn search_filter_btn">Apply<i class="fa fa-search" aria-hidden="true"></i></button>
-                    <button type="button" class="btn reset">Reset<i class="fa-solid fa-trash-arrow-up"></i></button>
+                    {% if not visible_filter or visible_filter == 'visible' %}
+                        <button type="button" class="btn search_filter_btn">Apply<i class="fa fa-search" aria-hidden="true"></i></button>
+                        <button type="button" class="btn reset">Reset<i class="fa-solid fa-trash-arrow-up"></i></button>
+                    {% endif %}
                 {% endif %}
             </form>
         </div>

@@ -3,6 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.utils import translation
 from .views import *
+from .models import *
 from django.core import serializers
 
 
@@ -41,6 +42,8 @@ def render_phrases(request, queryset):
 
 def render_accordion_projects(request, queryset):
     template = loader.get_template('ajax/ajax_accordion_projects.html')
+
+    queryset = queryset.order_by('-id')
 
     choices = dict()
 

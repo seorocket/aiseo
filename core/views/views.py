@@ -272,7 +272,8 @@ def urls(request):
         'statuses': choices,
         'urls': urls,
         'urls_count': urls_count,
-        'urls_filter': True
+        'urls_filter': True,
+        'visible_filter': 'not-visible'
     })
 
     return HttpResponse(template.render(context))
@@ -722,7 +723,7 @@ def ajax(request):
                 else:
                     result = {"error": 'No project selected'}
             except Exception as e:
-                result = {"error": e}
+                result = {"error": str(e)}
         if data.get('type') == 'delete_phrases':
             try:
                 phrase = SearchQuery.objects.get(id=data.get('id'))
