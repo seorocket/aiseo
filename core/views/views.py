@@ -101,7 +101,7 @@ def domains(request):
         projects = Project.objects.all()
     else:
         projects = Project.objects.filter(user=current_user)
-    domains = Domain.objects.filter(project__in=projects).exclude(status=4).order_by('-id')
+    domains = Domain.objects.filter(project__in=projects).order_by('-id')
 
     choices = dict()
 
@@ -156,6 +156,46 @@ def domains(request):
         'ahrefs_rank': True,
         'domains_filter': True
     })
+
+    return HttpResponse(template.render(context))
+
+
+@login_required
+def project_item(request, project_id):
+    data = get_object_or_404(Project, id=project_id)
+    template = loader.get_template('project-item.html')
+
+    search_query = SearchQuery.objects.filter(project=data).order_by('-id')
+
+    choices = dict()
+
+    for choice in CHOICE_SEARCHQUERY_STATUS:
+        choices[choice[0]] = {'name': choice[1]}
+
+    status_entry = request.GET.get('status')
+    if status_entry:
+        search_query = search_query.filter(status=status_entry)
+
+    search_query_count = search_query.count()
+
+    paginator = Paginator(search_query, 250)
+    page = request.GET.get('page')
+    try:
+        search_query = paginator.page(page)
+    except PageNotAnInteger:
+        search_query = paginator.page(1)
+    except EmptyPage:
+        search_query = paginator.page(paginator.num_pages)
+
+    context = {
+        'link': True,
+        'statuses': choices,
+        'data': data,
+        'search_query': search_query,
+        'search_query_count': search_query_count,
+        'request': request,
+    }
+    context.update(csrf(request))
 
     return HttpResponse(template.render(context))
 
@@ -393,72 +433,72 @@ def shots(request):
     return HttpResponse(template.render(context))
 
 
-@login_required
-def check_domains(request):
-    context = default_context(request, "index", TextPage)
-    template = loader.get_template('check-domains.html')
-    current_user = request.user
-    if current_user.is_staff:
-        projects = Project.objects.all()
-    else:
-        projects = Project.objects.filter(user=current_user)
-    domains = Domain.objects.filter(project__in=projects, status=4).order_by('-id')
-
-    choices = dict()
-
-    for choice in CHOICE_DOMAIN_STATUS:
-        choices[choice[0]] = {'name': choice[1]}
-
-    search_query = request.GET.get('search')
-    if search_query:
-        search_filter = Q(name__icontains=search_query)
-        domains = domains.filter(search_filter)
-
-    # фильтр по левому меню
-    left_filter = request.GET.dict()
-    if left_filter.get('left_filter'):
-        left_filter.pop('filter_p_sort')
-
-    for key in left_filter.keys():
-        value = left_filter.get(key)
-        if ',' in value:
-            values = [int(v) for v in value.split(',')]
-            q_objects = Q()
-            for v in values:
-                q_objects |= Q(**{key: v})
-            domains = domains.filter(q_objects)
-        try:
-            domains = domains.filter(**{key: value})
-        except Exception:
-            pass
-
-    status_entry = request.GET.get('status')
-    if status_entry:
-        domains = domains.filter(status=status_entry)
-
-    domains_count = domains.count()
-
-    paginator = Paginator(domains, 250)
-    page = request.GET.get('page')
-    try:
-        domains = paginator.page(page)
-    except PageNotAnInteger:
-        domains = paginator.page(1)
-    except EmptyPage:
-        domains = paginator.page(paginator.num_pages)
-
-    context.update({
-        'link': True,
-        'filter': True,
-        'domains': domains,
-        'domains_count': domains_count,
-        'statuses': choices,
-        'projects': projects,
-        'ahrefs_rank': True,
-        'domains_filter': True,
-    })
-
-    return HttpResponse(template.render(context))
+# @login_required
+# def check_domains(request):
+#     context = default_context(request, "index", TextPage)
+#     template = loader.get_template('check-domains.html')
+#     current_user = request.user
+#     if current_user.is_staff:
+#         projects = Project.objects.all()
+#     else:
+#         projects = Project.objects.filter(user=current_user)
+#     domains = Domain.objects.filter(project__in=projects, status=4).order_by('-id')
+#
+#     choices = dict()
+#
+#     for choice in CHOICE_DOMAIN_STATUS:
+#         choices[choice[0]] = {'name': choice[1]}
+#
+#     search_query = request.GET.get('search')
+#     if search_query:
+#         search_filter = Q(name__icontains=search_query)
+#         domains = domains.filter(search_filter)
+#
+#     # фильтр по левому меню
+#     left_filter = request.GET.dict()
+#     if left_filter.get('left_filter'):
+#         left_filter.pop('filter_p_sort')
+#
+#     for key in left_filter.keys():
+#         value = left_filter.get(key)
+#         if ',' in value:
+#             values = [int(v) for v in value.split(',')]
+#             q_objects = Q()
+#             for v in values:
+#                 q_objects |= Q(**{key: v})
+#             domains = domains.filter(q_objects)
+#         try:
+#             domains = domains.filter(**{key: value})
+#         except Exception:
+#             pass
+#
+#     status_entry = request.GET.get('status')
+#     if status_entry:
+#         domains = domains.filter(status=status_entry)
+#
+#     domains_count = domains.count()
+#
+#     paginator = Paginator(domains, 250)
+#     page = request.GET.get('page')
+#     try:
+#         domains = paginator.page(page)
+#     except PageNotAnInteger:
+#         domains = paginator.page(1)
+#     except EmptyPage:
+#         domains = paginator.page(paginator.num_pages)
+#
+#     context.update({
+#         'link': True,
+#         'filter': True,
+#         'domains': domains,
+#         'domains_count': domains_count,
+#         'statuses': choices,
+#         'projects': projects,
+#         'ahrefs_rank': True,
+#         'domains_filter': True,
+#     })
+#
+#     return HttpResponse(template.render(context))
 
 
 @login_required
@@ -601,48 +641,33 @@ def create_nested_url_list(urls_data):
     return nested_urls
 
 
+@receiver(post_save, sender=SearchQuery)
+def send_update_to_websocket(sender, instance, **kwargs):
+    channel_layer = get_channel_layer()
 
+    serialized_data = serialize('json', [instance])
+    deserialized_data = json.loads(serialized_data)[0]
 
-# def create_nested_url_list(urls_data):
-#     # Создаем пустой словарь для хранения вложенных уровней
-#     nested_urls = {}
-#
-#     for idx, url_info in enumerate(urls_data):
-#         url = url_info['name']
-#         if not validators.url(url):
-#             # Если ссылка невалидна, пропускаем ее и переходим к следующей итерации цикла
-#             continue
-#
-#         # Добавляем слеш в конец URL, если его там нет
-#         if not url.endswith('/'):
-#             url_with_slash = url + '/'
-#         else:
-#             url_with_slash = url
-#
-#         # Разделяем URL на протокол и оставшуюся часть
-#         protocol, remaining_url = url_with_slash.split('://')
-#
-#         parts = remaining_url.split('/')  # Разбиваем URL на части
-#
-#         current_level = nested_urls
-#         # Если учитываем протокол
-#         if protocol not in current_level:
-#             current_level[protocol] = {}
-#
-#         current_level = current_level[protocol]
-#
-#         for part in parts:
-#             if part not in current_level:
-#                 current_level[part] = {'count': 0}  # Создаем новый уровень и счетчик
-#             current_level = current_level[part]  # Переходим на следующий уровень
-#             current_level['count'] += 1  # Увеличиваем счетчик на этом уровне
-#
-#         # Добавляем id и ссылку к текущему уровню, только если есть id в urls_data
-#         if 'id' in url_info:
-#             current_level['id'] = url_info['id']
-#             current_level['link'] = url
-#
-#     return nested_urls
+    project_id = instance.project.id
+
+    phrases = SearchQuery.objects.filter(id=deserialized_data['pk'])
+    phrases_main = SearchQuery.objects.filter(project__id=project_id)
+    phrases_count = phrases_main.count()
+    html_content = render_phrases(None, phrases)
+    data = {
+        'html_content': html_content,
+        'serialized_data': serialized_data,
+        'phrases_count_all': phrases_count,
+    }
+    json_data = json.dumps(data)
+
+    async_to_sync(channel_layer.group_send)(
+        "phrases_group",
+        {
+            "type": "send_update",
+            "text": json_data
+        }
+    )
 
 
 @receiver(post_save, sender=Domain)
@@ -653,6 +678,7 @@ def send_update_to_websocket(sender, instance, **kwargs):
     deserialized_data = json.loads(serialized_data)[0]
     domains = Domain.objects.filter(id=deserialized_data['pk'])
     domains_main = Domain.objects.all()
+    domains_count = domains_main.count()
     domains_count_not_checked = domains_main.exclude(status=4).count()
     domains_count_checked = domains_main.filter(status=4).count()
     domains_count_timestamps = domains_main.filter(status=6).count()
@@ -660,6 +686,7 @@ def send_update_to_websocket(sender, instance, **kwargs):
     data = {
         'html_content': html_content,
         'serialized_data': serialized_data,
+        'domains_count_all': domains_count,
         'domains_count_not_checked': domains_count_not_checked,
         'domains_count_checked': domains_count_checked,
         'domains_count_timestamps': domains_count_timestamps,

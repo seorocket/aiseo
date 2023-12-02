@@ -252,11 +252,12 @@ function sendAjax(dataForm, el) {
                     $('.group_select option:last').prop('selected', true);
                     $('.indexSection .item.phrase').removeClass('d-none')
                 } else if (type === 'save_phrase') {
-                    $('.message_phrase').html('<span style="color:green;">Phrases added successfully</span>');
-                    setTimeout(function () {
-                        $('.message_phrase').html('')
-                    }, 1500)
-                    $('.accordion-phrase').html(response);
+                    showToasts('Phrases added successfully', 'text-bg-success')
+                    // $('.message_phrase').html('<span style="color:green;">Phrases added successfully</span>');
+                    // setTimeout(function () {
+                    //     $('.message_phrase').html('')
+                    // }, 1500)
+                    $('.list').html(response);
                 } else if (type === 'delete_phrases' || type === 'delete_projects') {
                     if (response.delete) {
                         $(el.target).parents('tr').fadeOut().remove()
@@ -283,7 +284,7 @@ function sendAjax(dataForm, el) {
                                 block = $(`table.table tr td input[value=${i}]`)
                             $(block).prop('checked', false)
                             $('.checks_all').prop('checked', false)
-                            if (type !== 'change_selected_domains') {
+                            if (type !== 'change_selected_domains' && type !== 'change_selected_phrases') {
                                 $(block).parents('tr').fadeOut().find('td.status-td').text(value)
                                 $(block).parents('tr').fadeOut().fadeIn()
                             }
@@ -354,13 +355,13 @@ function infoOpenModal(elem) {
     bodyText.html('')
     if (type === 'add-group') {
         titleText.html(`
-            <div class="h1 _title36 modal-title" id="exampleModalLabel">Добавить проект</div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            <div class="h1 _title36 modal-title" id="exampleModalLabel">Add a project</div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         `)
         bodyText.html(`
             <form class="application-block">
-                <input class="group_add" placeholder="Новый проект" name="name">
-                <div class="btn checkField" data-request="new_group">Создать новый проект</div>
+                <input class="group_add" placeholder="New project" name="name">
+                <div class="btn checkField" data-request="new_group">Create a new project</div>
             </form>
         `)
     }
@@ -724,15 +725,15 @@ $('.page-item .page-link').on('click', function (el) {
 $('.search-name input').on('input', function () {
     let temp = $(this).val()
     if (temp) {
-        $(this).parents('.info-block-main').find('.accordion .accordion-item').each(function () {
-            if ($(this).find('.accordion-button').text().toLowerCase().indexOf(temp.toLowerCase()) > -1) {
+        $(this).parents('.info-block-main').find('.list > a').each(function () {
+            if ($(this).text().toLowerCase().indexOf(temp.toLowerCase()) > -1) {
                 $(this).removeClass('d-none')
             } else {
                 $(this).addClass('d-none')
             }
         })
     } else {
-        $(this).parents('.info-block-main').find('.accordion .accordion-item').each(function () {
+        $(this).parents('.info-block-main').find('.list > a').each(function () {
             $(this).removeClass('d-none')
         })
     }
@@ -811,25 +812,39 @@ socket.onmessage = function(event) {
             let data = JSON.parse(event.data),
                 serialized_data = JSON.parse(data.serialized_data),
                 table = $('.domainsSection .domains-table'),
+                table_phrases = $('.project-item-section .phrases-item-table'),
+                table_tbody_phrases = $(table_phrases).find('tbody'),
+                block_phrases = $(table_tbody_phrases).find(`tr[data-id=${serialized_data[0].pk}]`),
                 table_tbody = $(`.domainsSection .domains-table tbody`),
                 block = $(`.domainsSection .domains-table tbody tr[data-id=${serialized_data[0].pk}]`),
                 domains_count_not_checked = data.domains_count_not_checked,
                 domains_count_checked = data.domains_count_checked,
                 domains_count_timestamps = data.domains_count_timestamps,
-                domains_count = 0,
+                domains_count_all = data.domains_count_all,
+                count_data = 0,
                 resultWord;
 
+            if ($(table_phrases).hasClass('main')) {
+                data.phrases_count_all === 1 ? resultWord = 'result' : resultWord = 'results';
+                count_data = data.phrases_count_all
+                if ($(block_phrases).length) {
+                    console.log(1)
+                    $(block_phrases).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
+                    $(block_phrases).fadeOut().fadeIn()
+                } else {
+                    console.log(2)
+                    $(table_tbody_phrases).append(data.html_content)
+                    block_phrases = $(`.project-item-section .phrases-item-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
+                    $(block_phrases).fadeOut().fadeIn()
+                }
+            }
+
             if ($(table).hasClass('main')) {
-                domains_count_not_checked === 1 ? resultWord = 'result' : resultWord = 'results';
-                domains_count = domains_count_not_checked
+                domains_count_all === 1 ? resultWord = 'result' : resultWord = 'results';
+                count_data = domains_count_all
                 if ($(block).length) {
-                    if (String(serialized_data[0].fields.status) === '4') {
-                        $(block).remove()
-                        showToasts('The domain has been moved to the "Check Domains" tab!', 'text-bg-success')
-                    } else {
-                        $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
-                        $(block).fadeOut().fadeIn()
-                    }
+                    $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
+                    $(block).fadeOut().fadeIn()
                 } else {
                     $(table_tbody).append(data.html_content)
                     block = $(`.domainsSection .domains-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
@@ -837,7 +852,7 @@ socket.onmessage = function(event) {
                 }
             } else if ($(table).hasClass('check')) {
                 domains_count_checked === 1 ? resultWord = 'result' : resultWord = 'results';
-                domains_count = domains_count_checked
+                count_data = domains_count_checked
                 if ($(block).length) {
                     if (String(serialized_data[0].fields.status) !== '4') {
                         $(block).remove()
@@ -849,7 +864,7 @@ socket.onmessage = function(event) {
                 }
             } else if ($(table).hasClass('timestamps')) {
                 domains_count_timestamps === 1 ? resultWord = 'result' : resultWord = 'results';
-                domains_count = domains_count_timestamps
+                count_data = domains_count_timestamps
                 if ($(block).length) {
                     if (String(serialized_data[0].fields.status) !== '6') {
                         $(block).remove()
@@ -862,7 +877,7 @@ socket.onmessage = function(event) {
                     }
                 }
             }
-            $('._titleBlock .name').text(`${domains_count} ${resultWord} found`)
+            $('._titleBlock .name').text(`${count_data} ${resultWord} found`)
         } catch (error) {
             // console.log(event.data)
         }

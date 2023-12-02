@@ -1,0 +1,101 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="phrasesSection project-item-section">
+        <div class="info-block-main">
+            {% if not search_change %}
+            <div class="functions">
+                <div class="item status-all-search-block">
+                    <label class="select">
+                        <select class="status-all-search" name="status">
+                            <option selected disabled>Search by status</option>
+                            {% for kst, st in statuses.items %}
+                                <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="btn-block">
+                        <div class="btn f-status">Search</div>
+                        <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
+                    </div>
+                </div>
+                <div class="item change">
+                    <label class="select">
+                        <select class="status-all-change" name="status">
+                            <option selected disabled>Change Status</option>
+                            {% for kst, st in statuses.items %}
+                                <option value="{{ kst }}">{{ st.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="btn-block">
+                        <div class="btn change-selected" data-request="change_selected_phrases">Change</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="_titleBlock">
+                <span class="name">{{ search_query_count }} result{{ search_query_count|pluralize }} found</span>
+            </div>
+            <div class="table-block">
+                <table class="table phrases-item-table main">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
+                        <th>Name</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in search_query %}
+                            <tr data-id="{{ i.id }}">
+                                <td style="width: 22px"><input type="checkbox" value="{{ i.id }}"
+                                           class="checks group-{{ g.id }}"></td>
+                                <td>{{ i.query }}</td>
+                                <td class="status-td">{{ i.get_status_display }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    {% if search_query.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ search_query.previous_page_number }}{{ dop_url }}">Prev</a></li>
+                    {% endif %}
+                    {% if search_query.paginator %}
+                        {% for i in search_query.paginator.page_range %}
+                            {% if search_query.number == 1 and i <= 5 %}
+                                {% if i == search_query.number %}
+                                    <li class="page-item"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif search_query.number == 2 and i <= 5 %}
+                                {% if i == 1 %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% elif i == search_query.number %}
+                                    <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif i >= search_query.number|add:'-2' and i <= search_query.number|add:'2' %}
+                                {% if i == search_query.number %}
+                                    <li class="page-item active"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% elif i == search_query.paginator.num_pages %}
+                                <li class="page-item more"><span class="page-link">...</span></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{{ dop_url }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if search_query.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ search_query.next_page_number }}{{ dop_url }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

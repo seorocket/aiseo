@@ -600,6 +600,20 @@ table tbody tr td a {
 .phrasesSection .info-block-main .status-all-search-block .btn-block .f-status:not(.active) {
   display: none;
 }
+.phrasesSection .info-block-main .list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.phrasesSection .info-block-main .list > a {
+  padding: 10px 20px;
+  background-color: #FFFFFF;
+  border: 1px solid #e5e5e5;
+  transition: all 0.3s;
+}
+.phrasesSection .info-block-main .list > a:hover {
+  background-color: #e5e5e5;
+}
 
 .projectsSection .info-block-main {
   display: flex;
@@ -776,7 +790,7 @@ table tbody tr td a {
   display: none;
 }
 .list-images-block .list-images-main > ul li.open + ul {
-  display: block;
+  display: flex;
 }
 .list-images-block .list-images-main > ul li.open .down i {
   transform: rotate(90deg);
@@ -1037,12 +1051,16 @@ ul.first-list li.folder {
   display: flex;
   gap: 5px;
   cursor: pointer;
+  order: 2;
 }
 ul.first-list li .down i {
   height: -moz-fit-content;
   height: fit-content;
   font-size: var(--fz14);
   transition: all 0.3s;
+}
+ul.first-list li.folder.not-nested {
+  order: 3;
 }
 ul.first-list li.folder.not-nested + .li_1.li_2 {
   display: none !important;

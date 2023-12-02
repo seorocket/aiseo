@@ -41,68 +41,10 @@
                 <div class="item search-name">
                     <input type="text" placeholder="Search by name">
                 </div>
-                <div class="item status-all-search-block">
-                    <label class="select">
-                        <select class="status-all-search" name="status">
-                            <option selected disabled>Search by status</option>
-                            {% for kst, st in statuses.items %}
-                                <option value="{{ kst }}" {% if request.GET.status == kst|stringformat:"i" %}selected{% endif %}>{{ st.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                    <div class="btn-block">
-                        <div class="btn f-status">Search</div>
-                        <div class="btn red-main reset-status {% if request.GET.status %}active{% endif %}">Reset status</div>
-                    </div>
-                </div>
             </div>
-            <div id="accordion-phrase" class="accordion accordion-phrase" data-request="get_phrases">
-                {% for g in projects %}
-                    <div class="accordion-item" data-id="{{ g.id }}">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-request="get_phrases" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapse_{{ forloop.counter }}" aria-expanded="false"
-                                    aria-controls="flush-collapse_{{ forloop.counter }}">{{ g.name }}
-                                <div class="status" data-request="get_phrases"></div>
-                            </button>
-                        </h2>
-                        <div id="flush-collapse_{{ forloop.counter }}" class="accordion-collapse collapse"
-                             data-bs-parent="#accordion-phrase">
-                            <div class="accordion-body with-del">
-                                {% if g.description %}<span>{{ g.description }}</span>{% endif %}
-                                <div class="functions">
-                                    <div class="item btn-block">
-                                        <div class="btn red-main delete-selected" data-request="delete_selected_phrases">Delete selected</div>
-                                    </div>
-                                    <div class="item change">
-                                        <label class="select">
-                                            <select class="status-all-change" name="status">
-                                                <option selected disabled>Change Status</option>
-                                                {% for kst, st in statuses.items %}
-                                                    <option value="{{ kst }}">{{ st.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </label>
-                                        <div class="btn-block">
-                                            <div class="btn change-selected" data-request="change_selected_phrases">Change</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-block">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th><input type="checkbox" class="checks_all" data-id="{{ g.id }}"></th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="list">
+                {% for project in projects %}
+                    <a href="{% url 'core:project_item' project.id %}">{{ project.name }}</a>
                 {% endfor %}
             </div>
             <nav>

@@ -37,7 +37,7 @@ def render_phrases(request, queryset):
     }
     result = template.render(context_data)
 
-    return HttpResponse(result)
+    return result
 
 
 def render_accordion_projects(request, queryset):
