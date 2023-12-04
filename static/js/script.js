@@ -828,12 +828,10 @@ socket.onmessage = function(event) {
                 data.phrases_count_all === 1 ? resultWord = 'result' : resultWord = 'results';
                 count_data = data.phrases_count_all
                 if ($(block_phrases).length) {
-                    console.log(1)
                     $(block_phrases).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
                     $(block_phrases).fadeOut().fadeIn()
                 } else {
-                    console.log(2)
-                    $(table_tbody_phrases).append(data.html_content)
+                    $(table_tbody_phrases).append(data.html_content_phrases)
                     block_phrases = $(`.project-item-section .phrases-item-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
                     $(block_phrases).fadeOut().fadeIn()
                 }
@@ -846,7 +844,7 @@ socket.onmessage = function(event) {
                     $(block).fadeOut().find('td.status-td').text(serialized_data[0].fields.status_name)
                     $(block).fadeOut().fadeIn()
                 } else {
-                    $(table_tbody).append(data.html_content)
+                    $(table_tbody).append(data.html_content_domains)
                     block = $(`.domainsSection .domains-table.main tbody tr[data-id=${serialized_data[0].pk}]`)
                     $(block).fadeOut().fadeIn()
                 }
@@ -858,7 +856,7 @@ socket.onmessage = function(event) {
                         $(block).remove()
                     }
                 } else {
-                    $(table_tbody).append(data.html_content)
+                    $(table_tbody).append(data.html_content_domains)
                     block = $(`.domainsSection .domains-table.check tbody tr[data-id=${serialized_data[0].pk}]`)
                     $(block).fadeOut().fadeIn()
                 }
@@ -871,7 +869,7 @@ socket.onmessage = function(event) {
                     }
                 } else {
                     if (String(serialized_data[0].fields.status) === '6') {
-                        $(table_tbody).append(data.html_content)
+                        $(table_tbody).append(data.html_content_domains)
                         block = $(`.domainsSection .domains-table.timestamps tbody tr[data-id=${serialized_data[0].pk}]`)
                         $(block).fadeOut().fadeIn()
                     }
