@@ -655,6 +655,7 @@ def send_update_to_websocket(sender, instance, **kwargs):
     phrases_count = phrases_main.count()
     html_content = render_phrases(None, phrases)
     data = {
+        'type': 'phrase',
         'html_content_phrases': html_content,
         'serialized_data': serialized_data,
         'phrases_count_all': phrases_count,
@@ -671,7 +672,7 @@ def send_update_to_websocket(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Domain)
-def send_update_to_websocket(sender, instance, **kwargs):
+def send_update_to_websocket_domain(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
 
     serialized_data = serialize('json', [instance])
@@ -684,6 +685,7 @@ def send_update_to_websocket(sender, instance, **kwargs):
     domains_count_timestamps = domains_main.filter(status=6).count()
     html_content = render_domains(None, domains)
     data = {
+        'type': 'domain',
         'html_content_domains': html_content,
         'serialized_data': serialized_data,
         'domains_count_all': domains_count,
