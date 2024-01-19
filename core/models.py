@@ -98,6 +98,12 @@ class Domain(models.Model):
     last_captured = models.IntegerField(default=0)
     status_name = models.CharField(max_length=50, blank=True, null=True)
 
+    dr = models.FloatField(blank=True, null=True)
+    inlinks = models.IntegerField(blank=True, null=True)
+    inlinks_do = models.IntegerField(blank=True, null=True)
+    indomains = models.IntegerField(blank=True, null=True)
+    indomains_do = models.IntegerField(blank=True, null=True)
+
     @property
     def files_count(self):
         return File.objects.filter(domain=self).count()

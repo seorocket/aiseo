@@ -46,7 +46,7 @@ class DomainImagesInline(admin.TabularInline):
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):
-    list_display = ('name', 'project', 'pages', 'history', 'status', 'snippet', 'image', 'first_captured', 'stripped_snippet', 'display_name', 'text', 'link', 'thumb', 'capture', 'video', 'webpage', 'audio', 'last_captured')
+    list_display = ('name', 'project', 'pages', 'history', 'status', 'snippet', 'image', 'first_captured', 'stripped_snippet', 'display_name', 'text', 'link', 'thumb', 'capture', 'video', 'webpage', 'audio', 'last_captured', 'dr', 'inlinks', 'inlinks_do', 'indomains', 'indomains_do')
     list_filter = ('project', 'status')
     search_fields = ('name', 'project__name')  # поиск по имени и имени проекта
     inlines = [DomainImagesInline]
