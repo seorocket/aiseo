@@ -55,6 +55,12 @@ class CustomPagination(PageNumberPagination):
     max_page_size = 100
 
 
+class DomainPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'  # Параметр запроса для изменения количества объектов на странице
+    max_page_size = 100
+
+
 class ProxyViewSet(viewsets.ModelViewSet):
     queryset = Proxy.objects.all().order_by('-id')
     serializer_class = ProxySerializer
@@ -86,6 +92,7 @@ class DomainFilter(filters.FilterSet):
 
 
 class DomainViewSet(viewsets.ModelViewSet):
+    pagination_class = DomainPagination
     queryset = Domain.objects.all().order_by('-id')
     serializer_class = DomainSerializer
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
