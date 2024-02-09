@@ -54,6 +54,11 @@
                         <th>Img</th>
                         <th>V</th>
                         <th>A</th>
+                        <th>Dr</th>
+                        <th>Inl</th>
+                        <th>Inl do</th>
+                        <th>Indm</th>
+                        <th>Indm do</th>
                         <th>Ahrefs</th>
                     </tr>
                     </thead>
@@ -74,6 +79,11 @@
                             <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
                             <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
                             <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
+                            <td>{% if i.dr %}{{ i.dr }}{% else %}-{% endif %}</td>
+                            <td>{% if i.inlinks %}{{ i.inlinks }}{% else %}-{% endif %}</td>
+                            <td>{% if i.inlinks_do %}{{ i.inlinks_do }}{% else %}-{% endif %}</td>
+                            <td>{% if i.indomains %}{{ i.indomains }}{% else %}-{% endif %}</td>
+                            <td>{% if i.indomains_do %}{{ i.indomains_do }}{% else %}-{% endif %}</td>
                             <td>{{ i.ahrefs }}</td>
                         </tr>
                     {% endfor %}
