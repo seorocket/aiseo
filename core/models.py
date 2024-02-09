@@ -72,6 +72,7 @@ CHOICE_DOMAIN_STATUS = (
     (4, 'checked'),
     (5, 'get files'),
     (6, 'timestamps'),
+    (7, 'ahrefs'),
 )
 
 
@@ -103,6 +104,8 @@ class Domain(models.Model):
     inlinks_do = models.IntegerField(blank=True, null=True)
     indomains = models.IntegerField(blank=True, null=True)
     indomains_do = models.IntegerField(blank=True, null=True)
+    ahrefs = models.BooleanField(default=False)
+
 
     @property
     def files_count(self):

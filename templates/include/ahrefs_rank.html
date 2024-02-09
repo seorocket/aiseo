@@ -63,6 +63,20 @@
                     <div><input type="number" placeholder="0" name="audio__lte" {% if request.GET.audio__lte|default:"" != '' %}value="{{ request.GET.audio__lte }}"{% endif %}></div>
                 </div>
             </div>
+            <div class="group_block">
+                <span>Ahrefs</span>
+                <div class="filter_block">
+                    <div>
+                        <label class="select">
+                            <select name="ahrefs">
+                                <option value="" {% if request.GET.ahrefs|default:"" == '' %}selected{% endif %}>Choose</option>
+                                <option value="True" {% if request.GET.ahrefs|default:"" == 'True' %}selected{% endif %}>True</option>
+                                <option value="False" {% if request.GET.ahrefs|default:"" == 'False' %}selected{% endif %}>False</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
 {#            <div class="group_block">#}
 {#                <span>History</span>#}
 {#                <div class="filter_block">#}

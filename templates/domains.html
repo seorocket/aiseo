@@ -54,6 +54,7 @@
                         <th>Img</th>
                         <th>V</th>
                         <th>A</th>
+                        <th>Ahrefs</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -73,6 +74,7 @@
                             <td>{% if i.image %}{{ i.image }}{% else %}-{% endif %}</td>
                             <td>{% if i.video %}{{ i.video }}{% else %}-{% endif %}</td>
                             <td>{% if i.audio %}{{ i.audio }}{% else %}-{% endif %}</td>
+                            <td>{{ i.ahrefs }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
