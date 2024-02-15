@@ -176,6 +176,7 @@ class Shot(models.Model):
     statuscode = models.IntegerField()
     digest = models.CharField(max_length=300)
     length = models.IntegerField()
+    mimetype = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name

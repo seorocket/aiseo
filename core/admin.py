@@ -66,4 +66,4 @@ class FileAdmin(admin.ModelAdmin):
 
 @admin.register(Shot)
 class ShotAdmin(admin.ModelAdmin):
-    list_display = ('name', 'file', 'date', 'status','timestamp','statuscode','digest','length')
+    list_display = ('name', 'file', 'date', 'status','timestamp','statuscode','digest','length','mimetype')
