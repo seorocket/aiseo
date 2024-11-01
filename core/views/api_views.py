@@ -29,6 +29,7 @@ from django.core.serializers import serialize
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
 
 
 class UserFilter(filters.FilterSet):
@@ -91,6 +92,12 @@ class DomainFilter(filters.FilterSet):
         fields = ['project']
 
 
+
+
+
+
+
+
 class DomainViewSet(viewsets.ModelViewSet):
     pagination_class = DomainPagination
     queryset = Domain.objects.all().order_by('-id')
@@ -99,31 +106,81 @@ class DomainViewSet(viewsets.ModelViewSet):
     filterset_class = DomainFilter
     changed_objects = []
 
-    @action(detail=False, methods=['get'])
+    def create(self, request, *args, **kwargs):
+        domains_data = request.data
+
+        # Если данные являются списком, обрабатываем каждый элемент
+        if isinstance(domains_data, list):
+            created_domains = []
+            errors = []
+
+            for domain_data in domains_data:
+                serializer = self.get_serializer(data=domain_data)
+                if serializer.is_valid():
+                    serializer.save()
+                    created_domains.append(serializer.data)
+                else:
+                    errors.append({"error": serializer.errors})
+
+            if errors:
+                return Response({"created": created_domains, "errors": errors}, status=status.HTTP_207_MULTI_STATUS)
+
+            return Response(created_domains, status=status.HTTP_201_CREATED)
+
+        # Если данные являются одним объектом, обрабатываем его
+        elif isinstance(domains_data, dict):
+            serializer = self.get_serializer(data=domains_data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"error": "Данные должны быть либо словарем, либо списком объектов."}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
     def update_status(self, request):
-        status_param = request.query_params.get('status', None)
-        if status_param is None:
-            return Response({"error": "Параметр 'status' не указан в запросе."}, status=status.HTTP_400_BAD_REQUEST)
+        domains_data = request.data
 
-        try:
-            status_code = int(status_param)
-        except ValueError:
-            return Response({"error": "Параметр 'status' должен быть числом."}, status=status.HTTP_400_BAD_REQUEST)
+        if not isinstance(domains_data, list):
+            return Response({"error": "Данные должны быть списком объектов."}, status=status.HTTP_400_BAD_REQUEST)
 
-        queryset = Domain.objects.filter(status=status_code)
+        updated_domains = []
+        errors = []
 
-        if not queryset.exists():
-            return Response({"error": f"По статусу {status_code} не найдено объектов Domain."},
-                            status=status.HTTP_404_NOT_FOUND)
+        for domain_data in domains_data:
+            status_code = domain_data.get('status', None)
+            if status_code is None:
+                errors.append({"error": "Параметр 'status' не указан для одного из объектов."})
+                continue
 
-        # Обновляем статус первого объекта в queryset на 3
-        first_domain = queryset.first()
-        first_domain.status = 2
-        first_domain.save()
+            try:
+                status_code = int(status_code)
+            except ValueError:
+                errors.append({"error": "Параметр 'status' должен быть числом для одного из объектов."})
+                continue
 
-        # Возвращаем объект Domain с обновленным статусом
-        serializer = DomainSerializer(first_domain)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            # Получаем queryset по статусу
+            queryset = Domain.objects.filter(status=status_code)
+
+            if not queryset.exists():
+                errors.append({"error": f"По статусу {status_code} не найдено объектов Domain."})
+                continue
+
+            # Обновляем статус первого объекта в queryset на 2
+            first_domain = queryset.first()
+            first_domain.status = 2
+            first_domain.save()
+
+            serializer = DomainSerializer(first_domain)
+            updated_domains.append(serializer.data)
+
+        if errors:
+            return Response({"updated": updated_domains, "errors": errors}, status=status.HTTP_207_MULTI_STATUS)
+
+        return Response(updated_domains, status=status.HTTP_200_OK)
+
+
 
 
 class DomainImagesFilter(filters.FilterSet):
