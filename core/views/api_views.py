@@ -86,15 +86,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class DomainFilter(filters.FilterSet):
     project = django_filters.CharFilter(field_name="project")
-
+    name = django_filters.CharFilter(field_name="name")
     class Meta:
         model = Domain
-        fields = ['project']
-
-
-
-
-
+        fields = ['project', 'name']
 
 
 
