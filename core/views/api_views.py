@@ -133,7 +133,7 @@ class DomainViewSet(viewsets.ModelViewSet):
 
         return Response({"error": "Данные должны быть либо словарем, либо списком объектов."}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['get'])
     def update_status(self, request):
         domains_data = request.data
 
